@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 18:44:56 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/04 02:04:40 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/04 02:17:35 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,27 @@ static void	remove_env_lst_if(t_envlst **env, char *data, int (*cmp_by)())
 	}
 }
 
+static void	error_message(char *s, t_minishell_info *info)
+{
+	if (write(STDERR_FILENO, "minishell: unset: `", 19) < 0)
+		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
+	if (write(STDERR_FILENO, s, ft_strlen(s)) < 0)
+		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
+	if (write(STDERR_FILENO, "': not a valid identifier\n", 26) < 0)
+		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
+}
+
 void		exec_unset(t_minishell_info *info, char **args)
 {
 	int		i;
 	char	*tmp;
 
+	if (args[1] == NULL)
+		return ;
 	if (args[1][0] == '-')
 		return (error_mandatory(ERR_UNSET, 29, info));
 	i = 0;
-	while (args[i])
+	while (args[++i])
 	{
 		if (args[i][0] == '\'' || args[i][0] == '\"')
 			if (!(args[i] = re_strtrim(&(args[i]), "\'\"")))
@@ -57,7 +69,11 @@ void		exec_unset(t_minishell_info *info, char **args)
 			tmp = search_env(args[i] + 1, ft_strlen(args[i] + 1), info->env);
 		else
 			tmp = args[i];
-		remove_env_lst_if(&(info->env), tmp, ft_strncmp);
-		i++;
+		if (tmp[0] == '\\')
+			tmp++;
+		if (ft_isalpha(tmp[0]))
+			remove_env_lst_if(&(info->env), tmp, ft_strncmp);
+		else
+			error_message(tmp, info);
 	}
 }

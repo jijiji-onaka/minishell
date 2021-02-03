@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 16:37:31 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/02 17:00:04 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/04 02:57:38 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static t_envlst	*make_env(char *env_name, char *env_value,
 
 	if (!(new = malloc(sizeof(t_envlst))))
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-	if (!(new->value = ft_strjoin(env_name, env_value)))
+	if (!(new->value = ft_str3join(env_name, "=", env_value)))
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	new->next = NULL;
 	return (new);
@@ -38,7 +38,7 @@ void			update_env_lst(t_envlst **env, char *env_name, char *env_value,
 			ft_strncmp(env_name, (*env)->value, ft_strlen(env_name)) == 0)
 		{
 			if (!((*env)->value =
-						re_strjoin(&((*env)->value), env_name, env_value)))
+			re_str3join(&((*env)->value), env_name, "=", env_value)))
 				all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 			*env = begin;
 			return ;

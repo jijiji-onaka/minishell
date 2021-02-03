@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/23 01:13:20 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/04 01:10:07 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/04 02:51:49 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	go_to_home(t_minishell_info *info)
 {
 	char		*home_path;
 
-	update_env_lst(&(info->env), "OLDPWD=", info->current_dir_path, info);
+	update_env_lst(&(info->env), "OLDPWD", info->current_dir_path, info);
 	home_path = search_env("HOME", 4, info->env);
 	if (chdir(home_path) == -1)
 		all_free_exit(info, ERR_CHDIR, __LINE__, __FILE__);
@@ -51,10 +51,10 @@ static void	go_to_path(t_minishell_info *info, char **dir,
 			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 		perror(dir_name);
 	}
-	update_env_lst(&(info->env), "OLDPWD=", info->current_dir_path, info);
+	update_env_lst(&(info->env), "OLDPWD", info->current_dir_path, info);
 	ptr_free((void **)&(info->current_dir_path));
 	info->current_dir_path = getcwd(NULL, 0);
-	update_env_lst(&(info->env), "PWD=", info->current_dir_path, info);
+	update_env_lst(&(info->env), "PWD", info->current_dir_path, info);
 }
 
 static void	go_to_oldpwd(t_minishell_info *info)

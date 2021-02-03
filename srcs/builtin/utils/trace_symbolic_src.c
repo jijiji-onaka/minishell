@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 01:02:59 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/02 17:00:00 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/04 02:51:55 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,5 +52,5 @@ void		trace_symbolic_src(t_minishell_info *info, char *dir_name)
 		if (errno == EFAULT || errno == EIO || errno == ENOMEM)
 			all_free_exit(info, ERR_CHDIR, __LINE__, __FILE__);
 	}
-	update_env_lst(&(info->env), "PWD=", info->current_dir_path, info);
+	update_env_lst(&(info->env), "PWD", info->current_dir_path, info);
 }

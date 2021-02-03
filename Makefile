@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/23 01:57:04 by tjinichi          #+#    #+#              #
-#    Updated: 2021/02/04 00:28:34 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/02/04 02:48:33 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,9 +26,11 @@ BUILTIN_DIR = $(SRCDIR)/builtin
 BUILTIN_SRCS = $(addprefix $(BUILTIN_DIR)/, \
 				utils/error_mandatory.c \
 				utils/is_symbolic_link.c \
+				utils/make_env_name.c \
 				utils/make_env_value.c \
-				utils/trace_symbolic_src.c \
 				utils/search_env.c \
+				utils/trace_symbolic_src.c \
+				utils/two_ptr_free.c \
 				utils/update_env_lst.c \
 				bin.c \
 				cd.c \

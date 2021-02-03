@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/03 20:41:03 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/04 01:58:18 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/04 02:55:17 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ char		*make_env_value(char **args, int i, int *j, t_minishell_info *info)
 	if (*(args[*j] + i) == '\'' || *(args[*j] + i) == '\"')
 		return (quotation(args, i, j, info));
 	len = 0;
+	i++;
 	while ((args[*j] + i)[len])
 		len++;
 	if (!(res = malloc(len + 1)))

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 17:56:17 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/04 01:56:00 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/04 02:58:43 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,11 +75,6 @@ static bool	prepare_in_advance(char *first_arg, t_minishell_info *info, int *j)
 	return (true);
 }
 
-static void	two_free(void **one, void **two)
-{
-	ptr_free((void **)one);
-	ptr_free((void **)two);
-}
 
 void		exec_export(t_minishell_info *info, char **args)
 {
@@ -92,19 +87,18 @@ void		exec_export(t_minishell_info *info, char **args)
 		return ;
 	while (args[++j])
 	{
-		i = 0;
-		while (args[j][i] && args[j][i] != '=')
-			i++;
-		if (args[j][i] == '\0')
+		if (args[j][0] == '\'' || args[j][0] == '\"')
+			if (!(args[j] = re_strtrim(&(args[j]), "\'\"")))
+				all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+		if (!(env_name = make_env_name(args[j], &i, info)))
 			continue ;
-		if (!(env_name = malloc(i + 2)))
-			all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-		i = -1;
-		while (args[j][++i] != '=')
-			env_name[i] = args[j][i];
-		env_name[i++] = '=';
-		env_name[i] = '\0';
+		if (env_name[0] == '$')
+			re_strdup(&(env_name),
+				search_env(env_name + 1, ft_strlen(env_name + 1), info->env));
 		env_value = make_env_value(args, i, &j, info);
+		if (env_value[0] == '$')
+			re_strdup(&(env_value),
+				search_env(env_value + 1, ft_strlen(env_value + 1), info->env));
 		update_env_lst(&(info->env), env_name, env_value, info);
 		two_free((void**)&env_name, (void**)&env_value);
 	}

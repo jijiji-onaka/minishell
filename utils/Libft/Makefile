@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/23 20:15:31 by tjinichi          #+#    #+#              #
-#    Updated: 2021/02/03 22:01:50 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/02/04 02:51:19 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -123,6 +123,7 @@ STRING_SRCS = $(addprefix $(STRING_DIR)/, \
 				re_strtrim.c \
 				re_strdup.c \
 				re_strjoin.c \
+				re_str3join.c \
 				strcmp_regardless_of_case.c \
 				numjoin_str.c \
 )

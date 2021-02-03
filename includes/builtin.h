@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 16:25:10 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/03 20:41:42 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/04 02:48:21 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,11 @@ void		exec_pwd(t_minishell_info *info);
 void		exec_unset(t_minishell_info *info, char **args);
 void		error_mandatory(char *err_message, int num, t_minishell_info *info);
 bool		is_symbolic_dir(t_minishell_info *info, char *dir_name);
+char		*make_env_name(char *args, int *i, t_minishell_info *info);
 char		*make_env_value(char **args, int i, int *j, t_minishell_info *info);
 char		*search_env(char *str, int num, t_envlst *env_lst);
 void		trace_symbolic_src(t_minishell_info *info, char *dir_name);
+void		two_free(void **one, void **two);
 void		update_env_lst(t_envlst **env, char *env_name, char *env_value,
 							t_minishell_info *info);
 

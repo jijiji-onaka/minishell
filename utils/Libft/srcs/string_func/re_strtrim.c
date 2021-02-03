@@ -6,13 +6,13 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/03 22:01:51 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/03 22:02:37 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/04 01:06:27 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/string_func.h"
 
-char			*re_strtrim(char const *s1, char const *set)
+char			*re_strtrim(char **s1, char const *set)
 {
 	size_t	tail;
 	char	*str;
@@ -20,16 +20,17 @@ char			*re_strtrim(char const *s1, char const *set)
 
 	if (!s1 || !set)
 		return (NULL);
-	tail = ft_strlen(s1) - 1;
+	tail = ft_strlen((*s1)) - 1;
 	head = 0;
-	while (s1[head] && ft_strchr(set, s1[head]))
+	while ((*s1)[head] && ft_strchr(set, (*s1)[head]))
 		head++;
-	while (tail && ft_strchr(set, s1[tail]))
+	while (tail && ft_strchr(set, (*s1)[tail]))
 		tail--;
 	if (head > tail)
 		str = ft_strdup("");
 	else
-		str = ft_substr(s1, head, tail - head + 1);
-	ptr_free((void **)&s1);
+		str = ft_substr((*s1), head, tail - head + 1);
+	ptr_free((void **)s1);
+	*s1 = str;
 	return (str);
 }

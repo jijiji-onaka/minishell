@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/23 01:13:20 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/02 20:52:27 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/04 01:10:07 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,22 @@ static void	go_to_home(t_minishell_info *info)
 	info->current_dir_path = home_path;
 }
 
-static void	go_to_path(t_minishell_info *info, char *dir,
+static void	go_to_path(t_minishell_info *info, char **dir,
 			bool option_p_flag)
 {
-	char		*dir_name;
+	char	*dir_name;
 
-	if (dir == NULL)
+	if ((*dir) == NULL)
 		return (go_to_home(info));
-	if (dir[0] == '.' && dir[1] == '\0')
+	if ((*dir)[0] == '.' && (*dir)[1] == '\0')
 		return ;
-	update_env_lst(&(info->env), "OLDPWD=", info->current_dir_path, info);
-	dir_name = dir;
-	if (dir[0] == '$' && dir[1] != '\0')
-		dir_name = search_env(dir + 1, ft_strlen(dir + 1), info->env);
+	if (**dir == '\'' || **dir == '\"')
+		if (!((*dir) = re_strtrim(dir, "\'\"")))
+			all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	if ((*dir)[0] == '$' && (*dir)[1] != '\0')
+		dir_name = search_env((*dir) + 1, ft_strlen((*dir) + 1), info->env);
+	else
+		dir_name = *dir;
 	if (option_p_flag == false)
 		if (is_symbolic_dir(info, dir_name) == true)
 			return ;
@@ -48,6 +51,7 @@ static void	go_to_path(t_minishell_info *info, char *dir,
 			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 		perror(dir_name);
 	}
+	update_env_lst(&(info->env), "OLDPWD=", info->current_dir_path, info);
 	ptr_free((void **)&(info->current_dir_path));
 	info->current_dir_path = getcwd(NULL, 0);
 	update_env_lst(&(info->env), "PWD=", info->current_dir_path, info);
@@ -84,10 +88,10 @@ void		exec_cd(t_minishell_info *info, t_cmdlst *cmd)
 	if (arg[1][0] == '-' && arg[1][1] == '\0')
 		go_to_oldpwd(info);
 	else if (arg[1][0] == '-' && arg[1][1] == 'P' && arg[1][2] == '\0')
-		go_to_path(info, arg[2], true);
+		go_to_path(info, &(cmd->arg[2]), true);
 	else if (arg[1][0] == '-' && arg[1][1] == 'L' && arg[1][2] == '\0')
-		go_to_path(info, arg[2], false);
+		go_to_path(info, &(cmd->arg[2]), false);
 	else
-		go_to_path(info, arg[1], false);
+		go_to_path(info, &(cmd->arg[1]), false);
 	g_working_dir = info->current_dir_path;
 }

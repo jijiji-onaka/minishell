@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 00:04:05 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/03 21:40:54 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/04 01:25:40 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,28 +19,27 @@ static void	put_newline(t_minishell_info *info)
 	return ;
 }
 
-static void	putstr_space(char *s, t_minishell_info *info)
+static void	putstr_space(char **s, t_minishell_info *info)
 {
-	char	*arg;
+	char	*env;
 
-	if (*s == '\'' || *s == '\"')
-	{
-		if (!(arg = ft_strtrim(s, "\'\"")))
+	if ((*s)[0] == '\'' || (*s)[0] == '\"')
+		if (!(*s = re_strtrim(s, "\'\"")))
 			all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-		if (write(STDOUT_FILENO, arg, ft_strlen(arg)) < 0)
+	if ((*s)[0] == '$' && (env = search_env(*s + 1,
+			ft_strlen(*s + 1), info->env)))
+	{
+		if (write(STDOUT_FILENO, env, ft_strlen(env)) < 0)
 			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-		ptr_free((void **)&arg);
 	}
-	else if (write(STDOUT_FILENO, s, ft_strlen(s)) < 0)
-		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	if (write(STDOUT_FILENO, " ", 1) < 0)
+	else if (write(STDOUT_FILENO, *s, ft_strlen(*s)) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 }
 
 static void	put_all_first_arg(int i, t_cmdlst *cmd, t_minishell_info *info)
 {
 	if (cmd->arg[i] != NULL)
-		putstr_space(cmd->arg[i], info);
+		putstr_space(&(cmd->arg[i]), info);
 	cmd = cmd->next;
 	while (cmd)
 	{
@@ -49,7 +48,7 @@ static void	put_all_first_arg(int i, t_cmdlst *cmd, t_minishell_info *info)
 		else
 		{
 			if (cmd->arg[1] != NULL)
-				putstr_space(cmd->arg[1], info);
+				putstr_space(&(cmd->arg[i]), info);
 			if ((cmd->next == NULL && i != 2) || (cmd->next && i != 2 &&
 				(cmd->next->type == PIPE || cmd->next->type == SEMICOLON)))
 				if (write(1, "\n", 1) == -1)
@@ -82,7 +81,7 @@ void		exec_echo(t_minishell_info *info, t_cmdlst *cmd)
 		return (error_mandatory(ERR_ECHO, 21, info));
 	while (args[i])
 	{
-		putstr_space(args[i], info);
+		putstr_space(&(args[i]), info);
 		if (args[i + 1] == NULL && n_flag == 0)
 			put_newline(info);
 		i++;

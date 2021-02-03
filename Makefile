@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/23 01:57:04 by tjinichi          #+#    #+#              #
-#    Updated: 2021/02/02 17:50:19 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/02/04 00:28:34 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ BUILTIN_DIR = $(SRCDIR)/builtin
 BUILTIN_SRCS = $(addprefix $(BUILTIN_DIR)/, \
 				utils/error_mandatory.c \
 				utils/is_symbolic_link.c \
+				utils/make_env_value.c \
 				utils/trace_symbolic_src.c \
 				utils/search_env.c \
 				utils/update_env_lst.c \
@@ -69,11 +70,9 @@ $(OBJDIR)/%.o : $(READ_DIR)/%.c
 PARSE_DIR = $(SRCDIR)/parse
 PARSE_SRCS = $(addprefix $(PARSE_DIR)/, \
 				utils/add_back_command_lst.c \
-				utils/dollar_switch_env_value.c \
 				utils/is_command_exit.c \
 				utils/isalnum_except_next_redir.c \
 				utils/split_each_parts.c \
-				utils/split_and_switch_env_value.c \
 				utils/rm_spaces_in_2d_array.c \
 				check_format/utils/ptr_2d_free_and_syntax_error.c \
 				check_format/check_format_of_command.c \

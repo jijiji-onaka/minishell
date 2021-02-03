@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/03 18:00:14 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/03 19:41:10 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ int			main()
 
 	display_welcome_message();
 	// put_help_message();
-	// g_signal.fork_pid = 1;
 	set_shell_level();
 	set_minishell_info(&info);
 	set_env(&info);

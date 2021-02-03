@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/23 10:55:09 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/11 21:26:36 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/03 22:01:18 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char			*ft_strtrim(char const *s1, char const *set)
 	while (tail && ft_strchr(set, s1[tail]))
 		tail--;
 	if (head > tail)
-		return (ft_strdup(""));
+		str = ft_strdup("");
 	else
 		str = ft_substr(s1, head, tail - head + 1);
 	return (str);

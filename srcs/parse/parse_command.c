@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/02 17:30:06 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/04 00:29:40 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static void	parsing(t_minishell_info *info, char *command)
 	const char	*base[CMD_NUM] = {"\0", "2>", "2>>", ";", ";<", ";>", ";>>",
 	"<", ">", ">>", ">|", "cd", "echo", "env", "export", "pwd", "unset", "|"};
 	// ">|"の扱いどうするか
-	if (!(split = split_and_switch_env_value(command, ' ', info->env)))
+	if (!(split = ft_split(command, ' ')))
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	if (split[0] == NULL)
 		return ;

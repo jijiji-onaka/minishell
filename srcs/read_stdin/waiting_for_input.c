@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 01:01:05 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/02 17:46:40 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/03 21:33:38 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,15 +46,14 @@ static void	check_return_value(ssize_t rc, char **command, char buf, \
 ** 'or"が奇数回押された時はbuf[1]に入ったままwhileを抜けてwait_quotation関数に繋がる
 */
 
-static bool	check_quotation(char **command, char buf[2])
+static bool	check_quotation(char buf[2])
 {
 	if (buf[1] == buf[0] && buf[0] != '\0')
 	{
-		rm_chr_in_str(command, buf[1]);
 		buf[1] = '\0';
 		return (true);
 	}
-	else if (buf[0] == '\'' || buf[0] == '\"')
+	else if (buf[1] != '\0' && (buf[0] == '\'' || buf[0] == '\"'))
 		buf[1] = buf[0];
 	return (false);
 }
@@ -82,7 +81,7 @@ char		*waiting_for_input(t_minishell_info *info)
 			ptr_free((void **)&command);
 			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 		}
-		if (check_quotation(&command, buf) == true)
+		if (check_quotation(buf) == true)
 			continue ;
 		check_return_value(rc, &command, buf[0], info);
 	}

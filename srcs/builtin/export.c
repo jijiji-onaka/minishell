@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 17:56:17 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/02 21:54:26 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/03 21:47:55 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,41 +59,50 @@ static void	display_sorted_env(t_minishell_info *info)
 	}
 }
 
-// static void	only_argument(char **args, int j)
-// {
-// 	if (j == 1)
-// 		return ;
-
-// }
+static bool	prepare_in_advance(char *first_arg, t_minishell_info *info, int *j)
+{
+	if (first_arg == NULL)
+	{
+		display_sorted_env(info);
+		return (false);
+	}
+	if (first_arg[0] == '-')
+	{
+		error_mandatory(ERR_EXPORT, 30, info);
+		return (false);
+	}
+	*j = 0;
+	return (true);
+}
 
 void		exec_export(t_minishell_info *info, char **args)
 {
 	char		*env_name;
+	char		*env_value;
 	int			i;
 	int			j;
-
-	if (args[1] == NULL)
-		return (display_sorted_env(info));
-	if (args[1][0] == '-')
-		return (error_mandatory(ERR_EXPORT, 30, info));
-	j = 0;
-	while (args[j + 1])
-		j++;
-	i = 0;
-	while (args[j][i] && args[j][i] != '=')
-		i++;
-	if (args[j][i] == '\0')
-	{
-		puts("未実装");
-		// return (only_argument(args, j));
+//export a='b c"a"'
+	if (prepare_in_advance(args[1], info, &j) == false)
 		return ;
+	while (args[++j])
+	{
+		i = 0;
+		while (args[j][i] && args[j][i] != '=')
+			i++;
+		if (args[j][i] == '\0')
+			continue ;
+		if (!(env_name = malloc(i + 2)))
+			all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+		i = -1;
+		while (args[j][++i] != '=')
+			env_name[i] = args[j][i];
+		env_name[i++] = '=';
+		env_name[i] = '\0';
+		printf("%s\n", env_name);
+		exit(1);
+		env_value = make_env_value(args, i, &j, info);
+		update_env_lst(&(info->env), env_name, env_value, info);
+		ptr_free((void **)&env_name);
+		ptr_free((void **)&env_value);
 	}
-	if (!(env_name = malloc(i + 1)))
-		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-	i = -1;
-	while (args[j][++i] != '=')
-		env_name[i] = args[j][i];
-	env_name[i] = '\0';
-	update_env_lst(&(info->env), env_name, args[j] + i, info);
-	ptr_free((void **)&env_name);
 }

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 18:44:56 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/02 17:04:13 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/04 02:04:40 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ static void	remove_env_lst_if(t_envlst **env, char *data, int (*cmp_by)())
 			ptr_free((void **)&(remove->value));
 			ptr_free((void **)&remove);
 		}
-		*env = (*env)->next;
+		else
+			*env = (*env)->next;
 	}
 	*env = begin;
 	if (cmp_by(data, (*env)->value, ft_strlen(data)) == 0)
@@ -41,14 +42,22 @@ static void	remove_env_lst_if(t_envlst **env, char *data, int (*cmp_by)())
 
 void		exec_unset(t_minishell_info *info, char **args)
 {
-	int	i;
+	int		i;
+	char	*tmp;
 
 	if (args[1][0] == '-')
 		return (error_mandatory(ERR_UNSET, 29, info));
 	i = 0;
 	while (args[i])
 	{
-		remove_env_lst_if(&(info->env), args[i], ft_strncmp);
+		if (args[i][0] == '\'' || args[i][0] == '\"')
+			if (!(args[i] = re_strtrim(&(args[i]), "\'\"")))
+				all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+		if (args[i][0] == '$')
+			tmp = search_env(args[i] + 1, ft_strlen(args[i] + 1), info->env);
+		else
+			tmp = args[i];
+		remove_env_lst_if(&(info->env), tmp, ft_strncmp);
 		i++;
 	}
 }

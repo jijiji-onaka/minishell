@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 00:06:42 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/02 17:01:38 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/04 23:48:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,24 @@ static bool	check_bash_standard_commands(t_minishell_info *info, char **command)
 	return (true);
 }
 
+static void	update_args(char **args, t_minishell_info *info)
+{
+	int	i;
+
+	i = 0;
+	while (args[i])
+	{
+		if (args[i][0] == '\'' || args[i][0] == '\"')
+			if (!(args[i] = re_strtrim(&(args[i]), "\'\"")))
+				all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+		if (args[i][0] == '$' && args[i][1] != '$')
+			if (!(args[i] = re_strdup(&(args[i]), search_env(args[i] + 1,
+						ft_strlen(args[i] + 1), info->env))))
+				all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+		i++;
+	}
+}
+
 void		exec_bin(t_minishell_info *info, char **args)
 {
 	int			return_val;
@@ -70,7 +88,7 @@ void		exec_bin(t_minishell_info *info, char **args)
 	int			status;
 	extern char	**environ;
 
-	return_val = 0;
+	update_args(args, info);
 	if ((g_signal.fork_pid = fork()) == -1)
 		all_free_exit(info, ERR_FORK, __LINE__, __FILE__);
 	else if (g_signal.fork_pid == 0)

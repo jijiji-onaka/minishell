@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 16:25:10 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 14:57:27 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/21 20:29:00 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,13 @@ void		two_free(void **one, void **two);
 void		update_env_lst(t_envlst **env, char *env_name, char *env_value,
 							t_minishell *info);
 bool		is_parameter(char c);
-char		**get_path(t_envlst *lst, t_minishell *info);
+char		**get_environ(t_envlst *lst, t_minishell *info);
 int			check_bash_standard_commands(t_minishell *info, char **command
 				, bool *path_flag);
+char		*check_executable_file_in_bin_dir(char *path, char **command,
+				t_minishell *info);
+bool		no_exe_file_in_bin_dir(char *file, t_minishell *info);
+void		not_builtin(char *command, t_minishell *info
+			, bool path_flag);
 
 #endif

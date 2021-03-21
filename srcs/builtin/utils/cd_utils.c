@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 12:11:59 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 14:43:50 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/21 16:57:58 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ void		go_to_upper_dir(char *now, t_minishell *info)
 	ptr_2d_free((void***)&(split), -1);
 	info->ptr_2d_for_free = NULL;
 }
-
 
 bool		is_symbolic_dir(t_minishell *info, char *dir_name)
 {

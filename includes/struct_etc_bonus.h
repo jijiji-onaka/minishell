@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:44:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 14:17:15 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/21 16:55:18 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct			s_minishell_info
 	char				*current_dir_path;
 	char				*oldpwd_path;
 	bool				cwd_err_f;
+	bool				minishell_op_c;
 	struct s_envlst		*env;
 	struct s_cmdlst		*cmd_lst;
 	int					cmd_lst_num;

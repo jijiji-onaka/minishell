@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 15:00:52 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/21 20:16:54 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int			main(int argc, char **argv)
 {
 	t_minishell	info;
 
-	// display_welcome_message();
+	display_welcome_message();
 	set_minishell(&info);
 	set_shell_level();
 	set_env(&info);

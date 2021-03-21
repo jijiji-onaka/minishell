@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 17:22:21 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/20 02:41:18 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/21 16:54:50 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ int			after_changed_len_(char *ptr, t_minishell *info,
 				t_str *string);
 int			envval_len_and_return_index(char *ptr, int *len,
 					t_envlst *env, t_str *string);
-// int			envval_len_only_ver(char *str);
-// int			envval_len(char *str);
 bool		is_quo(int c);
 bool		is_redir(int c);
 void		preparation__(int *num1, int *num2, int *num3, char chr[2]);

@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/23 01:57:04 by tjinichi          #+#    #+#              #
-#    Updated: 2021/03/21 14:27:49 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/03/21 20:35:03 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = minishell
 
 CC = gcc
 # CFLAGS = -g #-Wall -Werror -Wextra #            -fsanitize=address
-CFLAGS = -g #           -fsanitize=address
+CFLAGS = -g   #         -fsanitize=address
 
 SRCFILE =	 \
 
@@ -47,6 +47,7 @@ BUILTIN_SRCS = $(addprefix $(BUILTIN_DIR)/, \
 				utils/update_env_lst.c \
 				utils/get_path.c \
 				utils/search_exefile_bin_dir.c \
+				utils/not_builtin_command.c \
 				bin.c \
 				cd.c \
 				echo.c \
@@ -269,6 +270,7 @@ BUILTIN_B_SRCS = $(addprefix $(BUILTIN_DIR)/, \
 				utils/skip_for_exit_bonus.c \
 				utils/two_ptr_free_bonus.c \
 				utils/unset_remove_env_lst_if_bonus.c \
+				utils/not_builtin_command_bonus.c \
 				utils/update_env_lst_bonus.c \
 				utils/get_path_bonus.c \
 				utils/search_exefile_bin_dir_bonus.c \

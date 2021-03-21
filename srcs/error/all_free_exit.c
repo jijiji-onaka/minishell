@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 02:54:08 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 14:16:58 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/21 20:20:11 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ static void		free_cmd_lst(t_cmdlst **cmdlst)
 
 void			all_free_minishell_info(t_minishell *info)
 {
-	// bonus
 	ptr_free((void**)&(info->current_dir_path));
 	ptr_free((void**)&(info->oldpwd_path));
 	free_cmd_lst(&(info->cmd_lst));

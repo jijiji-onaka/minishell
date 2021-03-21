@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:44:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 15:04:20 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/21 16:55:12 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ typedef struct			s_envlst
 typedef struct			s_minishell_info
 {
 	char				*current_dir_path;
-	// bonus
 	char				*oldpwd_path;
 	bool				cwd_err_f;
 	bool				minishell_op_c;

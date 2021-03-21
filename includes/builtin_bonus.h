@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 16:25:10 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 14:51:30 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/21 20:30:12 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,9 @@ void		update_env_lst(t_envlst **env, char *env_name, char *env_value,
 							t_minishell *info);
 bool		is_parameter(char c);
 void		not_set_home_path(t_minishell *info);
-char		**get_path(t_envlst *lst, t_minishell *info);
 int			check_bash_standard_commands(t_minishell *info, char **command
 				, bool *path_flag);
+bool		not_found_cwd(t_minishell *info, char *arg_dir, char ***ptr);
+char		**get_environ(t_envlst *lst, t_minishell *info);
 
 #endif

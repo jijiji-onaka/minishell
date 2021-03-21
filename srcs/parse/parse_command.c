@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 14:53:36 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/21 17:32:06 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,11 +117,8 @@ bool		parse_command(t_minishell *info, char *command)
 	i = -1;
 	ret = true;
 	while (cmd_grp[++i])
-	{
-		// printf("parser : [%s]\n", cmd_grp[i]);
 		if (ret == true)
 			ret = parsing(info, &(cmd_grp[i]));
-	}
 	ptr_2d_free((void ***)&cmd_grp, i);
 	info->ptr_2d_for_free = NULL;
 	return (ret);

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/15 17:43:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 15:07:18 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/21 20:20:03 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,10 +83,7 @@ static bool	change_dir(char *dir, t_minishell *info)
 		return (false);
 	}
 	flag = false;
-	if (!search_env("OLDPWD", 6, info->env, &flag) && !flag)
-		;
-	else
-		set_oldpwd(info, oldpwd);
+	set_oldpwd(info, oldpwd);
 	info->oldpwd_path = re_strdup(&(info->oldpwd_path), oldpwd);
 	ptr_free((void**)&oldpwd);
 	return (true);
@@ -103,8 +100,7 @@ void		go_to_path(t_minishell *info, char **dir,
 	if (change_dir(*dir, info) == false)
 		return ;
 	when_double_slash_root(*dir, info);
-	// if (search_env("PWD", 3, info->env, &flag) != NULL && flag)
-		update_env_lst(&(info->env), "PWD", info->current_dir_path, info);
+	update_env_lst(&(info->env), "PWD", info->current_dir_path, info);
 	info->cwd_err_f = 0;
 	g_signal.exit_status = 0;
 }

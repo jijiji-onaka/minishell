@@ -6,13 +6,13 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/21 14:18:58 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 14:22:22 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/21 18:25:45 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-char		**get_path(t_envlst *lst, t_minishell *info)
+char		**get_environ(t_envlst *lst, t_minishell *info)
 {
 	int			len;
 	t_envlst	*begin;

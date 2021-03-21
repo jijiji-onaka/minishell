@@ -6,92 +6,48 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/23 01:13:20 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/04 02:51:49 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/21 14:50:57 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static void	go_to_home(t_minishell_info *info)
+void		set_oldpwd(t_minishell *info, char *oldpwd)
 {
-	char		*home_path;
+	char	*pwd_path;
+	bool	flag;
 
-	update_env_lst(&(info->env), "OLDPWD", info->current_dir_path, info);
-	home_path = search_env("HOME", 4, info->env);
-	if (chdir(home_path) == -1)
-		all_free_exit(info, ERR_CHDIR, __LINE__, __FILE__);
-	ptr_free((void **)&(info->current_dir_path));
-	info->current_dir_path = home_path;
+	g_signal.info.current_dir_path = info->current_dir_path;
+	g_signal.info.oldpwd_path = info->oldpwd_path;
+	pwd_path = search_env("PWD", 3, info->env, &flag);
+	if (pwd_path == NULL || pwd_path[0] == '\0' || flag == false)
+		update_env_lst(&(info->env), "OLDPWD", "", info);
+	else if (oldpwd)
+		update_env_lst(&(info->env), "OLDPWD", oldpwd, info);
 }
 
-static void	go_to_path(t_minishell_info *info, char **dir,
-			bool option_p_flag)
-{
-	char	*dir_name;
-
-	if ((*dir) == NULL)
-		return (go_to_home(info));
-	if ((*dir)[0] == '.' && (*dir)[1] == '\0')
-		return ;
-	if (**dir == '\'' || **dir == '\"')
-		if (!((*dir) = re_strtrim(dir, "\'\"")))
-			all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-	if ((*dir)[0] == '$' && (*dir)[1] != '\0')
-		dir_name = search_env((*dir) + 1, ft_strlen((*dir) + 1), info->env);
-	else
-		dir_name = *dir;
-	if (option_p_flag == false)
-		if (is_symbolic_dir(info, dir_name) == true)
-			return ;
-	if (chdir(dir_name) == -1)
-	{
-		if (errno == EFAULT || errno == EIO || errno == ENOMEM)
-			all_free_exit(info, ERR_CHDIR, __LINE__, __FILE__);
-		if (write(STDERR_FILENO, "minishell: ", 12) < 0)
-			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-		perror(dir_name);
-	}
-	update_env_lst(&(info->env), "OLDPWD", info->current_dir_path, info);
-	ptr_free((void **)&(info->current_dir_path));
-	info->current_dir_path = getcwd(NULL, 0);
-	update_env_lst(&(info->env), "PWD", info->current_dir_path, info);
-}
-
-static void	go_to_oldpwd(t_minishell_info *info)
-{
-	char		*oldpwd_path;
-
-	oldpwd_path = search_env("OLDPWD", 6, info->env);
-	if (oldpwd_path == NULL)
-	{
-		if (write(STDERR_FILENO, NO_OLDPWD, 29) < 0)
-			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-		return ;
-	}
-	if (chdir(oldpwd_path) == -1)
-		all_free_exit(info, ERR_CHDIR, __LINE__, __FILE__);
-	if (ft_putendl_fd(oldpwd_path, 1) == false)
-		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	update_env_lst(&(info->env), "OLDPWD=", info->current_dir_path, info);
-	ptr_free((void **)&(info->current_dir_path));
-	info->current_dir_path = oldpwd_path;
-}
-
-void		exec_cd(t_minishell_info *info, t_cmdlst *cmd)
+void		exec_cd(t_minishell *info, t_cmdlst *cmd)
 {
 	char	**arg;
 
 	arg = cmd->arg;
 	if (arg[1] == NULL ||
 		(arg[1] != NULL && arg[1][0] == '~' && arg[1][1] == '\0'))
-		go_to_home(info);
-	if (arg[1][0] == '-' && arg[1][1] == '\0')
+	{
+		if (!(arg[1] = search_env("HOME", 4, info->env, NULL)))
+			return (not_set_home_path(info));
+		go_to_path(info, &(arg[1]), false);
+		arg[1] = NULL;
+	}
+	else if (arg[1][0] == '-' && arg[1][1] == '\0')
 		go_to_oldpwd(info);
-	else if (arg[1][0] == '-' && arg[1][1] == 'P' && arg[1][2] == '\0')
-		go_to_path(info, &(cmd->arg[2]), true);
-	else if (arg[1][0] == '-' && arg[1][1] == 'L' && arg[1][2] == '\0')
-		go_to_path(info, &(cmd->arg[2]), false);
 	else
 		go_to_path(info, &(cmd->arg[1]), false);
-	g_working_dir = info->current_dir_path;
 }
+
+/*
+** else if (arg[1][0] == '-' && arg[1][1] == 'P' && arg[1][2] == '\0')
+** go_to_path(info, &(cmd->arg[2]), true);
+** else if (arg[1][0] == '-' && arg[1][1] == 'L' && arg[1][2] == '\0')
+** go_to_path(info, &(cmd->arg[2]), false);
+*/

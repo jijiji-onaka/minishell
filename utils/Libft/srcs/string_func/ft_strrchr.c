@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/22 13:16:02 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/13 04:24:56 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/28 23:17:41 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,8 @@ char	*ft_strrchr(const char *s, int c)
 	while (s[i])
 	{
 		if (s[i] == chr)
-			res = (char *)s;
+			res = (char *)s + i;
 		i++;
 	}
-	if (chr == '\0')
-		return ((char *)&(s[i]));
 	return (res);
 }

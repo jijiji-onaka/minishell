@@ -6,30 +6,29 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 01:01:05 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/04 01:23:28 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/20 20:30:54 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-/*
-** freeしてfalseを返すだけの関数。normのため分けた
-*/
-
-static char	*newline_only(char **command)
+static void	preparation(int *backup, char **command,
+					char *buf, t_minishell *info)
 {
-	ptr_free((void **)command);
-	return (NULL);
+	if ((*backup = dup(STDIN_FILENO)) == -1)
+		all_free_exit(info, ERR_DUP, __LINE__, __FILE__);
+	if (!(*command = ft_strdup("")))
+	{
+		if (ft_close(backup) == false)
+			all_free_exit(info, ERR_CLOSE, __LINE__, __FILE__);
+		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	}
+	*buf = '\0';
+	g_signal.reading = true;
 }
 
-/*
-** readの返り値によって1の時はどんどんコマンドに繋げていって
-** それ以外はCtrl + Dを押した時の挙動で(*command)[0] == '\0'はpwd[ctrl+D]が押された時に
-** exitするのを防いでいる
-*/
-
 static void	check_return_value(ssize_t rc, char **command, char buf, \
-			t_minishell_info *info)
+			t_minishell *info)
 {
 	if (rc != 0)
 	{
@@ -40,58 +39,38 @@ static void	check_return_value(ssize_t rc, char **command, char buf, \
 		ctrl_d_exit(command, info);
 }
 
-/*
-** 1回目はelse ifの方に入る
-** buf[1]に'or"が入っていたら"pwd"->pwdになるので"を取り除いている
-** 'or"が奇数回押された時はbuf[1]に入ったままwhileを抜けてwait_quotation関数に繋がる
-*/
-
-static bool	check_quotation(char **command, char buf[2], t_minishell_info *info)
+static void	clean_up(int *backup, char **command, t_minishell *info)
 {
-	if (buf[1] == buf[0] && buf[0] != '\0')
+	if (!g_signal.reading)
+		if ((dup2(*backup, STDIN_FILENO)) == -1)
+		{
+			ptr_free((void**)command);
+			all_free_exit(info, ERR_DUP2, __LINE__, __FILE__);
+		}
+	if (ft_close(backup) == false)
 	{
-		if (!(*command = re_strjoinch(command, buf[0])))
-			all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-		buf[1] = '\0';
-		return (true);
+		ptr_free((void**)command);
+		all_free_exit(info, ERR_CLOSE, __LINE__, __FILE__);
 	}
-	else if (buf[1] == '\0' && (buf[0] == '\'' || buf[0] == '\"'))
-	{
-		buf[1] = buf[0];
-	}
-	return (false);
 }
 
-/*
-** 入力待ちをする関数
-** (write(0, "\033[0K", 4);はCtrl + Dを押した時に^Dみたいなのが出るのを防いでいる)
-** 返り値boolじゃなくてもいいかも
-*/
-
-char		*waiting_for_input(t_minishell_info *info)
+char		*waiting_for_input(t_minishell *info)
 {
 	char	*command;
-	char	buf[2];
+	char	buf;
 	ssize_t	rc;
+	int		backup;
 
-	if (!(command = ft_strdup("")))
-		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-	buf[0] = '\0';
-	buf[1] = '\0';
-	while ((rc = safe_read(&buf[0], &command, info)) >= 0 && buf[0] != '\n')
+	preparation(&backup, &command, &buf, info);
+	while (g_signal.reading)
 	{
-		if (write(0, "\033[0K", 4) < 0)
-		{
-			ptr_free((void **)&command);
-			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-		}
-		if (check_quotation(&command, buf, info) == true)
-			continue ;
-		check_return_value(rc, &command, buf[0], info);
+		if ((rc = safe_read(&buf, &command, info)) && buf == '\n')
+			break ;
+		ctrl_d_rm(&command, info);
+		check_return_value(rc, &command, buf, info);
 	}
-	if (buf[1] == '\'' || buf[1] == '\"')
-		return (waiting_for_quotation(buf[1], &command, info));
-	if (command[0] == '\0')
-		return (newline_only(&(command)));
+	clean_up(&backup, &command, info);
+	if (!g_signal.reading)
+		return (reset_prompt(&command, NULL));
 	return (command);
 }

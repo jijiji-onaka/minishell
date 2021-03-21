@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 01:30:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/02 17:26:29 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/15 23:18:11 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static char	**create_no_spaces_array(char **new, char **old)
 	return (new);
 }
 
-char		**rm_spaces_in_2d_array(char **arr, t_minishell_info *info)
+char		**rm_spaces_in_2d_array(char **arr, t_minishell *info)
 {
 	int		i;
 	int		element_num;

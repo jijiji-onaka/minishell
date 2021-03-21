@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 02:15:05 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/22 02:15:39 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/15 20:38:24 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,21 @@
 
 bool		is_float(char *s)
 {
-	if (*s == '-')
+	bool	flag;
+
+	flag = true;
+	while (*s && (*s == '-' || *s == '+'))
 		s++;
 	while (ft_isdigit(*s))
 		s++;
 	if (*s == '.')
 	{
+		flag = false;
 		s++;
 		while (ft_isdigit(*s))
 			s++;
 	}
-	if (*s)
-		return (false);
-	return (true);
+	if (*s == '\0')
+		return (!flag);
+	return (!flag);
 }

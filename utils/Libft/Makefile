@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/23 20:15:31 by tjinichi          #+#    #+#              #
-#    Updated: 2021/02/04 02:51:19 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/03/05 02:18:14 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = libft.a
 
 # =========== compile option ===================================================
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror # -fsanitize=address
 RM = rm
 # =========== path =============================================================
 INCLUDES = $(wildcard ./includes/*.h)
@@ -24,13 +24,14 @@ OBJDIR = $(SRCDIR)/objs
 ALGORITHM_DIR = $(SRCDIR)/algorithm_func
 ALGORITHM_SRCS = $(addprefix $(ALGORITHM_DIR)/, \
 				ft_swap.c \
-				marge_strsort.c \
+				merge_strsort.c \
 				str_bsearch.c \
 )
 # ========= convert function ===================================================
 CONVERT_DIR = $(SRCDIR)/convert_func
 CONVERT_SRCS = $(addprefix $(CONVERT_DIR)/, \
 				ft_atoi.c \
+				ft_atol.c \
 				ft_itoa.c \
 				ft_tolower.c \
 				ft_toupper.c \
@@ -72,6 +73,7 @@ ISWHAT_SRCS = $(addprefix $(ISWHAT_DIR)/, \
 				ft_isdigit.c \
 				ft_isprint.c \
 				ft_isspace.c \
+				ft_iswhitespace.c \
 				is_float.c \
 )
 #========== lst function =======================================================
@@ -187,8 +189,8 @@ UNDER_LINE	= \033[0;4m
 
 T		=	$(words ${OBJS})
 N		=	0
-# words = 文字列の個数を数えます
-# eval = 文字列を評価します
+# words = words count
+# eval = evaluate words
 C		=	$(words $N)${eval N += 1}
 ECHO	=	"[`expr $C  '*' 100 / $T`%]"
 
@@ -239,10 +241,14 @@ all:	$(NAME)
 clean:
 	@make clean -C ./srcs/vec3d_func
 	@$(RM) -rf $(OBJDIR)
+	@printf "\r$(RED)$(BOLD)[Libft] \nremoved libft's object file and objs directory$(RESET)\n"
 
-fclean: clean
+fclean:
 	@make fclean -C ./srcs/vec3d_func
+	@$(RM) -rf $(OBJDIR)
+	@printf "\r$(RED)$(BOLD)[Libft] \nremoved object file and objs directory\n"
 	@$(RM) -f $(NAME)
+	@printf "\rremoved libft.a$(RESET)\n\n"
 
 re:	fclean all
 

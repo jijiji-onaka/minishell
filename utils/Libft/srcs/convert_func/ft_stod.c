@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/27 02:31:48 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/24 19:28:42 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/09 19:10:38 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static double	solve(char *a)
 	sign = 1;
 	r = 0;
 	frac = 1;
-	while (ft_isspace(*a))
+	while (ft_iswhitespace(*a))
 		a++;
 	if (*a == '+' || *a == '-')
 		if (*a++ == '-')

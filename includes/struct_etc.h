@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:44:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/02 17:03:18 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/21 15:04:20 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,57 +14,74 @@
 # define STRUCT_ETC_H
 
 # include <unistd.h>
+# include <stdbool.h>
 
-typedef struct	stat t_stat;
+typedef struct stat		t_stat;
 
-typedef struct		s_envlst
+typedef struct			s_envlst
 {
-	char			*value;
-	struct s_envlst	*next;
-}					t_envlst;
+	char				*value;
+	struct s_envlst		*next;
+	struct s_envlst		*qnext;
+}						t_envlst;
 
-typedef struct		s_minishell_info
+typedef struct			s_minishell_info
 {
-	char			*current_dir_path;
-	char			**environ;
-	struct s_envlst	*env;
-	struct s_cmdlst	*cmd_lst;
-	int				cmd_lst_num;
-}					t_minishell_info;
+	char				*current_dir_path;
+	// bonus
+	char				*oldpwd_path;
+	bool				cwd_err_f;
+	bool				minishell_op_c;
+	struct s_envlst		*env;
+	struct s_cmdlst		*cmd_lst;
+	int					cmd_lst_num;
+	bool				exit_too_arg;
+	bool				read_now;
+	char				*ptr_for_free;
+	char				*ptr_for_free_2;
+	char				**ptr_2d_for_free;
+}						t_minishell;
 
-typedef struct		s_cmdlst
+typedef struct			s_cmdlst
 {
-	int				type;
-	char			**arg;
-	struct s_cmdlst	*next;
-}					t_cmdlst;
+	int					type;
+	int					fd;
+	char				**arg;
+	int					checker_pipe;
+	int					checker_redir;
+	struct s_cmdlst		*next;
+}						t_cmdlst;
 
-typedef struct		s_cmd_grp
+typedef struct			s_cmd_grp
 {
-	char			***cmd_grp;
-	int				array_size;
-}					t_cmd_grp;
+	char				***cmd_grp;
+	int					array_size;
+}						t_cmd_grp;
 
-typedef struct	s_global
+typedef struct			s_str
 {
-	pid_t	fork_pid;
-	int		exit_status;
-}				t_global;
-t_global		g_signal;
+	char				*str;
+	int					prev_len;
+}						t_str;
+
+typedef struct			s_global
+{
+	pid_t				fork_pid;
+	pid_t				fork_pid_for_pipe;
+	int					exit_status;
+	int					sig_sign;
+	t_minishell			info;
+	bool				reading;
+}						t_global;
+t_global				g_signal;
 
 enum	e_cmd
 {
 	BIN,
-	STDERR_OUTPUT,
-	STDERR_DB_OUTPUT,
 	SEMICOLON,
-	SEMI_INPUT,
-	SEMI_OUTPUT,
-	SEMI_DB_OUTPUT,
 	INPUT,
 	OUTPUT,
 	DB_OUTPUT,
-	OUTPUT_PIPE,
 	CD,
 	ECHO,
 	ENV,
@@ -74,24 +91,42 @@ enum	e_cmd
 	PIPE,
 	CMD_NUM,
 };
+
+enum	e_format
+{
+	NOT_SEPARATOR,
+	F_SEMICOLON,
+	F_DB_SEMICOLON,
+	F_INPUT,
+	F_DB_INPUT,
+	F_TR_INPUT,
+	F_OUTPUT,
+	F_DB_OUTPUT,
+	F_OUTPUT_PIPE,
+	F_PIPE,
+	F_DB_PIPE,
+	F_CMD_NUM,
+};
+
 # define NOT_CMD CMD_NUM
-# define DB_SEMICOLON CMD_NUM + 1
-# define DB_PIPE CMD_NUM + 2
-# define OUTPUT_PIPE CMD_NUM + 3
-# define DB_INPUT CMD_NUM + 4
-# define TR_INPUT CMD_NUM + 5
-# define EXIT CMD_NUM + 6
-# define OUTPUT_INPUT CMD_NUM + 7
-# define DB_OUTPUT_INPUT CMD_NUM + 8
 
+/*
+** CMD_NUM + (1 ~ 8)
+*/
+# define DB_SEMICOLON 13
+# define DB_PIPE 14
+# define OUTPUT_PIPE 15
+# define DB_INPUT 16
+# define TR_INPUT 17
+# define EXIT 18
+# define OUTPUT_INPUT 19
+# define DB_OUTPUT_INPUT 20
 # define NOT_FOUND -1
-// # define NOT_FOUND -1
 # define CMD_NOT_FOUND 127
-
 # define NEXT_CMD 2
-
-char		*g_user_name;
-int			g_user_name_count;
-char		*g_working_dir;
+# define QUO 0
+# define B_SLA 1
+# define DOLLAR 2
+# define END_OF_THE_WORLD -1
 
 #endif

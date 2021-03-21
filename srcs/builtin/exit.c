@@ -6,36 +6,28 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 18:24:30 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/02 17:03:53 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/21 05:29:33 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static void	normal_exit(t_minishell_info *info)
+static void	normal_exit(t_minishell *info)
 {
 	all_free_minishell_info(info);
-	exit(1);
+	exit(g_signal.exit_status);
 }
 
-static void	selected_code_exit(t_minishell_info *info, int exit_code,
-				bool float_flag)
-{
-	if (float_flag)
-		exit_code = 255;
-	all_free_minishell_info(info);
-	exit(exit_code % 256);
-}
-
-static void	fail_too_arg_exit(t_minishell_info *info)
+static void	fail_too_arg_exit(t_minishell *info)
 {
 	if (write(2, "minishell: exit: too many arguments\n", 36) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	g_signal.exit_status = 1;
+	info->exit_too_arg = true;
 	return ;
 }
 
-static void	non_numeric_exit(t_minishell_info *info, char *arg1)
+static void	non_numeric_exit(t_minishell *info, char *arg1)
 {
 	if (write(2, "minishell: exit: ", 17) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
@@ -43,27 +35,38 @@ static void	non_numeric_exit(t_minishell_info *info, char *arg1)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	if (write(2, ": numeric argument required\n", 28) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	exit(255);
+	g_signal.exit_status = 255;
+	exit(g_signal.exit_status);
 }
 
-void		exec_exit(t_minishell_info *info)
+static void	selected_code_exit(t_minishell *info, int exit_code)
 {
-	int		count;
-	bool	numeric_arg_flag;
-	char	**arg;
+	all_free_minishell_info(info);
+	g_signal.exit_status = exit_code % 256;
+	exit(g_signal.exit_status);
+}
 
-	arg = info->cmd_lst->arg;
-	count = count_2d(arg);
-	if (write(2, "\033[0Kexit\n", 9) < 0)
-		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	if (arg[1] != NULL && ft_isdigit(arg[1][0]))
-		numeric_arg_flag = true;
-	if (count == 1)
+void		exec_exit(t_minishell *info, t_cmdlst *cmd)
+{
+	bool	numeric_arg_flag;
+	int		i;
+
+	if (!(cmd->checker_pipe) && !(cmd->checker_redir))
+		if (!info->minishell_op_c && write(STDERR_FILENO, "exit\n", 5) < 0)
+			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
+	if (cmd->arg[1] && ft_strcmp(cmd->arg[1], "--") == 0)
+		i = 2;
+	else
+		i = 1;
+	if (cmd->arg[i] == NULL)
 		normal_exit(info);
-	else if (count == 2 && numeric_arg_flag == true)
-		selected_code_exit(info, ft_atoi(arg[1]), is_float(arg[1]));
+	numeric_arg_flag = set_numeric_flag(cmd->arg[i]);
+	if (cmd->arg[i] == NULL)
+		normal_exit(info);
+	else if (cmd->arg[i + 1] == NULL && numeric_arg_flag == true)
+		selected_code_exit(info, ft_atoi(cmd->arg[i]));
 	else if (numeric_arg_flag)
 		fail_too_arg_exit(info);
 	else
-		non_numeric_exit(info, arg[1]);
+		non_numeric_exit(info, cmd->arg[i]);
 }

@@ -6,78 +6,123 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/04 00:29:40 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/21 14:53:36 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static void	devide_semicolon_and_redirect(int type, char ***split,
-						t_minishell_info *info)
+static int	err_fd(long long fd, t_minishell *info)
 {
-	ptr_2d_free((void ***)split, 1);
-	add_back_command_lst(info, NULL, SEMICOLON);
-	if (type == SEMI_OUTPUT)
-		add_back_command_lst(info, NULL, OUTPUT);
-	else if (type == SEMI_DB_OUTPUT)
-		add_back_command_lst(info, NULL, DB_OUTPUT);
-	else if (type == SEMI_INPUT)
-		add_back_command_lst(info, NULL, DB_INPUT);
+	if (fd > INT_MAX)
+	{
+		if (write(STDERR_FILENO,
+"minishell: file descriptor out of range: Bad file descriptor\n", 61) < 0)
+			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
+	}
+	else if (fd >= 256 && fd <= INT_MAX)
+	{
+		if (write(STDERR_FILENO, "minishell: ", 11) < 0)
+			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
+		if (ft_putnbr_fd(fd, STDERR_FILENO) == false)
+			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
+		if (write(STDERR_FILENO, ": Bad file descriptor\n", 22) < 0)
+			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
+	}
+	g_signal.exit_status = EXIT_FAILURE;
+	return (-1);
 }
 
-/*
-** 入力された文字列から各コマンドをparseする関数
-*/
+static int	check_redirect_fd(t_minishell *info, char **command)
+{
+	int			i;
+	long long	fd;
 
-static void	parsing(t_minishell_info *info, char *command)
+	if (**command == '<' || ft_strcmp(*command, "<<") == 0)
+		return (0);
+	else if (!ft_isdigit(**command))
+		return (1);
+	i = -1;
+	fd = 0;
+	while ((*command)[++i])
+	{
+		if (!ft_isdigit((*command)[i]))
+			break ;
+		fd = fd * 10 + ((*command)[i] - '0');
+	}
+	if (!((*command)[i] == '>' || (*command)[i] == '<'))
+		return (1);
+	*command = *command + i;
+	if (fd > INT_MAX || fd >= 256 && fd <= INT_MAX)
+		return (err_fd(fd, info));
+	return (fd);
+}
+
+static bool	check_quotation(char **command, t_minishell *info)
+{
+	char	quo;
+
+	quo = '\0';
+	if (is_valid_quotations(command, &quo) == false)
+		if (waiting_for_quotation(quo, command, info) == false)
+			return (false);
+	return (true);
+}
+
+static int	parsing(t_minishell *info, char **command)
 {
 	int			type;
 	char		**split;
-	const char	*base[CMD_NUM] = {"\0", "2>", "2>>", ";", ";<", ";>", ";>>",
-	"<", ">", ">>", ">|", "cd", "echo", "env", "export", "pwd", "unset", "|"};
-	// ">|"の扱いどうするか
-	if (!(split = ft_split(command, ' ')))
+	char		*begin;
+	int			fd_for_redir;
+
+	if ((*command)[0] == ';')
+		return (cmdlst_add_back(info, NULL, SEMICOLON, 0));
+	if (check_quotation(command, info) == false)
+		return (false);
+	begin = *command;
+	if ((fd_for_redir = check_redirect_fd(info, &(*command))) == -1)
+	{
+		*command = begin;
+		return (false);
+	}
+	if (!(split = split_each_arg((*command))))
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	*command = begin;
 	if (split[0] == NULL)
-		return ;
-	// 先にseparatorだけでバイナリーサーチしても良い
-	// if (split[0][0] == 'e' && split[0][1] == 'x' && split[0][2] == 'i'
-	// 	&& split[0][3] == 't' && split[0][4] == '\0')
-	if (is_command_exit(split[0]) == true)
-		return (add_back_command_lst(info, split, EXIT));
-	type = str_bsearch(split[0], base, CMD_NUM, strcmp_regardless_of_case);
-	if (type == SEMI_OUTPUT || type == SEMI_DB_OUTPUT ||
-				type == SEMI_INPUT)
-		return (devide_semicolon_and_redirect(type, &split, info));
-	else if (type == NOT_CMD)
-			return (add_back_command_lst(info, split, BIN));
-	add_back_command_lst(info, split, type);
+		return (true);
+	type = binary_search(split[0]);
+	if (is_redir(type))
+		return (cmdlst_add_back(info, split, type, fd_for_redir));
+	return (cmdlst_add_back(info, split, type, 0));
 }
 
-/*
-** parsing関数でparseするためにwhileを回す関数(envpは構造体に入れると思う)
-** commandもinfo->commandもmalloc済
-*/
-
-bool		parse_command(t_minishell_info *info, char *command)
+bool		parse_command(t_minishell *info, char *command)
 {
 	char	**cmd_grp;
 	char	*tmp;
 	int		i;
+	bool	ret;
 
+	info->ptr_for_free = command;
 	tmp = skip_space(command);
 	if (!(cmd_grp = split_each_parts(tmp)))
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-	cmd_grp = rm_spaces_in_2d_array(cmd_grp, info);
 	ptr_free((void **)&(command));
+	info->ptr_for_free = NULL;
+	cmd_grp = rm_spaces_in_2d_array(cmd_grp, info);
 	if (check_format_of_command(&cmd_grp, info) == false)
 		return (false);
+	info->ptr_2d_for_free = cmd_grp;
 	i = -1;
+	ret = true;
 	while (cmd_grp[++i])
 	{
-		printf("[%d] : [%s]\n", i, cmd_grp[i]);
-		parsing(info, cmd_grp[i]);
+		// printf("parser : [%s]\n", cmd_grp[i]);
+		if (ret == true)
+			ret = parsing(info, &(cmd_grp[i]));
 	}
 	ptr_2d_free((void ***)&cmd_grp, i);
-	return (true);
+	info->ptr_2d_for_free = NULL;
+	return (ret);
 }

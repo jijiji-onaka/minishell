@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/22 15:23:39 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/30 20:07:36 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/04 16:33:52 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,5 @@
 # include "algorithm_func.h"
 # include "string_func.h"
 # include "write_func.h"
-# define MIN(a, b) (a < b) ? (a) : (b)
 
 #endif

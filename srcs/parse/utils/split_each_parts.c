@@ -6,100 +6,94 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 16:54:09 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/02 17:29:41 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/21 14:06:31 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
+static void		decide_quo_val(char chr[2], char *now)
+{
+	if (chr[B_SLA] == '\0' && chr[QUO] == '\0' && is_quo(*now))
+		chr[QUO] = *now;
+	else if (chr[B_SLA] == '\0' && chr[QUO] == *now)
+		chr[QUO] = '\0';
+	else if (chr[QUO] != '\'' && chr[B_SLA] == '\0' && *now == '\\')
+		chr[B_SLA] = '\\';
+	else if (chr[QUO] != '\'')
+		chr[B_SLA] = ((!chr[B_SLA] && *now == '\\') ? '\\' : '\0');
+}
+
 static size_t	count_words(char *str)
 {
 	size_t		word_count;
+	char		chr[2];
 	int			flag;
 
 	word_count = 0;
-	flag = 0;
 	while (*str)
 	{
-		while (*str && (isalnum_except_next_redir(str) ||
-						*str == ' ') && (flag = 1))
-			str++;
-		if (*str && !(isalnum_except_next_redir(str) || *str == ' '))
+		chr[QUO] ^= chr[QUO];
+		chr[B_SLA] ^= chr[B_SLA];
+		if (*str && is_except_separator(str, chr[QUO]))
 		{
-			if (flag == 1)
-				word_count += 2;
-			else
-				word_count++;
-			flag = 0;
-			while (*str && !(isalnum_except_next_redir(str) || *str == ' '))
-				str++;
+			str -= 1;
+			while (*++str && is_except_separator(str, chr[QUO]))
+				decide_quo_val(chr, str);
+			word_count++;
 		}
+		flag ^= flag;
+		if (*str && (is_separator(str, NULL)) && (word_count += 1))
+			while (*str && (is_separator(str, &flag)))
+				str++;
+		while (*str && ft_isspace(*str))
+			str++;
 	}
-	return (word_count + flag);
-}
-
-static char		*re_insert_redirect(char **old, char **str)
-{
-	char	*res;
-	int		i;
-
-	i = 0;
-	while ((*str)[i] && ft_isalnum((*str)[i]))
-		i++;
-	if (!(res = malloc(ft_strlen(*old) + i + 2)))
-		return (NULL);
-	i = -1;
-	while ((*old)[++i])
-		res[i] = (*old)[i];
-	res[i++] = ' ';
-	while (**str && ft_isalnum(**str))
-	{
-		res[i++] = **str;
-		(*str)++;
-	}
-	res[i] = '\0';
-	ptr_free((void **)old);
-	return (res);
-}
-
-static char		*insert_word(char **str)
-{
-	char		*word;
-	size_t		i;
-
-	i = 0;
-	while ((*str)[i] && !(isalnum_except_next_redir(&(*str)[i]) ||
-				(*str)[i] == ' '))
-		i++;
-	if (!(word = malloc(sizeof(char) * (i + 1))))
-		return (NULL);
-	i = 0;
-	while (**str && !(isalnum_except_next_redir(*str) || **str == ' '))
-	{
-		word[i] = **str;
-		i++;
-		(*str)++;
-	}
-	word[i] = '\0';
-	return (word);
+	return (word_count);
 }
 
 static char		*insert_separator(char **str)
 {
 	char		*word;
 	size_t		i;
+	int			flag;
 
 	i = 0;
-	while ((*str)[i] && (isalnum_except_next_redir(&(*str)[i]) ||
-				(*str)[i] == ' '))
+	flag = 0;
+	while ((*str)[i] && (is_separator(&(*str)[i], &flag)))
 		i++;
 	if (!(word = malloc(sizeof(char) * (i + 1))))
 		return (NULL);
 	i = 0;
-	while (**str && (isalnum_except_next_redir(*str) || **str == ' '))
+	flag = 0;
+	while (**str && (is_separator(*str, &flag)))
+		word[i++] = *(*str)++;
+	word[i] = '\0';
+	while (**str && ft_isspace(**str))
+		(*str)++;
+	return (word);
+}
+
+static char		*insert_word(char **str)
+{
+	char		*word;
+	size_t		i;
+	char		chr[2];
+
+	i = -1;
+	chr[QUO] = 0;
+	chr[B_SLA] = 0;
+	while ((*str)[++i] && (is_except_separator(&(*str)[i], chr[QUO])))
+		decide_quo_val(chr, &((*str)[i]));
+	if (!(word = malloc(sizeof(char) * (i + 1))))
+		return (NULL);
+	i = 0;
+	chr[QUO] = 0;
+	chr[B_SLA] = 0;
+	while (**str && (is_except_separator(*str, chr[QUO])))
 	{
-		word[i] = **str;
-		i++;
+		decide_quo_val(chr, *str);
+		word[i++] = **str;
 		(*str)++;
 	}
 	word[i] = '\0';
@@ -116,16 +110,13 @@ char			**split_each_parts(char *str)
 	if (!(res = malloc(sizeof(char *) * (word_count + 1))))
 		return (NULL);
 	i = 0;
-	while (i < word_count)
+	while (*str && i < word_count)
 	{
-		if (*str && (isalnum_except_next_redir(str) || *str == ' '))
-			if (!(res[i++] = insert_separator(&str)))
-				return (ptr_2d_free((void***)&res, --i));
-		if (*str && !(isalnum_except_next_redir(str) || *str == ' '))
+		if (*str && (is_except_separator(str, 0)))
 			if (!(res[i++] = insert_word(&str)))
 				return (ptr_2d_free((void***)&res, --i));
-		if (i == 1 && res[0][0] == '>')
-			if (!(res[0] = re_insert_redirect(&(res[0]), &str)))
+		if (*str && (is_separator(str, NULL)))
+			if (!(res[i++] = insert_separator(&str)))
 				return (ptr_2d_free((void***)&res, --i));
 	}
 	res[i] = NULL;

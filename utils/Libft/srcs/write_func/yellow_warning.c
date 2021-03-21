@@ -6,15 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/17 22:17:29 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/17 22:18:11 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/04 14:30:29 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/write_func.h"
-
-/*
-** [Warning]を黄色文字(\033[33m)・太文字(\033[1m)で出す関数
-*/
 
 void	yellow_warning(void)
 {

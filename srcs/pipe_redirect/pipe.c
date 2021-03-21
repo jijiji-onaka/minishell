@@ -6,98 +6,114 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/19 20:52:49 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/02 17:48:09 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/20 01:20:19 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 /*
-** パイプをうまく機能させようと思うと、
-** 必要のないファイルディスクリプタは片っ端から閉じておく必要があります。
-** 無駄に開いている読み出し口や書き込み口があると、入力が終わってもEOFが返されません。
-** するとパイプで繋がれたプログラムが終了しないので、いつまでも待ち続ける羽目になります。
-** 必要なものだけ開いた状態にするのが鉄則です。
-** (引用) https://www.haya-programming.com/entry/2018/11/08/185349
+** https://www.haya-programming.com/entry/2018/11/08/185349
 */
 
 static void	apply_last_pipe(t_cmdlst **cmd_lst, int pipefd[2],
-							t_minishell_info *info)
+							t_minishell *info)
 {
-	int	fork_pid;
-
-	if ((fork_pid = fork()) == -1)
+	(*cmd_lst)->checker_pipe = true;
+	if ((g_signal.fork_pid_for_pipe = fork()) == -1)
 		all_free_exit(info, ERR_FORK, __LINE__, __FILE__);
-	else if (fork_pid == 0)
+	else if (g_signal.fork_pid_for_pipe == 0)
 	{
 		connect_std_in_out_and_pipe(pipefd, STDIN_FILENO, info);
-		execute_each_command(info, *cmd_lst);
-		exit(0);
+		if (!((*cmd_lst)->checker_redir) && (*cmd_lst && (*cmd_lst)->next
+		&& is_redir((*cmd_lst)->next->type)))
+			*cmd_lst = my_redirect(info, cmd_lst);
+		else if (!((*cmd_lst)->checker_redir) && (*cmd_lst && (*cmd_lst) &&
+		is_redir((*cmd_lst)->type)))
+			*cmd_lst = redir_first(info, cmd_lst);
+		else
+			execute_command(info, *cmd_lst);
+		exit(g_signal.exit_status);
 	}
 	close_pipe_fd(pipefd, info);
 }
 
 static void	apply_middle_pipe(t_cmdlst **cmd_lst, int old_pipefd[2],
-						int new_pipefd[2], t_minishell_info *info)
+						int new_pipefd[2], t_minishell *info)
 {
-	int	fork_pid;
-
+	(*cmd_lst)->checker_pipe = true;
 	if ((pipe(new_pipefd)) == -1)
 		all_free_exit(info, ERR_PIPE, __LINE__, __FILE__);
-	if ((fork_pid = fork()) == -1)
+	if ((g_signal.fork_pid_for_pipe = fork()) == -1)
 		all_free_exit(info, ERR_FORK, __LINE__, __FILE__);
-	else if (fork_pid == 0)
+	else if (g_signal.fork_pid_for_pipe == 0)
 	{
+		g_signal.exit_status = 0;
 		connect_std_in_out_and_pipe(old_pipefd, STDIN_FILENO, info);
 		connect_std_in_out_and_pipe(new_pipefd, STDOUT_FILENO, info);
-		execute_each_command(info, *cmd_lst);
-		exit(0);
+		if (!((*cmd_lst)->checker_redir) && (*cmd_lst && (*cmd_lst)->next
+		&& is_redir((*cmd_lst)->next->type)))
+			*cmd_lst = my_redirect(info, cmd_lst);
+		else if (!((*cmd_lst)->checker_redir) && (*cmd_lst && (*cmd_lst) &&
+		is_redir((*cmd_lst)->type)))
+			*cmd_lst = redir_first(info, cmd_lst);
+		else
+			execute_command(info, *cmd_lst);
+		exit(g_signal.exit_status);
 	}
 	close_pipe_fd(old_pipefd, info);
 }
 
 static void	apply_first_pipe(t_cmdlst **cmd_lst, int pipefd[2],
-						t_minishell_info *info)
+						t_minishell *info, int fd)
 {
-	int	fork_pid;
-
+	(void)fd;
+	(*cmd_lst)->checker_pipe = true;
+	g_signal.fork_pid_for_pipe = -1;
 	if ((pipe(pipefd)) == -1)
 		all_free_exit(info, ERR_FORK, __LINE__, __FILE__);
-	if ((fork_pid = fork()) == -1)
+	if ((g_signal.fork_pid_for_pipe = fork()) == -1)
 		all_free_exit(info, ERR_FORK, __LINE__, __FILE__);
-	else if (fork_pid == 0)
+	else if (g_signal.fork_pid_for_pipe == 0)
 	{
 		connect_std_in_out_and_pipe(pipefd, STDOUT_FILENO, info);
-		execute_each_command(info, *cmd_lst);
-		exit(0);
+		if (!((*cmd_lst)->checker_redir) && (*cmd_lst && (*cmd_lst)->next
+		&& is_redir((*cmd_lst)->next->type)))
+			*cmd_lst = my_redirect(info, cmd_lst);
+		else if (!((*cmd_lst)->checker_redir) && (*cmd_lst && (*cmd_lst) &&
+		is_redir((*cmd_lst)->type)))
+			*cmd_lst = redir_first(info, cmd_lst);
+		else
+			execute_command(info, *cmd_lst);
+		exit(g_signal.exit_status);
 	}
 }
 
-/*
-** pipefd[1]に入れたデータはpipefd[0]から取り出せる
-** dup2(pipefd[1], 1)とすると標準出力先がpipefd[1]、つまりパイプの入り口とつながります
-*/
-
-t_cmdlst	*pipe_sep(t_minishell_info *info, t_cmdlst **cmd_lst)
+t_cmdlst	*my_pipe(t_minishell *info, t_cmdlst **cmd_lst, int fd)
 {
 	int			pipefd[info->cmd_lst_num / 2][2];
-	t_cmdlst	*next;
 	int			i;
+	int			status;
 
-	i = 0;
-	apply_first_pipe(cmd_lst, pipefd[0], info);
-	*cmd_lst = skip_lst_and_free(cmd_lst, 2);
-	i++;
-	while (*cmd_lst && ((*cmd_lst)->type == PIPE || ((*cmd_lst)->next &&
-				(*cmd_lst)->next->type == PIPE)))
+	apply_first_pipe(cmd_lst, pipefd[0], info, fd);
+	skip_command(cmd_lst);
+	i = 1;
+	while (is_now_middle_pipe(*cmd_lst))
 	{
+		*cmd_lst = (*cmd_lst)->next;
 		apply_middle_pipe(cmd_lst, pipefd[i - 1], pipefd[i], info);
-		*cmd_lst = skip_lst_and_free(cmd_lst, 2);
+		skip_command(cmd_lst);
 		i++;
 	}
+	*cmd_lst = get_next_command(*cmd_lst);
 	apply_last_pipe(cmd_lst, pipefd[i - 1], info);
+	if ((waitpid(g_signal.fork_pid_for_pipe, &status, 0)) == -1)
+		all_free_exit(info, ERR_WAIT_PID, __LINE__, __FILE__);
+	g_signal.exit_status = WEXITSTATUS(status);
+	g_signal.fork_pid_for_pipe = -1;
 	while (wait(NULL) > 0)
 		;
-	next = (*cmd_lst)->next;
-	return (next);
+	g_signal.sig_sign = 1;
+	skip_command(cmd_lst);
+	return (*cmd_lst);
 }

@@ -6,13 +6,15 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/23 13:12:01 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/11 21:24:23 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/10 20:39:25 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/write_func.h"
 
-void	ft_putchar_fd(char c, int fd)
+bool	ft_putchar_fd(char c, int fd)
 {
-	write(fd, &c, 1);
+	if (write(fd, &c, 1) < 1)
+		return (false);
+	return (true);
 }

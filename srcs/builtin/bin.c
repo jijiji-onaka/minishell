@@ -6,106 +6,111 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 00:06:42 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/04 23:48:42 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/21 14:57:40 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static void	put_cmd_not_found(char *command, t_minishell_info *info)
+static char	*decide_error_message_2(char *command, t_minishell *info
+			, bool path_flag, bool sla_flag)
 {
+	int			fd;
+
+	(void)sla_flag;
+	if (path_flag)
+	{
+		fd = open(command, O_WRONLY);
+		g_signal.exit_status = (errno == ENOENT ? 127 : 126);
+		if (fd != -1 && close(fd) == -1)
+			all_free_exit(info, ERR_CLOSE, __LINE__, __FILE__);
+		return (strerror(errno));
+	}
+	g_signal.exit_status = CMD_NOT_FOUND;
+	return (NULL);
+}
+
+static char	*decide_error_message(char *command, t_minishell *info
+			, bool path_flag, bool sla_flag)
+{
+	struct stat	st;
+	int			fd;
+
+	if (sla_flag)
+	{
+		lstat(command, &st);
+		if (S_ISREG(st.st_mode) && ((S_IXUSR | S_IXGRP | S_IXOTH) & st.st_mode))
+		{
+			if (errno == EACCES && !(S_IRUSR & st.st_mode))
+			{
+				g_signal.exit_status = 126;
+				return (strerror(errno));
+			}
+			exit(0);
+		}
+		fd = open(command, O_WRONLY);
+		g_signal.exit_status = (errno == ENOENT ? 127 : 126);
+		if (fd != -1 && close(fd) == -1)
+			all_free_exit(info, ERR_CLOSE, __LINE__, __FILE__);
+		if (errno == EISDIR)
+			return ("is a directory");
+		return (strerror(errno));
+	}
+	if (path_flag)
+	{
+		fd = open(command, O_WRONLY);
+		g_signal.exit_status = (errno == ENOENT ? 127 : 126);
+		if (fd != -1 && close(fd) == -1)
+			all_free_exit(info, ERR_CLOSE, __LINE__, __FILE__);
+		return (strerror(errno));
+	}
+	return (decide_error_message_2(command, info, path_flag, sla_flag));
+}
+
+static void	not_builtin(char *command, t_minishell *info
+			, bool path_flag)
+{
+	char	*errno_message;
+
+	if (ENOEXEC == errno)
+		errno = EACCES;
+	if (!(errno_message = decide_error_message(command, info, path_flag,
+		ft_strchr(command, '/'))))
+		errno_message = "command not found";
 	if (write(STDERR_FILENO, "minishell: ", 11) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	if (write(STDERR_FILENO, command, ft_strlen(command)) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	if (write(STDERR_FILENO, ": command not found\n", 20) < 0)
+	if (write(STDERR_FILENO, ": ", 2) < 0)
+		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
+	else if (ft_putendl_fd(errno_message, STDERR_FILENO) == false)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 }
 
-static bool	check_executable_file_in_bin_dir(char *path, char **command,
-				t_minishell_info *info)
+void		exec_bin(t_minishell *info, t_cmdlst *cmd)
 {
-	t_stat	stat_buf;
-	char	*bin_path;
+	int			ret;
+	bool		path_flag;
+	char		**path;
 
-	if (!(bin_path = ft_str3join(path, "/", command[0])))
-		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-	if (lstat(bin_path, &stat_buf) == 0)
-	{
-		ptr_free((void **)&(command[0]));
-		command[0] = bin_path;
-		return (true);
-	}
-	ptr_free((void **)&bin_path);
-	return (false);
-}
-
-static bool	check_bash_standard_commands(t_minishell_info *info, char **command)
-{
-	char		*env_path;
-	char		**bin_paths;
-	int			i;
-
-	env_path = search_env("PATH", 4, info->env);
-	if (!(bin_paths = ft_split(env_path, ':')))
-	{
-		ptr_2d_free((void ***)command, ARG_MAX);
-		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-	}
-	i = 0;
-	while (bin_paths[i])
-	{
-		if (check_executable_file_in_bin_dir(bin_paths[i], command, info))
-			break ;
-		i++;
-	}
-	ptr_2d_free((void ***)&bin_paths, i);
-	return (true);
-}
-
-static void	update_args(char **args, t_minishell_info *info)
-{
-	int	i;
-
-	i = 0;
-	while (args[i])
-	{
-		if (args[i][0] == '\'' || args[i][0] == '\"')
-			if (!(args[i] = re_strtrim(&(args[i]), "\'\"")))
-				all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-		if (args[i][0] == '$' && args[i][1] != '$')
-			if (!(args[i] = re_strdup(&(args[i]), search_env(args[i] + 1,
-						ft_strlen(args[i] + 1), info->env))))
-				all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-		i++;
-	}
-}
-
-void		exec_bin(t_minishell_info *info, char **args)
-{
-	int			return_val;
-	pid_t		wait_pid;
-	int			status;
-	extern char	**environ;
-
-	update_args(args, info);
+	path = get_path(info->env, info);
 	if ((g_signal.fork_pid = fork()) == -1)
 		all_free_exit(info, ERR_FORK, __LINE__, __FILE__);
-	else if (g_signal.fork_pid == 0)
+	path_flag = false;
+	g_signal.exit_status = 0;
+	if (g_signal.fork_pid == 0)
 	{
-		check_bash_standard_commands(info, args);
-		return_val = execve(args[0], args, environ);
-		if (errno == ENOENT || errno == EACCES || errno == ENOEXEC)
-			put_cmd_not_found(args[0], info);
-		else if (return_val == -1)
-			all_free_exit(info, ERR_EXECVE, __LINE__, __FILE__);
-		exit(CMD_NOT_FOUND);
+		if ((ret = check_bash_standard_commands(info, cmd->arg, &path_flag)) < 0)
+			exit(!ft_perror("write or malloc"));
+		if (ret == 74)
+			exit(2);
+		if ((ret = execve(cmd->arg[0], cmd->arg, path)) == -1)
+			not_builtin(cmd->arg[0], info, path_flag);
+		exit(g_signal.exit_status);
 	}
-	if ((wait_pid = waitpid(g_signal.fork_pid, &status, 0)) == -1)
+	ptr_2d_free((void***)&path, 0);
+	if ((waitpid(g_signal.fork_pid, &ret, 0)) == -1)
 		all_free_exit(info, ERR_WAIT_PID, __LINE__, __FILE__);
-	if (g_signal.exit_status != 130)
-		g_signal.exit_status = WEXITSTATUS(status);
-	if (WIFEXITED(status) || WEXITSTATUS(status) == 0)
-		return ;
-	all_free_exit(info, ERR_FAIL_CHILD, __LINE__, __FILE__);
+	if (g_signal.exit_status != 130 && g_signal.exit_status != 131)
+		g_signal.exit_status = WEXITSTATUS(ret);
 }

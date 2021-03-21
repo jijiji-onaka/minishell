@@ -6,107 +6,113 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 00:23:07 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/03 21:25:20 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/21 14:00:13 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static char	*press_eof_while_looking(char match, char **inputs, \
-				t_minishell_info *info, char **command)
+static char	*preparation(char first_quo, char **command, int *backup,
+					t_minishell *info)
+{
+	char	*res;
+
+	if (!(res = ft_strdup("\0")))
+	{
+		ptr_free((void**)command);
+		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	}
+	display_what_is_waiting_for(first_quo, &res, command, info);
+	if ((*backup = dup(STDIN_FILENO)) == -1)
+	{
+		ptr_free((void**)command);
+		ptr_free((void**)res);
+		all_free_exit(info, ERR_DUP, __LINE__, __FILE__);
+	}
+	g_signal.reading = true;
+	info->ptr_for_free = *command;
+	return (res);
+}
+
+static void	clean_up(int *backup, char **inputs, t_minishell *info)
+{
+	if (!g_signal.reading)
+		if ((dup2(*backup, STDIN_FILENO)) == -1)
+		{
+			ptr_free((void**)inputs);
+			ptr_free((void**)info->ptr_for_free);
+			info->ptr_for_free = NULL;
+			all_free_exit(info, ERR_DUP2, __LINE__, __FILE__);
+		}
+	if (ft_close(backup) == false)
+	{
+		ptr_free((void**)inputs);
+		ptr_free((void**)info->ptr_for_free);
+		info->ptr_for_free = NULL;
+		all_free_exit(info, ERR_CLOSE, __LINE__, __FILE__);
+	}
+	info->ptr_for_free = NULL;
+	ptr_free((void **)inputs);
+}
+
+static void	*press_eof(char match, char **inputs, \
+				int *backup, t_minishell *info)
 {
 	ptr_free((void **)inputs);
-	ptr_free((void **)command);
-	if (write(1, "minishell: unexpected EOF while looking for matching `", 54)
+	clean_up(backup, inputs, info);
+	if (write(2, "minishell: unexpected EOF while looking for matching `", 54)
 				< 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	if (write(1, &match, 1) < 0)
+	if (write(2, &match, 1) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	if (write(1, "`\nminishell: syntax error: unexpected end of file\n", 50)
+	if (write(2, "`\nminishell: syntax error: unexpected end of file\n", 50)
 				< 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	return (NULL);
 }
 
-static bool	do_when_input_char_equal_newline(int count[2], char **inputs, \
-				char first_quo)
+static bool	press_newline(char *first_quo, char **inputs, \
+					char **command, t_minishell *info)
 {
-	if ((count[0] & 1) == 1)
-	{
-		if ((count[1] & 1) == 0)
-		{
-			count[0] = 0;
-			count[1] = 0;
-			return (true);
-		}
-	}
-	else
-	{
-		rm_chr_in_str(inputs, first_quo);
-		count[0] = 0;
-		count[1] = 0;
-	}
-	write(1, "> ", 2);
-	return (false);
-}
-
-static char	*prepare_in_advance(int *num1, int *num2, t_minishell_info *info)
-{
-	char	*res;
-
-	if (write(1, "> ", 2) < 0)
-		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	if (!(res = ft_strdup("\n")))
-		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-	*num1 = 0;
-	*num2 = 0;
-	return (res);
-}
-
-static bool	check_buf_and_return_value(ssize_t rc, char buf, int count[2], \
-			char first_quo)
-{
-	char	other_quo;
-
-	if (first_quo == '\'')
-		other_quo = '\"';
-	else if (first_quo == '\"')
-		other_quo = '\'';
-	if (rc == 0)
+	if (is_valid_quotations(inputs, first_quo) != false)
 		return (true);
-	else if (rc != 0 && buf == first_quo)
-		count[0]++;
-	else if (rc != 0 && buf == other_quo)
-		count[1]++;
+	if (!(*command = re_str3join(command, *command, "\n", *inputs)))
+		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	if (!(*inputs = re_strdup(inputs, "\0")))
+	{
+		ptr_free((void**)command);
+		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	}
+	display_what_is_waiting_for(*first_quo, inputs, command, info);
 	return (false);
 }
 
 char		*waiting_for_quotation(char first_quo, char **command, \
-						t_minishell_info *info)
+						t_minishell *info)
 {
 	ssize_t		rc;
 	char		buf;
 	char		*inputs;
-	int			count[2];
+	int			backup;
 
-	inputs = prepare_in_advance(&count[0], &count[1], info);
-	while ((rc = safe_read(&buf, &inputs, info)) >= 0)
+	inputs = preparation(first_quo, command, &backup, info);
+	buf = '\0';
+	while (g_signal.reading)
 	{
-		if (write(0, "\033[0K", 4) < 0)
-		{
-			ptr_free((void **)&inputs);
-			all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-		}
-		if (check_buf_and_return_value(rc, buf, count, first_quo) == true)
-			return (press_eof_while_looking(first_quo, &inputs, info, command));
-		if (buf == '\n')
-			if (do_when_input_char_equal_newline(count, &inputs, first_quo))
-				break ;
-		if (!(inputs = re_strjoinch(&inputs, buf)))
+		if ((rc = safe_read(&buf, &inputs, info)) < 0)
+			break ;
+		ctrl_d_rm(&inputs, info);
+		if (rc == 0 && inputs[0] == '\0')
+			return (press_eof(first_quo, &inputs, &backup, info));
+		if (buf == '\n' && press_newline(&first_quo, &inputs, command, info))
+			break ;
+		if (buf != '\n' && rc != 0 && !(inputs = re_strjoinch(&inputs, buf)))
 			all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	}
-	*command = re_strjoin(command, *command, inputs);
-	rm_chr_in_str(command, first_quo);
-	ptr_free((void **)&inputs);
+	if (!(*command = re_str3join(command, *command, "\n", inputs)))
+		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	clean_up(&backup, &inputs, info);
+	if (!g_signal.reading)
+		return (reset_prompt(command, &inputs));
 	return (*command);
 }

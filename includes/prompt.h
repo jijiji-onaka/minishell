@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 17:39:55 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/02 17:41:23 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/09 14:53:47 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,6 @@
 # include "standard_lib.h"
 
 void	display_welcome_message(void);
-void	put_prompt(t_minishell_info *info);
+void	put_prompt(t_minishell *info);
 
 #endif

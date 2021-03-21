@@ -6,41 +6,13 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 18:44:56 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/04 02:17:35 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/21 07:01:38 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static void	remove_env_lst_if(t_envlst **env, char *data, int (*cmp_by)())
-{
-	t_envlst	*begin;
-	t_envlst	*remove;
-
-	begin = *env;
-	while (*env && (*env)->next)
-	{
-		if (cmp_by(data, (*env)->next->value, ft_strlen(data)) == 0)
-		{
-			remove = (*env)->next;
-			(*env)->next = (*env)->next->next;
-			ptr_free((void **)&(remove->value));
-			ptr_free((void **)&remove);
-		}
-		else
-			*env = (*env)->next;
-	}
-	*env = begin;
-	if (cmp_by(data, (*env)->value, ft_strlen(data)) == 0)
-	{
-		remove = (*env)->next;
-		(*env)->next = (*env)->next->next;
-		ptr_free((void **)&(remove->value));
-		ptr_free((void **)remove);
-	}
-}
-
-static void	error_message(char *s, t_minishell_info *info)
+static bool	display_err(char *s, t_minishell *info)
 {
 	if (write(STDERR_FILENO, "minishell: unset: `", 19) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
@@ -48,32 +20,49 @@ static void	error_message(char *s, t_minishell_info *info)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	if (write(STDERR_FILENO, "': not a valid identifier\n", 26) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
+	g_signal.exit_status = 1;
+	return (false);
 }
 
-void		exec_unset(t_minishell_info *info, char **args)
+static bool	is_valid_env_name(char *env_name, t_minishell *info)
 {
 	int		i;
-	char	*tmp;
+	int		err_flag;
 
+	err_flag = false;
+	if (ft_strchr(env_name, ' ') ||
+	(env_name)[0] == '\0' || (env_name)[0] == '=' || ft_isdigit((env_name)[0]))
+		err_flag = true;
+	if (err_flag)
+		return (display_err(env_name, info));
+	i = -1;
+	while ((env_name)[++i])
+	{
+		if (!is_parameter((env_name)[i]))
+			err_flag = true;
+	}
+	if (err_flag)
+		return (display_err(env_name, info));
+	return (true);
+}
+
+void		exec_unset(t_minishell *info, t_cmdlst *cmd)
+{
+	int		i;
+	bool	valid_flag;
+	char	**args;
+
+	args = cmd->arg;
+	g_signal.exit_status = 0;
 	if (args[1] == NULL)
 		return ;
 	if (args[1][0] == '-')
 		return (error_mandatory(ERR_UNSET, 29, info));
 	i = 0;
+	valid_flag = false;
 	while (args[++i])
 	{
-		if (args[i][0] == '\'' || args[i][0] == '\"')
-			if (!(args[i] = re_strtrim(&(args[i]), "\'\"")))
-				all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-		if (args[i][0] == '$')
-			tmp = search_env(args[i] + 1, ft_strlen(args[i] + 1), info->env);
-		else
-			tmp = args[i];
-		if (tmp[0] == '\\')
-			tmp++;
-		if (ft_isalpha(tmp[0]))
-			remove_env_lst_if(&(info->env), tmp, ft_strncmp);
-		else
-			error_message(tmp, info);
+		if (is_valid_env_name(args[i], info))
+			remove_env_lst_if(&(info->env), args[i]);
 	}
 }

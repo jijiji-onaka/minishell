@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 12:38:30 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 14:55:44 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/21 21:31:49 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ static bool	display_err(char *arg, t_minishell *info)
 		write_err_flag = true;
 	if (write(2, "\': not a valid identifier\n", 26) < 0)
 		write_err_flag = true;
-
 	if (write_err_flag == true)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	g_signal.exit_status = 1;

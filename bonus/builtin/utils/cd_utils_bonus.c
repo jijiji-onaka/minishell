@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 12:11:59 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 14:44:40 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/21 21:31:44 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void		upper_dir(char *now, t_minishell *info)
 	info->current_dir_path = res;
 }
 
-void		go_to_upper_dir(char *now, t_minishell *info)
+void			go_to_upper_dir(char *now, t_minishell *info)
 {
 	int		i;
 	char	**split;
@@ -63,8 +63,7 @@ void		go_to_upper_dir(char *now, t_minishell *info)
 	info->ptr_2d_for_free = NULL;
 }
 
-
-bool		is_symbolic_dir(t_minishell *info, char *dir_name)
+bool			is_symbolic_dir(t_minishell *info, char *dir_name)
 {
 	t_stat	stat_buf;
 
@@ -79,7 +78,7 @@ bool		is_symbolic_dir(t_minishell *info, char *dir_name)
 	return (true);
 }
 
-void		update_current_dir(t_minishell *info, char *dir)
+void			update_current_dir(t_minishell *info, char *dir)
 {
 	if (info->current_dir_path[ft_strlen(info->current_dir_path) - 1] != '/')
 		info->current_dir_path =
@@ -92,7 +91,7 @@ void		update_current_dir(t_minishell *info, char *dir)
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 }
 
-bool		not_found_cwd(t_minishell *info, char *arg_dir, char ***ptr)
+bool			not_found_cwd(t_minishell *info, char *arg_dir, char ***ptr)
 {
 	if (errno != ENOENT)
 		all_free_exit(info, ERR_GETCWD, __LINE__, __FILE__);

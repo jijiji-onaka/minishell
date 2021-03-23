@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 03:10:50 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/18 04:36:14 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/21 20:52:08 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ bool	safe_chdir(char *dir, char **split, t_minishell *info)
 	char	*tmp;
 
 	if (dir[0] == '\0')
-		tmp = search_env("PWD", 3, info->env);
+		tmp = search_env("PWD", 3, info->env, NULL);
 	else
 		tmp = dir;
 	if (tmp == NULL || tmp[0] == '\0')

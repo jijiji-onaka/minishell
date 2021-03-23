@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 19:18:45 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 14:38:24 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/21 21:32:08 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,10 @@ static int	compare(char *s1, char *s2, size_t n, bool *flag)
 	}
 	if (u_s1[i] == '\0' && flag)
 		*flag = true;
-	else if (u_s1[i] != '=' || (u_s2[i] != '\0' && u_s2[i] != ' ' && u_s2[i] != '$'
-		&& u_s2[i] != '\"' && u_s2[i] != '\'' && u_s2[i] != '\\'
-		&& u_s2[i] != '-' && u_s2[i] != '.' && u_s2[i] != '/' && ft_isdigit(u_s2[i])))
+	else if (u_s1[i] != '=' || (u_s2[i] != '\0' && u_s2[i] != ' '
+	&& u_s2[i] != '$' && u_s2[i] != '\"' && u_s2[i] != '\'' && u_s2[i] != '\\'
+	&& u_s2[i] != '-' && u_s2[i] != '.' && u_s2[i] != '/'
+	&& ft_isdigit(u_s2[i])))
 		return (-1);
 	return (0);
 }

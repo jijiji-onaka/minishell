@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:50:53 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/20 14:03:34 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/21 21:31:23 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ static void	break_read(void)
 void		sig_int(int code)
 {
 	(void)code;
-
 	if (g_signal.fork_pid_for_pipe == 0)
 	{
 		g_signal.exit_status = 130;

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd_go_to_oldpwd.c                                  :+:      :+:    :+:   */
+/*   cd_go_to_oldpwd_bonus.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/15 17:51:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/17 04:37:54 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/21 20:51:55 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void		go_to_oldpwd(t_minishell *info)
 {
 	char		*oldpwd_path;
 
-	oldpwd_path = search_env("OLDPWD", 6, info->env);
+	oldpwd_path = search_env("OLDPWD", 6, info->env, NULL);
 	if (oldpwd_path == NULL)
 	{
 		if (write(STDERR_FILENO, NO_OLDPWD, 30) < 0)

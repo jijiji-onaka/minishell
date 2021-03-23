@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_more_pipe.c                                  :+:      :+:    :+:   */
+/*   check_more_pipe_bonus.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/19 22:58:37 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/19 22:59:59 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/21 20:58:05 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/minishell.h"
+#include "../../../includes/minishell_bonus.h"
 
 static char	**insert_2d_array(char **dst, char **src1, char **src2)
 {

@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   search_exefile_bin_dir.c                           :+:      :+:    :+:   */
+/*   search_exefile_bin_dir_bonus.c                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/21 14:23:17 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 14:26:17 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/21 20:54:09 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-static bool	check_executable_file_in_bin_dir(char *path, char **command,
+char		*check_executable_file_in_bin_dir(char *path, char **command,
 				t_minishell *info)
 {
 	t_stat	stat_buf;
@@ -22,15 +22,13 @@ static bool	check_executable_file_in_bin_dir(char *path, char **command,
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	if (lstat(bin_path, &stat_buf) == 0)
 	{
-		ptr_free((void **)&(command[0]));
-		command[0] = bin_path;
-		return (true);
+		return (bin_path);
 	}
 	ptr_free((void **)&bin_path);
 	return (false);
 }
 
-static bool	no_exe_file_in_bin_dir(char *file, t_minishell *info)
+bool		no_exe_file_in_bin_dir(char *file, t_minishell *info)
 {
 	DIR				*dir;
 	struct dirent	*dp;
@@ -63,10 +61,7 @@ int			check_bash_standard_commands(t_minishell *info, char **command
 
 	if ((*command) == NULL || (*command)[0] == '\0')
 		return (true);
-	if (((*command)[0] == '.' && (*command)[1] == '\0'))
-		return (write(STDERR_FILENO, "minishell: .: filename argument required\n\
-.: usage: . filename [arguments]\n", 74));
-	if (ft_strchr((*command), '/') || ft_strcmp((*command), "..") == 0)
+	if (ft_strchr((*command), '/') || (ft_strcmp((*command), "..") == 0))
 		return (true);
 	if (!(env_path = search_env("PATH", 4, info->env, NULL)))
 		return ((*path_flag = true));
@@ -78,9 +73,8 @@ int			check_bash_standard_commands(t_minishell *info, char **command
 	while (bin_paths[++i])
 		if (check_executable_file_in_bin_dir(bin_paths[i], command, info))
 			return (!(ptr_2d_free((void ***)&bin_paths, i)));
-	if ((env_path[ft_strlen(env_path) - 1] == ':' ||
-			env_path[ft_strlen(env_path) - 1] == '/') &&
-			no_exe_file_in_bin_dir(*command, info) == true)
+	if ((env_path[ft_strlen(env_path) - 1] == ':' || env_path
+[ft_strlen(env_path) - 1] == '/') && no_exe_file_in_bin_dir(*command, info))
 		*command = re_strjoin(command, "./", *command);
 	return (!(ptr_2d_free((void ***)&bin_paths, i)));
 }

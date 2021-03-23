@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 17:22:21 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 16:54:50 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/21 21:14:39 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,5 +54,6 @@ char		**split_each_parts(char *str);
 char		**split_each_arg(char *str);
 char		**final_split(char const *s, char c);
 bool		parse_command(t_minishell *info, char *command);
+int			return_index(int type);
 
 #endif

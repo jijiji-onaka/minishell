@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 17:42:21 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/20 02:12:21 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/21 20:58:10 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 # include "struct_etc_bonus.h"
 # include "standard_lib_bonus.h"
 
-int		add_command_group(char **split, t_cmd_grp *cmd_grp_info,
-						int split_size, t_minishell *info);
 void	ctrl_d_exit(char **ptr, t_minishell *info);
 void	ctrl_d_rm(char **ptr, t_minishell *info);
 void	rm_chr_in_str(char **str, char chr);

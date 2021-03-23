@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 14:07:59 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/20 14:03:10 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/21 21:30:54 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ bool		do_here_document(t_minishell *info, int fd, char *stopper,
 			return (press_eof(&inputs, &backup, info));
 		if (buf == '\n' && press_newline(&inputs, stopper, fd, expand_flag))
 			break ;
-		else if (buf != '\n' && rc != 0 && !(inputs = re_strjoinch(&inputs, buf)))
+		else if (buf != '\n' && !(inputs = re_strjoinch(&inputs, buf)))
 			all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	}
 	clean_up(&backup, &inputs, info);

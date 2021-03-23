@@ -6,12 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 16:54:09 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 14:06:39 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/21 21:31:08 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell_bonus.h"
-
 
 static void		decide_quo_val(char chr[2], char *now)
 {

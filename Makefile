@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/23 01:57:04 by tjinichi          #+#    #+#              #
-#    Updated: 2021/03/21 20:35:03 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/03/21 21:28:58 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = minishell
 
 CC = gcc
 # CFLAGS = -g #-Wall -Werror -Wextra #            -fsanitize=address
-CFLAGS = -g   #         -fsanitize=address
+CFLAGS = -g            -fsanitize=address
 
 SRCFILE =	 \
 
@@ -267,13 +267,13 @@ BUILTIN_B_SRCS = $(addprefix $(BUILTIN_DIR)/, \
 				utils/export_when_only_env_name_bonus.c \
 				utils/safe_chdir_bonus.c \
 				utils/search_env_bonus.c \
+				utils/search_exefile_bin_dir_bonus.c \
 				utils/skip_for_exit_bonus.c \
 				utils/two_ptr_free_bonus.c \
 				utils/unset_remove_env_lst_if_bonus.c \
+				utils/get_path_bonus.c \
 				utils/not_builtin_command_bonus.c \
 				utils/update_env_lst_bonus.c \
-				utils/get_path_bonus.c \
-				utils/search_exefile_bin_dir_bonus.c \
 				bin_bonus.c \
 				cd_bonus.c \
 				echo_bonus.c \
@@ -295,11 +295,12 @@ $(OBJDIR)/%.o : $(BUILTIN_DIR)/%.c
 READ_DIR = $(B_SRCDIR)/read_stdin
 READ_B_SRCS = $(addprefix $(READ_DIR)/, \
 				utils/ctrl_d_exit_bonus.c \
-				utils/ctrl_d_rm_bonus.c \
-				utils/check_more_pipe_bonus.c \
-				utils/reset_prompt_bonus.c \
 				utils/rm_chr_in_str_bonus.c \
 				utils/safe_read_bonus.c \
+				utils/reset_prompt_bonus.c \
+				utils/check_more_pipe_bonus.c \
+				utils/ctrl_d_rm_bonus.c \
+				utils/what_is_waiting_for_bonus.c \
 				waiting_for_input_bonus.c \
 				waiting_for_quotation_bonus.c \
 				waiting_for_next_command_bonus.c \
@@ -317,13 +318,12 @@ PARSE_DIR = $(B_SRCDIR)/parse
 PARSE_B_SRCS = $(addprefix $(PARSE_DIR)/, \
 				utils/binary_search_bonus.c \
 				utils/cmdlst_add_back_bonus.c \
-				utils/is_valid_quotation_bonus.c \
-				utils/what_is_waiting_for_bonus.c\
 				utils/is_what_bonus.c \
 				utils/is_what_2_bonus.c \
 				utils/rm_spaces_in_2d_array_bonus.c \
 				utils/split_each_arg_bonus.c \
 				utils/split_each_parts_bonus.c \
+				utils/is_valid_quotation_bonus.c  \
 				check_format/free_syntax_error_bonus.c \
 				check_format/check_format_of_command_bonus.c \
 				parse_command_bonus.c \
@@ -357,10 +357,11 @@ EXECUTE_B_SRCS = $(addprefix $(EXECUTE_DIR)/, \
 				utils/change_only_env_bonus.c \
 				utils/change_only_env_2_bonus.c \
 				utils/merge_lst_sort_bonus.c \
-				utils/stock_envval_bonus.c \
 				utils/wild_card_utils_bonus.c \
 				utils/wild_card_get_matched_files_bonus.c \
 				utils/change_astarisk_bonus.c \
+				utils/stock_envval_bonus.c \
+				utils/return_index_bonus.c \
 				execute_bonus.c \
 				and_or_bonus.c \
 )
@@ -379,8 +380,6 @@ SEPARATOR_B_SRCS = $(addprefix $(SEPARATOR_DIR)/, \
 				utils/connect_std_in_out_and_pipe_bonus.c \
 				utils/err_message_bonus.c \
 				utils/do_here_document_bonus.c \
-				change_env_in_here_doc_bonus.c \
-				change_env_in_here_doc_2_bonus.c \
 				utils/free_alloc_ptr_in_cmd_lst_bonus.c \
 				utils/get_arg_behind_redir_for_redir_first_bonus.c \
 				utils/get_arg_behind_redir_bonus.c \
@@ -388,6 +387,8 @@ SEPARATOR_B_SRCS = $(addprefix $(SEPARATOR_DIR)/, \
 				utils/prepare_redir_bonus.c \
 				utils/redir_open_files_and_stock_fd_bonus.c \
 				utils/skip_cmdlst_bonus.c \
+				utils/change_env_in_here_doc_2_bonus.c  \
+				utils/change_env_in_here_doc_bonus.c  \
 				pipe_bonus.c \
 				redir_first_bonus.c \
 				redirect_bonus.c \

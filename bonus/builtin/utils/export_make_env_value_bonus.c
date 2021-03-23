@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export_make_env_value.c                            :+:      :+:    :+:   */
+/*   export_make_env_value_bonus.c                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/03 20:41:03 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/17 04:37:54 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/21 20:52:02 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char		*add_env_value(char *arg, t_minishell *info, char **env_name)
 	char	*search;
 	char	*res;
 
-	search = search_env(*env_name, ft_strlen(*env_name), info->env);
+	search = search_env(*env_name, ft_strlen(*env_name), info->env, NULL);
 	if (search == NULL)
 		return (make_env_value(arg, info, env_name));
 	else

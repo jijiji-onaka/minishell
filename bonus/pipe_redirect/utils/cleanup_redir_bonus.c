@@ -6,12 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 11:26:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 14:02:27 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/21 21:31:03 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell_bonus.h"
-
 
 void		cleanup_redirect_put(int (*fd)[2], int *backup,
 				t_cmdlst *lst, t_minishell *info)

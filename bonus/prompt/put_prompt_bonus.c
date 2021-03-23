@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 00:41:03 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/20 01:19:38 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/21 20:54:25 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void		put_prompt(t_minishell *info)
 	char	*user_name;
 	char	*working_dir;
 
-	user_name = search_env("USER", 4, info->env);
+	user_name = search_env("USER", 4, info->env, NULL);
 	working_dir = info->current_dir_path;
 	if (!user_name)
 	{

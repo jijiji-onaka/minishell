@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 02:18:39 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/17 05:24:36 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,6 @@ bool			syntax_error(int type, t_minishell *info)
 	write_rc = syntax_error2(type);
 	if (write_rc == -1)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	g_signal.exit_status = 258;
+	g_global.exit_status = 258;
 	return (false);
 }

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 12:38:30 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 14:55:41 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/24 19:50:23 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static bool	display_err(char *arg, t_minishell *info)
 		write_err_flag = true;
 	if (write_err_flag == true)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	g_signal.exit_status = 1;
+	g_global.exit_status = 1;
 	return (false);
 }
 
@@ -52,30 +52,29 @@ static bool	is_valid_env_name(char **env_name, char *arg, t_minishell *info)
 	return (true);
 }
 
-void		when_only_env_name(char *arg, t_minishell *info)
-{
-	char	*env_name;
-	bool	f;
+// void		when_only_env_name(char *arg, t_minishell *info)
+// {
+// 	char	*env_name;
+// 	// bool	f;
 
-	if (!(env_name = ft_strdup(arg)))
-		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-	if (is_valid_env_name(&env_name, arg, info))
-	{
-		if (ft_strcmp(arg, "PWD") == 0)
-		{
-			search_env("PWD", 3, info->env, &f);
-			if (!f)
-				update_env_lst(&(info->env), env_name,
-					info->current_dir_path, info);
-		}
-		else if (ft_strcmp(arg, "OLDPWD") == 0)
-		{
-			if (!search_env(env_name, ft_strlen(env_name), info->env, &f) && !f)
-				update_env_lst(&(info->env), env_name, info->oldpwd_path, info);
-		}
-		else if (!search_env(env_name, ft_strlen(env_name), info->env, &f)
-			&& !f)
-			update_env_lst(&(info->env), env_name, NULL, info);
-	}
-	ptr_free((void**)&env_name);
-}
+// 	if (!(env_name = ft_strdup(arg)))
+// 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+// 	if (is_valid_env_name(&env_name, arg, info))
+// 	{
+// 		if (ft_strcmp(arg, "PWD") == 0)
+// 		{
+// 			search_env("PWD", 3, info->env);
+// 			// if (!f)
+// 				update_env_lst(&(info->env), env_name,
+// 					info->current_dir_path, info);
+// 		}
+// 		else if (ft_strcmp(arg, "OLDPWD") == 0)
+// 		{
+// 			if (!search_env(env_name, ft_strlen(env_name), info->env))
+// 				update_env_lst(&(info->env), env_name, info->oldpwd_path, info);
+// 		}
+// 		else if (!search_env(env_name, ft_strlen(env_name), info->env))
+// 			update_env_lst(&(info->env), env_name, NULL, info);
+// 	}
+// 	ptr_free((void**)&env_name);
+// }

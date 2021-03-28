@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 02:54:08 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 20:20:11 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/28 07:46:41 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ static void		free_env_lst(t_envlst **envlst)
 	while (*envlst)
 	{
 		env_tmp = (*envlst)->next;
-		ptr_free((void **)&((*envlst)->value));
+		ptr_free((void **)&((*envlst)->env.key));
+		ptr_free((void **)&((*envlst)->env.value));
 		ptr_free((void **)&(*envlst));
 		*envlst = env_tmp;
 	}
@@ -43,12 +44,27 @@ static void		free_cmd_lst(t_cmdlst **cmdlst)
 	}
 }
 
+void			free_command_history(t_history **history)
+{
+	t_history *next;
+
+	while (*history)
+	{
+		next = (*history)->prev;
+		ptr_free((void **)&((*history)->command));
+		// ptr_free((void **)&(*history));
+		free(*history);
+		*history = next;
+	}
+}
+
 void			all_free_minishell_info(t_minishell *info)
 {
 	ptr_free((void**)&(info->current_dir_path));
 	ptr_free((void**)&(info->oldpwd_path));
 	free_cmd_lst(&(info->cmd_lst));
 	free_env_lst(&(info->env));
+	free_command_history(&(info->command_history_begin));
 }
 
 static void		put_error_location_and_exit(char *error_message,
@@ -57,7 +73,7 @@ static void		put_error_location_and_exit(char *error_message,
 	char	*location_message;
 	char	*tmp;
 
-	red_error();
+	// red_error();
 	if (write(STDERR_FILENO, info->current_dir_path,
 				ft_strlen(info->current_dir_path)) < 0)
 		exit(EXIT_FAILURE);
@@ -87,6 +103,7 @@ void			all_free_exit(t_minishell *info, char *error_message, \
 	if (info->ptr_for_free_2)
 		ptr_free((void**)&info->ptr_for_free_2);
 	free_cmd_lst(&(info->cmd_lst));
+	tcsetattr(STDIN_FILENO, TCSANOW, &(g_global.terms[ORIGINAL]));
 	if (errno == 0)
 		exit(1);
 	put_error_location_and_exit(error_message, line_num, file_name, info);

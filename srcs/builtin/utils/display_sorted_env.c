@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 01:04:08 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/13 13:47:14 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/24 21:53:27 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,36 +40,35 @@ static void	put_env_value(char *str, t_minishell *info)
 	while (str[i])
 	{
 		if (str[i] == '\"' || str[i] == '\\' || str[i] == '$' || str[i] == '`')
-			if (write(1, "\\", 1) < 0)
+			if (write(STDOUT_FILENO, "\\", 1) < 0)
 				all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-		if (write(1, str + i, 1) < 0)
+		if (write(STDOUT_FILENO, str + i, 1) < 0)
 			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 		i++;
 	}
 }
 
-static void	print_env(char *value, t_minishell *info)
+static void	display_env(t_env env, t_minishell *info)
 {
 	size_t	i;
 	size_t	j;
-	int		flag;
 
-	if ((flag = length_and_return_flag(value, &i, &j)) == 2)
-		return ;
-	if (write(1, "declare -x ", 11) < 0)
+	if (write(STDOUT_FILENO, "declare -x ", 11) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	if (flag == false)
+	if (env.key.str && env.value.str == NULL)
 	{
-		if (ft_putendl_fd(value, 1) == false)
+		if (write(STDOUT_FILENO, env.key.str, env.key.len) < 0)
+			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
+		if (write(STDOUT_FILENO, "\n", 1) < 0)
 			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 		return ;
 	}
-	if (write(1, value, j + 1) < 0)
+	if (write(STDOUT_FILENO, env.key.str, env.key.len) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	if (write(1, "\"", 1) < 0)
+	if (write(STDOUT_FILENO, "=\"", 2) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	put_env_value(value + j + 1, info);
-	if (write(1, "\"\n", 2) < 0)
+	put_env_value(env.value.str, info);
+	if (write(STDOUT_FILENO, "\"\n", 2) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 }
 
@@ -83,7 +82,7 @@ void		display_sorted_env(t_minishell *info)
 	while (sort_env)
 	{
 		tmp = sort_env->next;
-		print_env(sort_env->value, info);
+		display_env(sort_env->env, info);
 		free(sort_env);
 		sort_env = tmp;
 	}

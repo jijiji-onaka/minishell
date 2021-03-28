@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 18:24:30 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/20 01:28:00 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 static void	normal_exit(t_minishell *info)
 {
 	all_free_minishell_info(info);
-	exit(g_signal.exit_status);
+	exit(g_global.exit_status);
 }
 
 static void	fail_too_arg_exit(t_minishell *info)
 {
 	if (write(2, "minishell: exit: too many arguments\n", 36) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	g_signal.exit_status = 1;
+	g_global.exit_status = 1;
 	info->exit_too_arg = true;
 	return ;
 }
@@ -35,15 +35,15 @@ static void	non_numeric_exit(t_minishell *info, char *arg1)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	if (write(2, ": numeric argument required\n", 28) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	g_signal.exit_status = 255;
-	exit(g_signal.exit_status);
+	g_global.exit_status = 255;
+	exit(g_global.exit_status);
 }
 
 static void	selected_code_exit(t_minishell *info, int exit_code)
 {
 	all_free_minishell_info(info);
-	g_signal.exit_status = exit_code % 256;
-	exit(g_signal.exit_status);
+	g_global.exit_status = exit_code % 256;
+	exit(g_global.exit_status);
 }
 
 void		exec_exit(t_minishell *info, t_cmdlst *cmd)

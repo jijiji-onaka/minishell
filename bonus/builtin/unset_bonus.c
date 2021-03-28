@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 18:44:56 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/17 04:40:33 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static bool	display_err(char *s, t_minishell *info)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	if (write(STDERR_FILENO, "': not a valid identifier\n", 26) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	g_signal.exit_status = 1;
+	g_global.exit_status = 1;
 	return (false);
 }
 
@@ -61,5 +61,5 @@ void		exec_unset(t_minishell *info, t_cmdlst *cmd)
 	i = 0;
 	while (args[++i])
 		remove_env_lst_if(&(info->env), args[i]);
-	g_signal.exit_status = 0;
+	g_global.exit_status = 0;
 }

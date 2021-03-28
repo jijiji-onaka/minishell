@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 16:00:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 13:59:53 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,22 +18,22 @@ static char	*preparation(int *backup, \
 	char	*res;
 
 	if (!(res = ft_strdup("")))
-		all_free_exit(&(g_signal.info), ERR_MALLOC, __LINE__, __FILE__);
-	display_what_is_waiting_for('|', &res, NULL, &(g_signal.info));
+		all_free_exit(&(g_global.info), ERR_MALLOC, __LINE__, __FILE__);
+	display_what_is_waiting_for('|', &res, NULL, &(g_global.info));
 	if ((*backup = dup(STDIN_FILENO)) == -1)
 	{
 		ptr_free((void**)&res);
-		all_free_exit(&(g_signal.info), ERR_DUP, __LINE__, __FILE__);
+		all_free_exit(&(g_global.info), ERR_DUP, __LINE__, __FILE__);
 	}
 	cmd_grp_info->cmd_grp = cmd_grp;
 	cmd_grp_info->array_size = array_size;
-	g_signal.reading = true;
+	g_global.reading = true;
 	return (res);
 }
 
 static void	clean_up(int *backup, char **inputs, t_minishell *info)
 {
-	if (!g_signal.reading)
+	if (!g_global.reading)
 		if ((dup2(*backup, STDIN_FILENO)) == -1)
 		{
 			ptr_free((void**)inputs);
@@ -88,7 +88,7 @@ char		*waiting_for_next_command(char ***cmd_grp, int array_size,
 	int			backup;
 
 	inputs = preparation(&backup, &cmd_grp_info, cmd_grp, array_size);
-	while (g_signal.reading)
+	while (g_global.reading)
 	{
 		if ((rc = safe_read(&buf, &inputs, info)) < 0)
 			break ;

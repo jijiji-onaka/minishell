@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 03:10:50 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 11:25:39 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/24 22:22:21 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ bool	safe_chdir(char *dir, char **split, t_minishell *info)
 	char	*tmp;
 
 	if (dir[0] == '\0')
-		tmp = search_env("PWD", 3, info->env, NULL);
+		tmp = ft_getenv("PWD", info->env, false);
 	else
 		tmp = dir;
 	if (tmp == NULL || tmp[0] == '\0')
@@ -33,7 +33,7 @@ bool	safe_chdir(char *dir, char **split, t_minishell *info)
 		}
 		ft_perror(err);
 		free(err);
-		g_signal.exit_status = EXIT_FAILURE;
+		g_global.exit_status = EXIT_FAILURE;
 		return (false);
 	}
 	return (true);

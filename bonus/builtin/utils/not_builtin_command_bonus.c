@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/21 14:23:17 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 21:05:03 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,12 @@ static char	*decide_error_message_2(char *command, t_minishell *info
 	if (path_flag)
 	{
 		fd = open(command, O_WRONLY);
-		g_signal.exit_status = (errno == ENOENT ? 127 : 126);
+		g_global.exit_status = (errno == ENOENT ? 127 : 126);
 		if (fd != -1 && close(fd) == -1)
 			all_free_exit(info, ERR_CLOSE, __LINE__, __FILE__);
 		return (strerror(errno));
 	}
-	g_signal.exit_status = CMD_NOT_FOUND;
+	g_global.exit_status = CMD_NOT_FOUND;
 	return (NULL);
 }
 
@@ -43,13 +43,13 @@ static char	*decide_error_message(char *command, t_minishell *info
 		{
 			if (errno == EACCES && !(S_IRUSR & st.st_mode))
 			{
-				g_signal.exit_status = 126;
+				g_global.exit_status = 126;
 				return (strerror(errno));
 			}
 			exit(0);
 		}
 		fd = open(command, O_WRONLY);
-		g_signal.exit_status = (errno == ENOENT ? 127 : 126);
+		g_global.exit_status = (errno == ENOENT ? 127 : 126);
 		if (fd != -1 && close(fd) == -1)
 			all_free_exit(info, ERR_CLOSE, __LINE__, __FILE__);
 		if (errno == EISDIR)

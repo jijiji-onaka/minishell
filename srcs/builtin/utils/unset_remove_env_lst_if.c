@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/15 17:55:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 14:36:34 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/25 00:16:40 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,23 +42,25 @@ void		remove_env_lst_if(t_envlst **env, char *data)
 	begin = *env;
 	while (*env && (*env)->next)
 	{
-		if (compare((*env)->next->value, data, ft_strlen(data)) == 0)
+		if (ft_strcmp((*env)->next->env.key.str, data) == MATCH)
 		{
 			remove = (*env)->next;
 			(*env)->next = (*env)->next->next;
-			ptr_free((void **)&(remove->value));
+			ptr_free((void **)&(remove->env.key.str));
+			ptr_free((void **)&(remove->env.value.str));
 			free(remove);
 		}
 		else
 			*env = (*env)->next;
 	}
 	*env = begin;
-	if (compare((*env)->value, data, ft_strlen(data)) == 0)
+	if (ft_strcmp((*env)->env.key.str, data) == MATCH)
 	{
 		begin = (*env)->next;
-		ptr_free((void **)&((*env)->value));
+		ptr_free((void **)&((*env)->env.key.str));
+		ptr_free((void **)&((*env)->env.value.str));
 		free(*env);
 		*env = begin;
-		g_signal.info.env = *env;
+		g_global.info.env = *env;
 	}
 }

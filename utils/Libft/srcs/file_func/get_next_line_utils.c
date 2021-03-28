@@ -6,49 +6,107 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/18 23:39:11 by sehattor          #+#    #+#             */
-/*   Updated: 2020/12/11 21:30:25 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/26 21:48:41 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/file_func.h"
 
-t_gnl	*gnl_lstnew(char *content, int fd)
+size_t	gnl_strlen(char *s)
 {
-	t_gnl	*new_element;
+	size_t i;
 
-	if (!(new_element = malloc(sizeof(t_gnl))))
+	i = 0;
+	if (!s)
+		return (0);
+	while (s[i] && s[i] != '\n')
+		i++;
+	return (i);
+}
+
+char	*gnl_strjoin(char **s1, char *s2)
+{
+	size_t	i;
+	size_t	j;
+	char	*str;
+
+	str = malloc(gnl_strlen(*s1) + gnl_strlen(s2) + 1);
+	if (str == NULL)
 		return (NULL);
-	new_element->fd = fd;
-	new_element->store = ft_strdup(content);
-	new_element->next = NULL;
-	return (new_element);
+	i = 0;
+	if ((*s1))
+		while ((*s1)[i])
+		{
+			str[i] = (*s1)[i];
+			i++;
+		}
+	ptr_free((void**)s1);
+	j = 0;
+	if (s2)
+		while (s2[j] && s2[j] != '\n')
+		{
+			str[i + j] = s2[j];
+			j++;
+		}
+	str[i + j] = '\0';
+	return (str);
 }
 
-void	gnl_lstadd_front(t_gnl **lst, t_gnl *new)
+char	*get_next_word(char *buf, char *nl_ptr)
 {
-	if (!lst || !new)
-		return ;
-	if (!*lst)
+	size_t i;
+
+	i = 0;
+	while (buf[i] && nl_ptr[i])
 	{
-		*lst = new;
-		return ;
+		buf[i] = nl_ptr[i];
+		i++;
 	}
-	new->next = *lst;
-	*lst = new;
+	buf[i] = '\0';
+	return (buf);
 }
 
-t_gnl	*recognize_fd(int fd, t_gnl **lst)
+int		clear_one_node(int fd, t_gnl_list **head)
 {
-	t_gnl			*res;
+	t_gnl_list *begin;
+	t_gnl_list *tmp;
 
-	res = *lst;
-	while (res)
+	begin = *head;
+	while (begin && begin->next)
 	{
-		if (res->fd == fd)
-			return (res);
-		res = res->next;
+		if (begin->next->fd == fd)
+		{
+			tmp = begin->next;
+			begin->next = begin->next->next;
+			ptr_free((void **)&(tmp->buf));
+			free(tmp);
+		}
+		else
+			begin = begin->next;
 	}
-	res = gnl_lstnew("", fd);
-	gnl_lstadd_front(lst, res);
-	return (res);
+	begin = *head;
+	if (begin->fd == fd)
+	{
+		tmp = begin->next;
+		ptr_free((void **)&(begin->buf));
+		free(begin);
+		begin = tmp;
+	}
+	return (GNL_EOF);
+}
+
+int		clear_all_node(t_gnl_list **head)
+{
+	t_gnl_list	*lst;
+	t_gnl_list	*next;
+
+	lst = *head;
+	while (lst)
+	{
+		next = lst->next;
+		ptr_free((void**)&(lst->buf));
+		free(lst);
+		lst = next;
+	}
+	return (GNL_ERR);
 }

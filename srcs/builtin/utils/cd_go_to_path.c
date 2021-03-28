@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/15 17:43:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 20:20:03 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/25 22:06:59 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static bool	ch_each_path(t_minishell *info, char *dir)
 		else if (ft_strcmp(split[i], "..") == 0)
 			go_to_upper_dir(info->current_dir_path, info);
 		else
-			update_current_dir(info, split[i]);
+			connect_path(&(info->current_dir_path), split[i], info);
 		free(new);
 	}
 	ptr_2d_free((void***)&(split), -1);
@@ -54,9 +54,9 @@ static bool	ch_each_path(t_minishell *info, char *dir)
 	return (true);
 }
 
-static bool	ch_root_dir_when_arg_is_absolute(t_minishell *info, bool flag)
+static bool	change_root_dir(t_minishell *info, bool absolute_path)
 {
-	if (flag)
+	if (absolute_path)
 	{
 		if (safe_chdir("/", NULL, info) == false)
 			return (false);
@@ -70,9 +70,9 @@ static bool	change_dir(char *dir, t_minishell *info)
 	char	*oldpwd;
 	bool	flag;
 
-	if (!(oldpwd = ft_strdup(search_env("PWD", 3, info->env, NULL))))
+	if (!(oldpwd = ft_strdup(ft_getenv("PWD", info->env, false))))
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-	if (ch_root_dir_when_arg_is_absolute(info, dir[0] == '/') == false)
+	if (change_root_dir(info, dir[0] == '/') == false)
 	{
 		ptr_free((void**)&oldpwd);
 		return (false);
@@ -89,18 +89,110 @@ static bool	change_dir(char *dir, t_minishell *info)
 	return (true);
 }
 
+
+
+
+bool	safe_opendir(DIR **dp, char *dir, t_minishell *info)
+{
+	*dp = opendir(dir);
+	if (*dp == NULL && errno == ENOENT)
+		return (false);
+	if (*dp == NULL)
+		all_free_exit(info, ERR_OPENDIR, __LINE__, __FILE__);
+	return (true);
+}
+
+bool	safe_readdir(t_dirent **dirp, DIR *dp, t_minishell *info)
+{
+	*dirp = readdir(dp);
+	if (*dirp != NULL)
+		return (true);
+	// if (errno != 0 && errno != ENOENT)
+	// 	all_free_exit(info, ERR_READDIR, __LINE__, __FILE__);
+	return (false);
+}
+
+void	safe_closedir(DIR **dp, t_minishell *info)
+{
+	if (closedir(*dp) == -1)
+		all_free_exit(info, ERR_CLOSEDIR, __LINE__, __FILE__);
+}
+
+bool		get_path(char **split, char **dir, t_minishell *info)
+{
+	int			i;
+	DIR			*dp;
+	t_dirent	*dirp;
+	bool		ret;
+
+	i = -1;
+	ret = false;
+	while (split[++i] && ret == false)
+	{
+		if (safe_opendir(&dp, split[i], info) == false)
+			return (false);
+		while (ret == false)
+		{
+			if (safe_readdir(&dirp, dp, info) == false)
+				break ;
+			if (dirp->d_name[0] == '.')
+				continue ;
+			if (equal(ft_strcmp(dirp->d_name, *dir)))
+			{
+				connect_path(&(split[i]), dirp->d_name, info);
+				int fd = open(split[i], O_RDONLY);
+				if (fd == -1)
+					continue ;
+				close(fd);
+				*dir = re_strdup(dir, split[i]);
+				safe_closedir(&dp, info);
+				return (true);
+			}
+		}
+		safe_closedir(&dp, info);
+	}
+	return (ret);
+}
+
+bool		is_cd_path(t_minishell *info, char **dir)
+{
+	char		*cdpath;
+	char		**split;
+	bool		ret;
+	bool		srcdir_absolute_flag;
+
+	srcdir_absolute_flag = false;
+	if ((*dir)[0] == '/')
+		srcdir_absolute_flag = true;
+	cdpath = ft_getenv("CDPATH", info->env, false);
+	if (cdpath == NULL || cdpath[0] == ':')
+		return (false);
+	split = ft_split(cdpath, ':');
+	if (split == NULL)
+		return (false);
+	ret = get_path(split, dir, info);
+	ptr_2d_free((void***)&split, -1);
+	// if (srcdir_absolute_flag == false)
+	// 	ret = false;
+	return (ret);
+}
+
 void		go_to_path(t_minishell *info, char **dir,
 				bool option_p_flag)
 {
 	bool	flag;
+	bool	cd_path_flag;
 
 	(void)option_p_flag;
+	cd_path_flag = is_cd_path(info, dir);
 	if (safe_chdir(*dir, NULL, info) == false)
 		return ;
+	info->oldpwd_path = re_strdup(&(info->oldpwd_path), info->current_dir_path);
 	if (change_dir(*dir, info) == false)
 		return ;
 	when_double_slash_root(*dir, info);
-	update_env_lst(&(info->env), "PWD", info->current_dir_path, info);
-	info->cwd_err_f = 0;
-	g_signal.exit_status = 0;
+	update_env_value(&(info->env), "PWD", info->current_dir_path, info);
+	if (cd_path_flag)
+		ft_putendl_fd(info->current_dir_path, STDOUT_FILENO);
+	g_global.exit_status = 0;
 }

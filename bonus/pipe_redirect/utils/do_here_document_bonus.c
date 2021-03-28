@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 14:07:59 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 21:30:54 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	preparation(int *backup, char **inputs,
 		all_free_exit(info, ERR_DUP, __LINE__, __FILE__);
 	if (!(*inputs = ft_strdup("\0")))
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-	g_signal.reading = true;
+	g_global.reading = true;
 }
 
 static bool	press_newline(char **inputs, char *stopper,
@@ -37,23 +37,23 @@ static bool	press_newline(char **inputs, char *stopper,
 		return (true);
 	}
 	if (expand_flag)
-		change_env_for_here_doc(inputs, &(g_signal.info));
+		change_env_for_here_doc(inputs, &(g_global.info));
 	if (ft_putendl_fd(*inputs, fd) == false)
-		all_free_exit(&(g_signal.info), ERR_WRITE, __LINE__, __FILE__);
+		all_free_exit(&(g_global.info), ERR_WRITE, __LINE__, __FILE__);
 	if (!(*inputs = re_strdup(inputs, "\0")))
-		all_free_exit(&(g_signal.info), ERR_MALLOC, __LINE__, __FILE__);
+		all_free_exit(&(g_global.info), ERR_MALLOC, __LINE__, __FILE__);
 	if (write(STDOUT_FILENO, "wait :(", 7) < 7)
-		all_free_exit(&(g_signal.info), ERR_WRITE, __LINE__, __FILE__);
+		all_free_exit(&(g_global.info), ERR_WRITE, __LINE__, __FILE__);
 	if (write(STDOUT_FILENO, stopper, ft_strlen(stopper)) < 0)
-		all_free_exit(&(g_signal.info), ERR_WRITE, __LINE__, __FILE__);
+		all_free_exit(&(g_global.info), ERR_WRITE, __LINE__, __FILE__);
 	if (write(STDOUT_FILENO, ")> ", 3) < 3)
-		all_free_exit(&(g_signal.info), ERR_WRITE, __LINE__, __FILE__);
+		all_free_exit(&(g_global.info), ERR_WRITE, __LINE__, __FILE__);
 	return (false);
 }
 
 static void	clean_up(int *backup, char **inputs, t_minishell *info)
 {
-	if (!g_signal.reading)
+	if (!g_global.reading)
 		if ((dup2(*backup, STDIN_FILENO)) == -1)
 		{
 			ptr_free((void**)inputs);
@@ -90,8 +90,8 @@ bool		do_here_document(t_minishell *info, int fd, char *stopper,
 
 	preparation(&backup, &inputs, stopper, info);
 	buf = '\0';
-	g_signal.sig_sign = 0;
-	while (g_signal.reading)
+	g_global.sig_sign = 0;
+	while (g_global.reading)
 	{
 		if ((rc = safe_read(&buf, &inputs, info)) < 0)
 			break ;
@@ -104,8 +104,8 @@ bool		do_here_document(t_minishell *info, int fd, char *stopper,
 			all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	}
 	clean_up(&backup, &inputs, info);
-	g_signal.sig_sign = 1;
-	if (!g_signal.reading)
+	g_global.sig_sign = 1;
+	if (!g_global.reading)
 		return (reset_prompt(NULL, NULL));
 	return (true);
 }

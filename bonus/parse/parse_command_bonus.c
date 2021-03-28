@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 14:06:19 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	err_fd(long long fd, t_minishell *info)
 		if (write(STDERR_FILENO, ": Bad file descriptor\n", 22) < 0)
 			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	}
-	g_signal.exit_status = EXIT_FAILURE;
+	g_global.exit_status = EXIT_FAILURE;
 	return (-1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/22 16:52:56 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/11 21:26:24 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/25 03:02:36 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	while (i < n)
 	{
 		if (u_s1[i] == '\0' || u_s1[i] != u_s2[i])
-			return (u_s1[i] - u_s2[i]);
+			return (((u_s1[i] - u_s2[i]) > 0) - ((u_s1[i] - u_s2[i]) < 0));
 		i++;
 	}
 	return (0);

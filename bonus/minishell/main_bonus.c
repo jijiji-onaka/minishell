@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 21:31:12 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 static void	initialize_global_variables(void)
 {
-	g_signal.fork_pid = -1;
-	g_signal.fork_pid_for_pipe = -1;
-	g_signal.reading = false;
-	g_signal.sig_sign = 2;
+	g_global.fork_pid = -1;
+	g_global.fork_pid_for_pipe = -1;
+	g_global.reading = false;
+	g_global.sig_sign = 2;
 }
 
 static void	initialize_cmd_lst(t_minishell *info)
@@ -38,7 +38,7 @@ static void	console_loop(t_minishell *info)
 		{
 			if (parse_command(info, command) != false)
 			{
-				g_signal.sig_sign = 1;
+				g_global.sig_sign = 1;
 				execute_command_loop(info);
 				initialize_cmd_lst(info);
 			}
@@ -56,12 +56,12 @@ static int	minishell_option_c(char *argv_2, t_minishell *info)
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	if (parse_command(info, command) != false)
 	{
-		g_signal.sig_sign = 1;
+		g_global.sig_sign = 1;
 		execute_command_loop(info);
 		initialize_cmd_lst(info);
 	}
 	all_free_minishell_info(info);
-	return (g_signal.exit_status);
+	return (g_global.exit_status);
 }
 
 int			main(int argc, char **argv)
@@ -76,7 +76,7 @@ int			main(int argc, char **argv)
 		all_free_exit(&info, ERR_MALLOC, __LINE__, __FILE__);
 	if (!(info.oldpwd_path = ft_strdup(search_env("OLDPWD", 6, info.env, 0))))
 		all_free_exit(&info, ERR_MALLOC, __LINE__, __FILE__);
-	g_signal.info = info;
+	g_global.info = info;
 	if (argc > 2 && ft_strncmp("-c", argv[1], 3) == 0)
 		return (minishell_option_c(argv[2], &info));
 	info.minishell_op_c = false;

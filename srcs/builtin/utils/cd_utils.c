@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 12:11:59 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 16:57:58 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/25 19:50:04 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,16 +78,13 @@ bool		is_symbolic_dir(t_minishell *info, char *dir_name)
 	return (true);
 }
 
-void		update_current_dir(t_minishell *info, char *dir)
+void		connect_path(char **src, char *dst, t_minishell *info)
 {
-	if (info->current_dir_path[ft_strlen(info->current_dir_path) - 1] != '/')
-		info->current_dir_path =
-			re_str3join(&(info->current_dir_path),
-				info->current_dir_path, "/", dir);
+	if ((*src)[ft_strlen(*src) - 1] != '/')
+		*src = re_str3join(src, *src, "/", dst);
 	else
-		info->current_dir_path =
-			re_strjoin(&(info->current_dir_path), info->current_dir_path, dir);
-	if (!(info->current_dir_path))
+		*src = re_strjoin(src, *src, dst);
+	if (!(*src))
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 }
 
@@ -95,13 +92,13 @@ bool		not_found_cwd(t_minishell *info, char *arg_dir, char ***ptr)
 {
 	if (errno != ENOENT)
 		all_free_exit(info, ERR_GETCWD, __LINE__, __FILE__);
-	write(2, "cd: error retrieving current directory: getcwd: cannot \
-access parent directories: No such file or directory\n", 108);
-	update_env_lst(&(info->env), "OLDPWD",
+	write(STDERR_FILENO, "cd: error retrieving current directory: getcwd: \
+cannot access parent directories: No such file or directory\n", 108);
+	update_env_value(&(info->env), "OLDPWD",
 					info->current_dir_path, info);
-	update_current_dir(info, arg_dir);
-	update_env_lst(&(info->env), "PWD", info->current_dir_path, info);
-	info->cwd_err_f = 1;
+	connect_path(&(info->current_dir_path), arg_dir, info);
+	update_env_value(&(info->env), "PWD", info->current_dir_path, info);
+	// info->cwd_err_f = 1;
 	if (ptr)
 		ptr_2d_free((void***)(ptr), -1);
 	return (false);

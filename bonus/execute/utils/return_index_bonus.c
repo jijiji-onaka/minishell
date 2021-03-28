@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/21 21:14:10 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 21:14:26 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/24 00:36:27 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	return_index(int type)
 		return (1);
 	else if (type == PWD)
 		return (2);
-	else if (type == ECHO)
+	else if (type == CMD_ECHO)
 		return (3);
 	else if (type == CD)
 		return (4);

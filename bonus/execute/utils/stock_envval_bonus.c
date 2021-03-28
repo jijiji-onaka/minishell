@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 02:36:29 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 14:53:18 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static bool		only_hatena_or_doll(char *ptr, int *len, t_str *string)
 {
 	if (ptr[1] == '?')
 	{
-		*len += ft_numlen(g_signal.exit_status);
+		*len += ft_numlen(g_global.exit_status);
 		string->prev_len = 2;
 		return (true);
 	}

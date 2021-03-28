@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/08 16:09:33 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 16:56:19 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/24 22:23:20 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ bool		only_hatena_or_doll(char *ptr, int *len, t_str *string)
 {
 	if (ptr[1] == '?')
 	{
-		*len += ft_numlen(g_signal.exit_status);
+		*len += ft_numlen(g_global.exit_status);
 		string->prev_len = 2;
 		return (true);
 	}
@@ -63,31 +63,27 @@ bool		only_hatena_or_doll(char *ptr, int *len, t_str *string)
 static int	envval_len_and_return_index(char *ptr, int *len,
 			t_envlst *env, t_str *string)
 {
-	int		ret;
-	int		j;
-	char	*tmp;
-	bool	flag;
+	int		i;
+	char	*env_value;
+	char	tmp_chr;
 
 	if (only_hatena_or_doll(ptr, len, string) == true)
 		return (string->prev_len);
-	tmp = NULL;
-	j = 1;
+	i = 1;
 	if (!ft_isdigit(ptr[1]))
-		while (ptr[j] && (ft_isalnum(ptr[j]) || ptr[j] == '_'))
-			j++;
-	if (tmp == NULL && (tmp = search_env(ptr + 1, j - 1, env, (bool *)&flag)))
-		ret = j;
-	if (!flag)
-		tmp = NULL;
-	string->str = tmp;
+		while (ptr[i] && (ft_isalnum(ptr[i]) || ptr[i] == '_'))
+			i++;
+	tmp_chr = ptr[i];
+	ptr[i] = '\0';
+	env_value = ft_getenv(ptr + 1, env, true);
+	ptr[i] = tmp_chr;
+	string->str = env_value;
 	if (string->str)
 		*len += envval_len(string->str);
-	else
-		ret = j;
 	if (ft_isdigit(ptr[1]))
-		ret++;
-	string->prev_len = ret;
-	return (ret);
+		i++;
+	string->prev_len = i;
+	return (i);
 }
 
 int			after_changed_len_(char *ptr, t_minishell *info, t_str *string)

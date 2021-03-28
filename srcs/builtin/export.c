@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 17:56:17 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 14:48:32 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/25 02:40:19 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,15 @@ static bool	display_err(char *arg, t_minishell *info)
 	bool write_err_flag;
 
 	write_err_flag = false;
-	if (write(2, "minishell: export: `", 20) < 0)
+	if (write(STDERR_FILENO, "minishell: export: `", 20) < 0)
 		write_err_flag = true;
 	if (ft_putstr_fd(arg, 2) == false)
 		write_err_flag = true;
-	if (write(2, "\': not a valid identifier\n", 26) < 0)
+	if (write(STDERR_FILENO, "\': not a valid identifier\n", 26) < 0)
 		write_err_flag = true;
 	if (write_err_flag == true)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	g_signal.exit_status = 1;
+	g_global.exit_status = 1;
 	return (false);
 }
 
@@ -52,7 +52,7 @@ static bool	is_valid_env_name(char **env_name, char *arg, t_minishell *info)
 	return (true);
 }
 
-static bool	preparation(char *first_arg, t_minishell *info, int *j)
+static bool	preparation(char *first_arg, t_minishell *info, int *i)
 {
 	if (first_arg == NULL)
 	{
@@ -64,43 +64,63 @@ static bool	preparation(char *first_arg, t_minishell *info, int *j)
 		error_mandatory(ERR_EXPORT, 30, info);
 		return (false);
 	}
-	*j = 0;
+	*i = 0;
 	return (true);
 }
 
-static char	*apply_env_value(char *arg, t_minishell *info, char **env_name)
+static t_string		make_key(char *src, t_minishell *info)
 {
-	char	*env_value;
+	t_string	res;
 
-	if (arg[0] == '+' && arg[1] == '=')
-		env_value = add_env_value(arg + 2, info, env_name);
-	else
-		env_value = make_env_value(arg + 1, info, env_name);
-	return (env_value);
+	if (src == NULL)
+		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	res.str = src;
+	res.len = ft_strlen(src);
+	return (res);
+}
+
+static t_string		make_value(char *src, bool is_val, t_minishell *info)
+{
+	t_string	res;
+
+	if (is_val)
+	{
+		res.str = NULL;
+		res.len = 0;
+		return (res);
+	}
+	res.str = ft_strdup(src);
+	if (res.str == NULL)
+		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	res.len = ft_strlen(src);
+	return (res);
 }
 
 void		exec_export(t_minishell *info, t_cmdlst *cmd)
 {
-	char		*env_name;
-	char		*env_value;
-	char		**args;
+	t_string	key;
+	t_string	value;
 	int			i;
-	int			j;
+	char		*equ_ptr;
+	size_t		key_len;
 
-	args = cmd->arg;
-	g_signal.exit_status = 0;
-	if (preparation(args[1], info, &j) == false)
+	g_global.exit_status = 0;
+	if (preparation(cmd->arg[1], info, &i) == false)
 		return ;
-	while (args[++j])
+	while (cmd->arg[++i])
 	{
-		if (!(env_name = make_env_name(args[j], &i, info)))
-		{
-			when_only_env_name(args[j], info);
-			continue ;
-		}
-		env_value = apply_env_value(args[j] + i, info, &env_name);
-		if (is_valid_env_name(&env_name, args[j], info))
-			update_env_lst(&(info->env), env_name, env_value, info);
-		two_free((void**)&env_name, (void**)&env_value);
+		equ_ptr = ft_strchr(cmd->arg[i] + 1, '=');
+		if (equ_ptr == NULL)
+			key_len = -1;
+		else
+			key_len = equ_ptr - cmd->arg[i];
+		key = make_key(ft_substr(cmd->arg[i], 0, key_len), info);
+		value = make_value(cmd->arg[i] + key_len + 1, equ_ptr == NULL, info);
+		if (equ_ptr && key.str[key.len - 1] == '+')
+			add_env_value(&key, &value, info);
+		if (is_valid_env_name(&(key.str), cmd->arg[i], info))
+			update_env_lst(&(info->env), key, value, info);
+		else
+			two_free((void **)&(key.str), (void **)&(value.str));
 	}
 }

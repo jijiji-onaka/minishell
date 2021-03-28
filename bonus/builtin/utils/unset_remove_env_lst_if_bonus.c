@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/15 17:55:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 14:36:54 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,6 @@ void		remove_env_lst_if(t_envlst **env, char *data)
 		ptr_free((void **)&((*env)->value));
 		free(*env);
 		*env = begin;
-		g_signal.info.env = *env;
+		g_global.info.env = *env;
 	}
 }

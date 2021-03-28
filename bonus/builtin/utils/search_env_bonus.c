@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 19:18:45 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 21:32:08 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,6 @@ char		*search_env(char *str, int num, t_envlst *env_lst, bool *flag)
 	if (flag)
 		*flag = false;
 	if ('P' == str[0] && ft_strcmp("PWD", str) == 0)
-		return (g_signal.info.current_dir_path);
+		return (g_global.info.current_dir_path);
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:51:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 17:34:23 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/28 06:33:11 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,9 @@
 # define ERR_CLOSEDIR "Failed to \033[4mclosedir\033[0m at the above location. "
 # define ERR_GETCWD "Failed to \033[4mgetcwd\033[0m at the above location. "
 # define ERR_LSTAT "Failed to \033[4mlstat\033[0m at the above location. "
+# define ERR_ISATTY "Failed to \033[4misatty\033[0m at the above location. "
+# define ERR_TGETENT "Failed to \033[4mtgetent\033[0m at the above location. "
+# define ERR_TGETSTR "Failed to \033[4mtgetstr\033[0m at the above location. "
 # define SYNTAX_EOL_NUM -1
 # define SYNTAX_EOL "minishell: syntax error: unexpected end of file\n"
 # define NEWLINE -2

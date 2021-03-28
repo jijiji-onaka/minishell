@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 16:46:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 14:15:32 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/25 03:40:17 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,31 +71,27 @@ static void	normal_with_slash_support_len(int *len, char chr[2],
 static int	envval_len_and_return_index(char *ptr, int *len,
 			t_envlst *env, t_str *string)
 {
-	int		ret;
-	int		j;
-	char	*tmp;
-	bool	flag;
+	int		i;
+	char	*env_value;
+	char	tmp_chr;
 
 	if (only_hatena_or_doll(ptr, len, string) == true)
 		return (string->prev_len);
-	tmp = NULL;
-	j = 1;
+	i = 1;
 	if (!ft_isdigit(ptr[1]))
-		while (ptr[j] && (ft_isalnum(ptr[j]) || ptr[j] == '_'))
-			j++;
-	if (tmp == NULL && (tmp = search_env(ptr + 1, j - 1, env, (bool *)&flag)))
-		ret = j;
-	if (!flag)
-		tmp = NULL;
-	string->str = tmp;
+		while (ptr[i] && (ft_isalnum(ptr[i]) || ptr[i] == '_'))
+			i++;
+	tmp_chr = ptr[i];
+	ptr[i] = '\0';
+	env_value = ft_getenv(ptr + 1, env, true);
+	ptr[i] = tmp_chr;
+	string->str = env_value;
 	if (string->str)
 		*len += ft_strlen(string->str);
-	else
-		ret = j;
 	if (ft_isdigit(ptr[1]))
-		ret++;
-	string->prev_len = ret;
-	return (ret);
+		i++;
+	string->prev_len = i;
+	return (i);
 }
 
 int			after_changed_len(char *ptr, t_minishell *info, t_str *string)

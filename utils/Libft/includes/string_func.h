@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/10 20:46:45 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/16 05:22:46 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/25 19:27:11 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ int				check_strtail(char *s, char *tail);
 char			*ft_str3join(char *s1, char *s2, char *s3);
 char			*ft_strchr(const char *s, int c);
 int				ft_strcmp(char *p1, char *p2);
+int				equal(int cmp);
 char			*ft_strdup(const char *s1);
 char			*ft_strjoin(char const *s1, char const *s2);
 char			*ft_strjoinch(char const *s, char c);

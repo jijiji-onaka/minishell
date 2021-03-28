@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/23 20:15:31 by tjinichi          #+#    #+#              #
-#    Updated: 2021/03/05 02:18:14 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/03/26 21:49:43 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = libft.a
 
 # =========== compile option ===================================================
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror # -fsanitize=address
+CFLAGS = -g -Wall -Wextra -Werror # -fsanitize=address
 RM = rm
 # =========== path =============================================================
 INCLUDES = $(wildcard ./includes/*.h)

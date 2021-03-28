@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 02:06:52 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 13:57:06 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,5 +18,5 @@ void		ctrl_d_exit(char **ptr, t_minishell *info)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	all_free_minishell_info(info);
 	ptr_free((void **)ptr);
-	exit(g_signal.exit_status);
+	exit(g_global.exit_status);
 }

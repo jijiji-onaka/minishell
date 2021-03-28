@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 18:24:30 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 05:29:33 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/28 06:39:54 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,36 +14,40 @@
 
 static void	normal_exit(t_minishell *info)
 {
+	tcsetattr(STDIN_FILENO, TCSANOW, &(g_global.terms[ORIGINAL]));
 	all_free_minishell_info(info);
-	exit(g_signal.exit_status);
+	exit(g_global.exit_status);
 }
 
 static void	fail_too_arg_exit(t_minishell *info)
 {
-	if (write(2, "minishell: exit: too many arguments\n", 36) < 0)
+	if (write(STDERR_FILENO, "minishell: exit: too many arguments\n", 36) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	g_signal.exit_status = 1;
+	g_global.exit_status = 1;
 	info->exit_too_arg = true;
 	return ;
 }
 
 static void	non_numeric_exit(t_minishell *info, char *arg1)
 {
-	if (write(2, "minishell: exit: ", 17) < 0)
+	if (write(STDERR_FILENO, "minishell: exit: ", 17) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	if (ft_putstr_fd(arg1, 2) == false)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	if (write(2, ": numeric argument required\n", 28) < 0)
+	if (write(STDERR_FILENO, ": numeric argument required\n", 28) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	g_signal.exit_status = 255;
-	exit(g_signal.exit_status);
+	g_global.exit_status = 255;
+	tcsetattr(STDIN_FILENO, TCSANOW, &(g_global.terms[ORIGINAL]));
+	all_free_minishell_info(info);
+	exit(g_global.exit_status);
 }
 
 static void	selected_code_exit(t_minishell *info, int exit_code)
 {
+	g_global.exit_status = exit_code % 256;
+	tcsetattr(STDIN_FILENO, TCSANOW, &(g_global.terms[ORIGINAL]));
 	all_free_minishell_info(info);
-	g_signal.exit_status = exit_code % 256;
-	exit(g_signal.exit_status);
+	exit(g_global.exit_status);
 }
 
 void		exec_exit(t_minishell *info, t_cmdlst *cmd)

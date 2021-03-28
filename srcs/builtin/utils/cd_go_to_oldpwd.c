@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/15 17:51:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 11:24:12 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/24 22:21:51 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@ void		go_to_oldpwd(t_minishell *info)
 {
 	char		*oldpwd_path;
 
-	oldpwd_path = search_env("OLDPWD", 6, info->env, NULL);
+	oldpwd_path = ft_getenv("OLDPWD", info->env, false);
 	if (oldpwd_path == NULL)
 	{
 		if (write(STDERR_FILENO, NO_OLDPWD, 30) < 0)
 			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-		g_signal.exit_status = EXIT_FAILURE;
+		g_global.exit_status = EXIT_FAILURE;
 		return ;
 	}
 	if (!(oldpwd_path = ft_strdup(oldpwd_path)))
@@ -33,5 +33,5 @@ void		go_to_oldpwd(t_minishell *info)
 	set_oldpwd(info, info->current_dir_path);
 	ptr_free((void **)&(info->current_dir_path));
 	info->current_dir_path = oldpwd_path;
-	g_signal.exit_status = EXIT_SUCCESS;
+	g_global.exit_status = EXIT_SUCCESS;
 }

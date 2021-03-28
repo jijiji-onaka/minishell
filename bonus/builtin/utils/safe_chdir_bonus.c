@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 03:10:50 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 20:52:08 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ bool	safe_chdir(char *dir, char **split, t_minishell *info)
 		}
 		ft_perror(err);
 		free(err);
-		g_signal.exit_status = EXIT_FAILURE;
+		g_global.exit_status = EXIT_FAILURE;
 		return (false);
 	}
 	return (true);

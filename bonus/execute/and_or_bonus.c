@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/18 03:15:15 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/18 03:15:40 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 t_cmdlst		*do_and(t_cmdlst **cmd)
 {
-	if (g_signal.exit_status == 0)
+	if (g_global.exit_status == 0)
 		return (*cmd);
 	while (*cmd)
 	{
@@ -27,7 +27,7 @@ t_cmdlst		*do_and(t_cmdlst **cmd)
 
 t_cmdlst		*do_db_pipe(t_cmdlst **cmd)
 {
-	if (g_signal.exit_status != 0)
+	if (g_global.exit_status != 0)
 		return (*cmd);
 	while (*cmd)
 	{

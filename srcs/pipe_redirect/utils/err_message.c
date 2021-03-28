@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 02:09:10 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 01:56:42 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ bool			err_ambiguous_redirect(char **filename, t_minishell *info)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	if (write(STDERR_FILENO, ": ambiguous redirect\n", 21) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	g_signal.exit_status = EXIT_FAILURE;
+	g_global.exit_status = EXIT_FAILURE;
 	ptr_free((void**)&tmp);
 	return (false);
 }

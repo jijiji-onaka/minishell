@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 13:23:16 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/20 13:28:12 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static int	stock_envval_and_return_index(char *str, char next_chr,
 
 	if (next_chr == '?')
 	{
-		tmp_num = g_signal.exit_status;
+		tmp_num = g_global.exit_status;
 		num_len = ft_numlen(tmp_num);
 		tmp_num_len = num_len;
 		while (tmp_num_len)

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:44:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 16:55:12 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/28 07:31:36 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,27 +15,76 @@
 
 # include <unistd.h>
 # include <stdbool.h>
+# include "standard_lib.h"
 
 typedef struct stat		t_stat;
+typedef struct termios	t_termios;
+typedef struct dirent	t_dirent;
+
+typedef struct			s_string
+{
+	char				*str;
+	size_t				len;
+}						t_string;
+
+typedef struct			s_env
+{
+	struct s_string		key;
+	struct s_string		value;
+	// char				*key;
+	// size_t				key_len;
+	// char				*value;
+	// size_t				value_len;
+	// bool				only_key_flag;
+}						t_env;
 
 typedef struct			s_envlst
 {
-	char				*value;
+	struct s_env		env;
 	struct s_envlst		*next;
 	struct s_envlst		*qnext;
 }						t_envlst;
+
+typedef struct			s_history
+{
+	char				*command;
+	struct s_history	*next;
+	struct s_history	*prev;
+}						t_history;
+
+typedef struct			s_hist_all
+{
+	char				*history_path;
+	struct s_history	*command_history;
+	struct s_history	*command_history_begin;
+	bool				history_flag;
+}						t_hist_all;
+
+typedef struct			s_key
+{
+	char				*left;
+	char				*right;
+	char				*clean_right;
+	char				*save;
+}						t_key;
 
 typedef struct			s_minishell_info
 {
 	char				*current_dir_path;
 	char				*oldpwd_path;
-	bool				cwd_err_f;
+	bool				unset_pwd_flag;
+	bool				unset_oldpwd_flag;
 	bool				minishell_op_c;
 	struct s_envlst		*env;
 	struct s_cmdlst		*cmd_lst;
+	char				*history_path;
+	struct s_history	*command_history;
+	struct s_history	*command_history_begin;
+	bool				history_flag;
+	// struct s_hist_all	history;
+	struct s_key		key;
 	int					cmd_lst_num;
 	bool				exit_too_arg;
-	bool				read_now;
 	char				*ptr_for_free;
 	char				*ptr_for_free_2;
 	char				**ptr_2d_for_free;
@@ -71,8 +120,9 @@ typedef struct			s_global
 	int					sig_sign;
 	t_minishell			info;
 	bool				reading;
+	t_termios			terms[2];
 }						t_global;
-t_global				g_signal;
+t_global				g_global;
 
 enum	e_cmd
 {
@@ -82,7 +132,7 @@ enum	e_cmd
 	OUTPUT,
 	DB_OUTPUT,
 	CD,
-	ECHO,
+	CMD_ECHO,
 	ENV,
 	EXPORT,
 	PWD,
@@ -120,6 +170,9 @@ enum	e_format
 # define EXIT 18
 # define OUTPUT_INPUT 19
 # define DB_OUTPUT_INPUT 20
+/*
+**
+*/
 # define NOT_FOUND -1
 # define CMD_NOT_FOUND 127
 # define NEXT_CMD 2
@@ -127,5 +180,15 @@ enum	e_format
 # define B_SLA 1
 # define DOLLAR 2
 # define END_OF_THE_WORLD -1
+# define ORIGINAL 0
+# define REPLICA 1
+# define MATCH 0
+# define OLDPWD 1
+/*
+** KEY
+*/
+# define CTRL_D 4
+# define CTRL_L 12
+# define DELETE_KEY 127
 
 #endif

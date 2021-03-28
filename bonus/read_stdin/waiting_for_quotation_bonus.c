@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 00:23:07 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 14:00:23 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,14 @@ static char	*preparation(char first_quo, char **command, int *backup,
 		ptr_free((void**)res);
 		all_free_exit(info, ERR_DUP, __LINE__, __FILE__);
 	}
-	g_signal.reading = true;
+	g_global.reading = true;
 	info->ptr_for_free = *command;
 	return (res);
 }
 
 static void	clean_up(int *backup, char **inputs, t_minishell *info)
 {
-	if (!g_signal.reading)
+	if (!g_global.reading)
 		if ((dup2(*backup, STDIN_FILENO)) == -1)
 		{
 			ptr_free((void**)inputs);
@@ -98,7 +98,7 @@ char		*waiting_for_quotation(char first_quo, char **command, \
 
 	inputs = preparation(first_quo, command, &backup, info);
 	buf = '\0';
-	while (g_signal.reading)
+	while (g_global.reading)
 	{
 		if ((rc = safe_read(&buf, &inputs, info)) < 0)
 			break ;
@@ -113,7 +113,7 @@ char		*waiting_for_quotation(char first_quo, char **command, \
 	if (!(*command = re_str3join(command, *command, "\n", inputs)))
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	clean_up(&backup, &inputs, info);
-	if (!g_signal.reading)
+	if (!g_global.reading)
 		return (reset_prompt(command, NULL));
 	return (*command);
 }

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 03:43:49 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 20:54:17 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int		binary_search(char *cmd)
 
 	if (is_command_exit(cmd) == true)
 		return (EXIT);
-	if (search_env("PATH", 4, g_signal.info.env, NULL) == NULL)
+	if (search_env("PATH", 4, g_global.info.env, NULL) == NULL)
 		ret = str_bsearch(cmd, base, CMD_NUM, ft_strcmp);
 	else
 		ret = str_bsearch(cmd, base, CMD_NUM, strcmp_regardless_of_case);

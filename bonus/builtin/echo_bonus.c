@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 00:04:05 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/17 04:40:20 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void		exec_echo(t_minishell *info, t_cmdlst *cmd)
 	bool		n_flag;
 
 	args = cmd->arg;
-	g_signal.exit_status = 0;
+	g_global.exit_status = 0;
 	n_flag = false;
 	if (args[1] == NULL)
 		return (put_newline(info));

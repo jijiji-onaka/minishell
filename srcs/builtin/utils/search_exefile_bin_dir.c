@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/21 14:23:17 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 20:23:11 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/24 22:22:32 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int			check_bash_standard_commands(t_minishell *info, char **command
 		return (true);
 	if (ft_strchr((*command), '/') || (ft_strcmp((*command), "..") == 0))
 		return (true);
-	if (!(env_path = search_env("PATH", 4, info->env, NULL)))
+	if (!(env_path = ft_getenv("PATH", info->env, false)))
 		return ((*path_flag = true));
 	if (env_path[0] == '\0')
 		return ((*path_flag = true));

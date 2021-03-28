@@ -6,11 +6,18 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/25 16:46:55 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/11 21:26:07 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/25 19:54:12 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/string_func.h"
+
+int	equal(int cmp)
+{
+	if (cmp == 0)
+		return (true);
+	return (false);
+}
 
 int	ft_strcmp(char *p1, char *p2)
 {

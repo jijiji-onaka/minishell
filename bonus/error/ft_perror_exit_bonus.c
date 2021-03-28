@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_perror_exit.c                                   :+:      :+:    :+:   */
+/*   ft_perror_exit_bonus.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 02:55:26 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/17 04:38:09 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void		*ft_perror(char *err_message)
 		exit(EXIT_FAILURE);
 	if (write(2, "\n", 1) < 0)
 		exit(EXIT_FAILURE);
-	g_signal.exit_status = EXIT_FAILURE;
+	g_global.exit_status = EXIT_FAILURE;
 	return (NULL);
 }
 

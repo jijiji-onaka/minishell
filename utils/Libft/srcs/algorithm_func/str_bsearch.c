@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/30 20:08:45 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/27 05:17:00 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/24 15:19:09 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int		str_bsearch(char *key, const char *base[], int array_size,
 	left = 0;
 	right = array_size;
 	if (left == right)
-		return (-1);
+		return (0);
 	while (left <= right)
 	{
 		mid = (left + right) / 2;

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 17:18:21 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/17 04:40:23 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,5 +54,5 @@ void		exec_env(t_minishell *info, t_cmdlst *cmd)
 	if (option != NULL)
 		return (error_mandatory(ERR_ENV, 37, info));
 	display_env(info);
-	g_signal.exit_status = 0;
+	g_global.exit_status = 0;
 }

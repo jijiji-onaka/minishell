@@ -6,68 +6,109 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/18 23:19:23 by sehattor          #+#    #+#             */
-/*   Updated: 2020/12/11 21:30:18 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/28 04:25:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/file_func.h"
 
-static int		free_return(char **ptr, int rc)
+static char			*read_and_strchr(t_gnl_list *node)
 {
-	free(*ptr);
-	*ptr = NULL;
-	return (rc);
+	char	*nl_ptr;
+
+	node->ret = read(node->fd, node->buf, BUFFER_SIZE);
+	if (node->ret == -1)
+		return (false);
+	node->buf[node->ret] = '\0';
+	nl_ptr = ft_strchr(node->buf, '\n');
+	return (nl_ptr);
 }
 
-static int		read_and_store(int fd, char **store, int rc)
+static t_gnl_list	*make_list(int fd)
 {
-	char	*buf;
-	char	*tmp_ptr;
+	t_gnl_list	*new;
 
-	if (!(buf = malloc(sizeof(char) * (BUFFER_SIZE + 1))))
-		return (-1);
-	if ((rc = read(fd, buf, BUFFER_SIZE)) >= 0)
-		buf[rc] = '\0';
-	if (!(*store) && rc > 0)
-		*store = ft_strdup(buf);
-	else if (*store && rc > 0)
+	new = malloc(sizeof(t_gnl_list));
+	if (new == NULL)
+		return (NULL);
+	new->buf = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (new->buf == NULL)
 	{
-		tmp_ptr = *store;
-		*store = ft_strjoin(tmp_ptr, buf);
-		free(tmp_ptr);
-		tmp_ptr = NULL;
+		free(new);
+		return (NULL);
 	}
-	free(buf);
-	if (rc == -1)
-		free_return(store, rc);
-	return (rc);
+	new->fd = fd;
+	new->buf[0] = '\0';
+	new->next = NULL;
+	return (new);
 }
 
-int				get_next_line(int fd, char **line)
+static t_gnl_list	*setup_list(int fd, t_gnl_list **head)
 {
-	static t_gnl	*lst;
-	t_gnl			*now;
-	char			*newline;
-	char			*tmp;
-	int				rc;
+	t_gnl_list	*new;
+	t_gnl_list	*lst;
 
-	if (fd < 0 || !line || (!(now = recognize_fd(fd, &lst))))
-		return (-1);
-	rc = 1;
-	while ((!(newline = ft_strchr(now->store, '\n'))) && \
-		(rc = read_and_store(fd, &(now->store), rc)) > 0)
-		if (!(now->store))
-			return (free_return(&(now->store), R_ERR));
-	if (newline)
+	lst = *head;
+	while (lst)
 	{
-		*line = ft_substr(now->store, 0, newline - now->store);
-		tmp = now->store;
-		now->store = ft_strdup(newline + 1);
-		free_return(&tmp, NO_RETURN);
-		return ((!(*line)) || !(now->store) ? \
-			free_return(&(now->store), R_ERR) : R_NL);
+		if (lst->fd == fd)
+			return (lst);
+		lst = lst->next;
 	}
-	*line = ft_strdup(now->store);
-	free_return(&(now->store), NO_RETURN);
-	return ((!(*line) || rc < 0) ? R_ERR : R_EOF);
+	new = make_list(fd);
+	if (new == NULL)
+		return (NULL);
+	if (*head == NULL)
+		*head = new;
+	else
+		lst = new;
+	return (new);
+}
+
+static bool			get_line(t_gnl_list *node, char **line)
+{
+	char	*nl_ptr;
+
+	nl_ptr = NULL;
+	if (node->buf[0] != '\0')
+		nl_ptr = ft_strchr(node->buf, '\n');
+	while (nl_ptr == NULL)
+	{
+		if (node->buf[0] == '\0')
+		{
+			nl_ptr = read_and_strchr(node);
+			if (nl_ptr)
+				break ;
+		}
+		*line = gnl_strjoin(line, node->buf);
+		if (*line == NULL)
+			return (false);
+		node->buf[0] = '\0';
+		if (node->ret == 0)
+			return (true);
+	}
+	*line = gnl_strjoin(line, node->buf);
+	if (*line == NULL)
+		return (-1);
+	node->buf = get_next_word(node->buf, nl_ptr + 1);
+	return (true);
+}
+
+int					get_next_line(int fd, char **line)
+{
+	static t_gnl_list	*head;
+	t_gnl_list			*node;
+
+	if (fd < 0 || !line)
+		return (clear_all_node(&head));
+	node = setup_list(fd, &head);
+	if (node == NULL)
+		return (clear_all_node(&head));
+	if (*line != NULL)
+		*line = NULL;
+	if (get_line(node, line) == false)
+		return (clear_all_node(&head));
+	if (node->ret == 0)
+		return (clear_one_node(fd, &head));
+	return (GNL_NL);
 }

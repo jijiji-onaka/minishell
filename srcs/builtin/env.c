@@ -6,43 +6,33 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 17:18:21 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/17 00:37:53 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/24 19:59:06 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static bool	env_len(char *s, size_t *len)
-{
-	bool	flag;
-
-	*len = 0;
-	flag = false;
-	while (s[*len])
-	{
-		if (flag == false && s[*len] == '=')
-			flag = true;
-		(*len)++;
-	}
-	return (flag);
-}
-
 static void	display_env(t_minishell *info)
 {
-	t_envlst	*env;
-	size_t		len;
+	t_envlst	*lst;
 
-	env = info->env;
-	while (env)
+	lst = info->env;
+	while (lst)
 	{
-		if (env_len(env->value, &len) == true)
+		if (lst->env.value.str != NULL)
 		{
-			if (write(STDOUT_FILENO, env->value, len) < 0)
+			if (write(STDOUT_FILENO, lst->env.key.str,
+						lst->env.key.len) < 0)
+				all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
+			if (write(STDOUT_FILENO, "=", 1) < 0)
+				all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
+			if (write(STDOUT_FILENO, lst->env.value.str,
+						lst->env.value.len) < 0)
 				all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 			if (write(STDOUT_FILENO, "\n", 1) < 0)
 				all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 		}
-		env = env->next;
+		lst = lst->next;
 	}
 }
 
@@ -54,5 +44,5 @@ void		exec_env(t_minishell *info, t_cmdlst *cmd)
 	if (option != NULL)
 		return (error_mandatory(ERR_ENV, 37, info));
 	display_env(info);
-	g_signal.exit_status = 0;
+	g_global.exit_status = 0;
 }

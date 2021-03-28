@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/03 20:41:03 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 11:24:47 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/25 02:40:09 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,21 +35,21 @@ char		*make_env_value(char *arg, t_minishell *info, char **ptr)
 	return (res);
 }
 
-char		*add_env_value(char *arg, t_minishell *info, char **env_name)
+void		add_env_value(t_string *key, t_string *value, t_minishell *info)
 {
-	char	*search;
-	char	*res;
 
-	search = search_env(*env_name, ft_strlen(*env_name), info->env, NULL);
+	char	*search;
+	char	*tmp;
+
+	key->str[key->len - 1] = '\0';
+	search = ft_getenv(key->str, info->env, false);
 	if (search == NULL)
-		return (make_env_value(arg, info, env_name));
-	else
+		return ;
+	value->str = re_strjoin(&(value->str), search, value->str);
+	if (value->str == NULL)
 	{
-		if (!(res = ft_strjoin(search, arg)))
-		{
-			ptr_free((void**)env_name);
-			all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-		}
+		ptr_free((void **)&(key->str));
+		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	}
-	return (res);
+	value->len += ft_strlen(search);
 }

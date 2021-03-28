@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/23 01:57:04 by tjinichi          #+#    #+#              #
-#    Updated: 2021/03/21 21:28:58 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/03/28 08:02:45 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = minishell
 
 CC = gcc
 # CFLAGS = -g #-Wall -Werror -Wextra #            -fsanitize=address
-CFLAGS = -g            -fsanitize=address
+CFLAGS = -g          -fsanitize=address
 
 SRCFILE =	 \
 
@@ -40,12 +40,13 @@ BUILTIN_SRCS = $(addprefix $(BUILTIN_DIR)/, \
 				utils/export_unset_is_parameter.c \
 				utils/export_when_only_env_name.c \
 				utils/safe_chdir.c \
-				utils/search_env.c \
+				utils/ft_getenv.c \
 				utils/skip_for_exit.c \
 				utils/two_ptr_free.c \
 				utils/unset_remove_env_lst_if.c \
 				utils/update_env_lst.c \
-				utils/get_path.c \
+				utils/make_struct_string.c \
+				utils/get_environ.c \
 				utils/search_exefile_bin_dir.c \
 				utils/not_builtin_command.c \
 				bin.c \
@@ -213,7 +214,7 @@ LIBS = ./utils/Libft/
 LIBFT = ./utils/Libft/libft.a
 
 $(NAME): $(LIBFT) $(OBJS)
-	@$(CC) $(CFLAGS)  -o $(NAME) $(OBJS) $(LIBFT)
+	@$(CC) $(CFLAGS)  -o $(NAME) $(OBJS) $(LIBFT) -ltermcap
 	@printf "\r                                                             \r$(GREEN)$(BOLD)created exe file [minishell]$(RESET)\n"
 
 $(LIBFT): FORCE
@@ -222,13 +223,13 @@ $(LIBFT): FORCE
 all: $(NAME)
 
 clean:
-	@make clean -C $(LIBS)
+	# @make clean -C $(LIBS)
 	@rm -f $(OBJS)
 	@rm -rf $(OBJDIR)
 	@printf "$(RED)$(BOLD)[minishell] \nremoved object file and objs directory$(RESET)\n"
 
 fclean:
-	@make fclean -C $(LIBS)
+	# @make fclean -C $(LIBS)
 	@rm -rf $(OBJDIR)
 	@printf "$(RED)$(BOLD)[minishell] \nremoved object file and objs directory\n"
 	@rm -f $(NAME)
@@ -246,7 +247,11 @@ valgrind: $(LIBFT) $(OBJS)
 
 
 check:
+	@cd minishell-helper && bash check.sh
+check2:
 	@cd minishell-helper && bash check1.sh
+check1:
+	@cd minishell-helper && bash test.sh
 
 #========== builtin function ===================================================
 BUILTIN_DIR = $(B_SRCDIR)/builtin
@@ -266,12 +271,12 @@ BUILTIN_B_SRCS = $(addprefix $(BUILTIN_DIR)/, \
 				utils/export_unset_is_parameter_bonus.c \
 				utils/export_when_only_env_name_bonus.c \
 				utils/safe_chdir_bonus.c \
-				utils/search_env_bonus.c \
+				utils/ft_getenv_bonus.c \
 				utils/search_exefile_bin_dir_bonus.c \
 				utils/skip_for_exit_bonus.c \
 				utils/two_ptr_free_bonus.c \
 				utils/unset_remove_env_lst_if_bonus.c \
-				utils/get_path_bonus.c \
+				utils/get_environ_bonus.c \
 				utils/not_builtin_command_bonus.c \
 				utils/update_env_lst_bonus.c \
 				bin_bonus.c \

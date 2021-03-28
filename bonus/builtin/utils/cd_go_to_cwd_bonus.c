@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/15 17:31:39 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 20:51:49 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static bool	when_cwd_is_not_symbolic(t_minishell *info, char *each_dir,
 	char	*new;
 
 	update_env_lst(&(info->env), "PWD", info->current_dir_path, info);
-	g_signal.exit_status = 0;
+	g_global.exit_status = 0;
 	return (true);
 }
 
@@ -30,7 +30,7 @@ static bool	when_cwd_is_symbolic(t_minishell *info, char *dir)
 		return (not_found_cwd(info, dir, NULL));
 	ptr_free((void **)&(info->current_dir_path));
 	info->current_dir_path = new;
-	g_signal.exit_status = 0;
+	g_global.exit_status = 0;
 	return (true);
 }
 

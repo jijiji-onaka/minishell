@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:44:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 16:55:18 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ typedef struct			s_global
 	bool				reading;
 	t_minishell			info;
 }						t_global;
-t_global				g_signal;
+t_global				g_global;
 
 enum	e_cmd
 {
@@ -85,7 +85,7 @@ enum	e_cmd
 	OUTPUT,
 	DB_OUTPUT,
 	CD,
-	ECHO,
+	CMD_ECHO,
 	ENV,
 	EXPORT,
 	PWD,

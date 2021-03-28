@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 01:01:05 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/20 01:11:17 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	preparation(int *backup, char **command,
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	}
 	*buf = '\0';
-	g_signal.reading = true;
+	g_global.reading = true;
 }
 
 static void	check_return_value(ssize_t rc, char **command, char buf, \
@@ -41,7 +41,7 @@ static void	check_return_value(ssize_t rc, char **command, char buf, \
 
 static void	clean_up(int *backup, char **command, t_minishell *info)
 {
-	if (!g_signal.reading)
+	if (!g_global.reading)
 		if ((dup2(*backup, STDIN_FILENO)) == -1)
 		{
 			ptr_free((void**)command);
@@ -62,7 +62,7 @@ char		*waiting_for_input(t_minishell *info)
 	int		backup;
 
 	preparation(&backup, &command, &buf, info);
-	while (g_signal.reading)
+	while (g_global.reading)
 	{
 		if ((rc = safe_read(&buf, &command, info)) && buf == '\n')
 			break ;
@@ -70,7 +70,7 @@ char		*waiting_for_input(t_minishell *info)
 		check_return_value(rc, &command, buf, info);
 	}
 	clean_up(&backup, &command, info);
-	if (!g_signal.reading)
+	if (!g_global.reading)
 		return (reset_prompt(&command, NULL));
 	return (command);
 }

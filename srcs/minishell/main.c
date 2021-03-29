@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/28 18:09:08 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/28 22:43:14 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,36 +96,24 @@ void		initialize_term(void)
 	// ft_putstr_fd(tgetstr("cl", NULL), STDIN_FILENO);
 }
 
-static char *init_key(int key)
-{
-    static char up[] = {27, 79, 65, 0};
-    static char right[] = {27, 91, 67, 0};
-    static char left[] = {27, 91, 68, 0}; // ESC[nD	カーソルを左にn桁移動
-
-    if (key == 0)
-        return (up);
-    if (key == 1)
-        return (right);
-    if (key == 2)
-        return (left);
-    return (NULL);
-}
-
 void	set_key(t_minishell *info)
 {
-	// info->key.left = tgetstr("le", NULL);
-	info->key.left = init_key(2);
+	info->key.left = tgetstr("le", NULL);
+	// info->key.left = init_key(2);
 	if (info->key.left == NULL)
 		all_free_exit(info, ERR_TGETSTR, __LINE__, __FILE__);
 	// right yet
-	// info->key.right = tgetstr("le", NULL);
-	// if (info->key.right == NULL)
-	// 	all_free_exit(info, ERR_TGETSTR, __LINE__, __FILE__);
+	info->key.right = tgetstr("nd", NULL);
+	if (info->key.right == NULL)
+		all_free_exit(info, ERR_TGETSTR, __LINE__, __FILE__);
 	info->key.clean_right = tgetstr("ce", NULL);
 	if (info->key.clean_right == NULL)
 		all_free_exit(info, ERR_TGETSTR, __LINE__, __FILE__);
 	info->key.save = tgetstr("sc", NULL);
 	if (info->key.save == NULL)
+		all_free_exit(info, ERR_TGETSTR, __LINE__, __FILE__);
+	info->key.reset = tgetstr("rc", NULL);
+	if (info->key.reset == NULL)
 		all_free_exit(info, ERR_TGETSTR, __LINE__, __FILE__);
 }
 

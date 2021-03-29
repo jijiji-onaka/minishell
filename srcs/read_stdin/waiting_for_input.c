@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 01:01:05 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/28 18:06:52 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/28 22:44:02 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ static void	preparation(int *backup, t_string *command,
 	buf[0] = '\0';
 	g_global.reading = true;
 	info->history_flag = false;
+	// info->key.command_end_flag = true;
+	info->key.save_command_len = 0;
 }
 
 // static void	check_return_value(ssize_t rc, char **command, char buf[4], \
@@ -85,29 +87,89 @@ void		clear_terminal(char *command, t_minishell *info)
 	ft_putstr_fd(command, STDOUT_FILENO);
 }
 
+void		edit_displayed_char(char *buf, t_string *command, t_minishell *info)
+{
+	char	*new;
+	size_t	i;
+	size_t	j;
+
+	new = malloc(sizeof(char) * (ft_strlen(command->str) + 2));
+	if (new == NULL)
+		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	i = 0;
+	j = 0;
+	while (command->str[i])
+	{
+		if (i == command->len)
+			new[j++] = buf[0];
+		new[j] = command->str[i];
+		j++;
+		i++;
+	}
+	new[j] = '\0';
+	free(command->str);
+	command->str = new;
+}
+
 void		print_user_pushed_char(t_string *command, char *buf, t_minishell *info)
 {
-	// puts("======");
-	ft_putchar_fd(*buf, STDOUT_FILENO);
-	if (!(command->str = re_strjoin(&(command->str), command->str, buf)))
-		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	if (info->key.save_command_len == command->len || buf[0] == 10)
+	{
+		ft_putchar_fd(*buf, STDOUT_FILENO);
+		if (!(command->str = re_strjoin(&(command->str), command->str, buf)))
+			all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+		command->len++;
+		info->key.save_command_len = command->len;
+		return ;
+	}
+	if (ft_putstr_fd(info->key.save, 0) == false)
+		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
+	if (ft_putstr_fd(info->key.clean_right, 0) == false)
+		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
+	edit_displayed_char(buf, command, info);
+	ft_putstr_fd(command->str + command->len, 1);
+	ft_putstr_fd(info->key.reset, 0);
+	ft_putstr_fd(buf, 1);
 	command->len++;
+	// info->key.save_command_len = command->len;
 }
 
 void		move_cursor_left(char *buf, t_string *command, t_minishell *info)
 {
 	if (command->len == 0)
-	{
-		// buf[0] = '\0';
 		return ;
-	}
+	// info->key.command_end_flag = false;
 	--command->len;
-	// ft_putstr_fd(info->key.left, STDIN_FILENO);
 	ft_putstr_fd(buf, STDIN_FILENO);
-	buf[0] = '\0';
-	buf[1] = '\0';
-	buf[2] = '\0';
-	buf[3] = '\0';
+}
+
+void		move_cursor_right(char *buf, t_string *command, t_minishell *info)
+{
+	if (command->len == info->key.save_command_len)
+		return ;
+	// info->key.command_end_flag = false;
+	++command->len;
+	ft_putstr_fd(buf, STDIN_FILENO);
+}
+
+static void	create_new_command(t_string *command, t_minishell *info)
+{
+	size_t	i;
+	size_t	j;
+	size_t	len;
+	char	*str;
+
+	i = 0;
+	j = 0;
+	str = command->str;
+	len = command->len;
+	while (str[i])
+	{
+		if (i != len)
+			str[j++] = str[i];
+		i++;
+	}
+	command->str[j] = '\0';
 }
 
 void		delete_displayed_char(char *buf, t_string *command, t_minishell *info)
@@ -117,15 +179,16 @@ void		delete_displayed_char(char *buf, t_string *command, t_minishell *info)
 		buf[0] = '\0';
 		return ;
 	}
-	command->str[command->len - 1] = '\0';
-	--command->len;
 	if (ft_putstr_fd(info->key.left, 0) == false)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	if (ft_putstr_fd(info->key.save, 0) == false)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	if (ft_putstr_fd(info->key.clean_right, 0) == false)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	ft_putstr_fd(tgetstr("rc", NULL), 0);
+	ft_putstr_fd(command->str + command->len, 1);
+	--command->len;
+	create_new_command(command, info);
+	ft_putstr_fd(info->key.reset, 0);
 }
 
 // size_t	ft_strlen1(const char *s)
@@ -143,19 +206,24 @@ void		delete_displayed_char(char *buf, t_string *command, t_minishell *info)
 // 	return (i);
 // }
 
-bool		is_up_key(char *buf)
+bool		is_up_arrow_key(char *buf)
 {
 	return (buf[0] == 27 && buf[1] == 91 && buf[2] == 65);
 }
 
-bool		is_down_key(char *buf)
+bool		is_down_arrow_key(char *buf)
 {
 	return (buf[0] == 27 && buf[1] == 91 && buf[2] == 66);
 }
 
-bool		is_left_key(char *buf)
+bool		is_left_arrow_key(char *buf)
 {
 	return (buf[0] == 27 && buf[1] == 91 && buf[2] == 68);
+}
+
+bool		is_right_arrow_key(char *buf)
+{
+	return (buf[0] == 27 && buf[1] == 91 && buf[2] == 67);
 }
 
 void		trace_history_up(char *buf, t_string *command, t_minishell *info)
@@ -238,18 +306,14 @@ void		check_key(char *buf, t_string *command, t_minishell *info)
 		clear_terminal(command->str, info);
 	else if (buf[0] == DELETE_KEY)
 		delete_displayed_char(buf, command, info);
-	// else if (ft_strlen(buf) == 1)
-	// 	print_user_pushed_char(command, buf, info);
-	else if (is_up_key(buf))
+	else if (is_up_arrow_key(buf))
 		trace_history_up(buf, command, info);
-	else if (is_down_key(buf))
+	else if (is_down_arrow_key(buf))
 		trace_history_down(buf, command, info);
-	else if (is_left_key(buf))
+	else if (is_left_arrow_key(buf))
 		move_cursor_left(buf, command, info);
-	// write(1, "\033[D", 3);
-	// if (ft_strlen(buf) == 1)
-	// 	if (!(command->str = re_strjoin(&(command->str), command->str, buf)))
-	// 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	else if (is_right_arrow_key(buf))
+		move_cursor_right(buf, command, info);
 	else
 		print_user_pushed_char(command, buf, info);
 }
@@ -266,13 +330,11 @@ char		*waiting_for_input(t_minishell *info)
 	{
 		rc = safe_read1(buf, &(command.str), info);
 		if (rc == -1)
-		{
-			puts("read error");
 			break ;
-		}
-		ctrl_d_rm(&(command.str), info);
+		// ctrl_d_rm(&(command.str), info); // これが原因
 		check_key(buf, &command, info);
 		// check_return_value(rc, &command, buf, info);
+		// if (ft_strchr(command.str, '\n') != NULL)
 		if (ft_strchr(buf, '\n') != NULL)
 			break ;
 	}

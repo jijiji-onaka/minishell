@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:44:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/28 07:31:36 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/28 22:39:16 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ typedef struct			s_key
 	char				*right;
 	char				*clean_right;
 	char				*save;
+	char				*reset;
+	size_t				save_command_len;
 }						t_key;
 
 typedef struct			s_minishell_info

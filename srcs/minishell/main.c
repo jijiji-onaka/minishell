@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/28 22:43:14 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/29 18:01:30 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,15 +99,16 @@ void		initialize_term(void)
 void	set_key(t_minishell *info)
 {
 	info->key.left = tgetstr("le", NULL);
-	// info->key.left = init_key(2);
 	if (info->key.left == NULL)
 		all_free_exit(info, ERR_TGETSTR, __LINE__, __FILE__);
-	// right yet
 	info->key.right = tgetstr("nd", NULL);
 	if (info->key.right == NULL)
 		all_free_exit(info, ERR_TGETSTR, __LINE__, __FILE__);
 	info->key.clean_right = tgetstr("ce", NULL);
 	if (info->key.clean_right == NULL)
+		all_free_exit(info, ERR_TGETSTR, __LINE__, __FILE__);
+	info->key.clean = tgetstr("cl", NULL);
+	if (info->key.clean == NULL)
 		all_free_exit(info, ERR_TGETSTR, __LINE__, __FILE__);
 	info->key.save = tgetstr("sc", NULL);
 	if (info->key.save == NULL)

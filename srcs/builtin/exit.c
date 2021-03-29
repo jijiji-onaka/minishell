@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 18:24:30 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/28 06:39:54 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/29 18:25:23 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 static void	normal_exit(t_minishell *info)
 {
 	tcsetattr(STDIN_FILENO, TCSANOW, &(g_global.terms[ORIGINAL]));
+	update_command_history_file(info, info->command_history_begin);
 	all_free_minishell_info(info);
 	exit(g_global.exit_status);
 }
@@ -38,6 +39,7 @@ static void	non_numeric_exit(t_minishell *info, char *arg1)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	g_global.exit_status = 255;
 	tcsetattr(STDIN_FILENO, TCSANOW, &(g_global.terms[ORIGINAL]));
+	update_command_history_file(info, info->command_history_begin);
 	all_free_minishell_info(info);
 	exit(g_global.exit_status);
 }
@@ -46,6 +48,7 @@ static void	selected_code_exit(t_minishell *info, int exit_code)
 {
 	g_global.exit_status = exit_code % 256;
 	tcsetattr(STDIN_FILENO, TCSANOW, &(g_global.terms[ORIGINAL]));
+	update_command_history_file(info, info->command_history_begin);
 	all_free_minishell_info(info);
 	exit(g_global.exit_status);
 }

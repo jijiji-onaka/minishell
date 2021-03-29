@@ -241,19 +241,21 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include "includes/minishell.h"
-int main()
+#include <sys/ioctl.h>
+#include <unistd.h>
+
+static size_t line_length = 80;
+int main( int argc, char *argv[] )
 {
-	ft_putnbr_fd(INT_MIN, 1);
-	puts("");
-	ft_putnbr_fd(INT_MAX, 1);
-	puts("");
-	ft_putnbr_fd(0, 1);
-	puts("");
-	ft_putnbr_fd(123, 1);
-	puts("");
-	ft_putnbr_fd(+123, 1);
-	puts("");
-	ft_putnbr_fd(-123, 1);
-	printf("\033[D");
-	printf("\033[D");
+    struct winsize ws;
+    // get terminal size
+    if( ioctl( STDOUT_FILENO, TIOCGWINSZ, &ws ) != -1 ) {
+        printf("terminal_width  =%d\n", ws.ws_col);
+        printf("terminal_height =%d\n", ws.ws_row);
+        if( 0 < ws.ws_col && ws.ws_col == (size_t)ws.ws_col ) {
+            line_length = ws.ws_col;
+        }
+    }
+	printf("line %d\n", line_length);
+    return 0;
 }

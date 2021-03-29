@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:44:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/28 22:39:16 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/29 20:18:24 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ typedef struct			s_key
 	char				*left;
 	char				*right;
 	char				*clean_right;
+	char				*clean;
 	char				*save;
 	char				*reset;
 	size_t				save_command_len;
@@ -189,8 +190,15 @@ enum	e_format
 /*
 ** KEY
 */
+# define READ_SIZE 3
+# define KEY_UP 0
+# define KEY_DOWN 1
+# define KEY_LEFT 2
+# define KEY_RIGHT 3
 # define CTRL_D 4
-# define CTRL_L 12
-# define DELETE_KEY 127
+# define CTRL_L 5
+# define KEY_DELETE 6
+# define NORMAL_CHAR 7
+# define KEY_NEWLINE 8
 
 #endif

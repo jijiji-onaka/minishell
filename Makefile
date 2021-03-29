@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/23 01:57:04 by tjinichi          #+#    #+#              #
-#    Updated: 2021/03/28 08:02:45 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/03/29 16:57:01 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -75,6 +75,11 @@ READ_SRCS = $(addprefix $(READ_DIR)/, \
 				utils/reset_prompt.c \
 				utils/rm_chr_in_str.c \
 				utils/safe_read.c \
+				utils/key_check.c \
+				utils/key_up_down.c \
+				utils/key_left_right.c \
+				utils/key_del_clear.c \
+				utils/key_normal.c \
 				waiting_for_input.c \
 				waiting_for_quotation.c \
 				waiting_for_next_command.c \

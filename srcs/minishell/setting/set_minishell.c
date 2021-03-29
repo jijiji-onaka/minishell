@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 16:01:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/28 07:12:31 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/29 18:23:10 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,23 +64,34 @@ void	set_command_history(t_minishell *info)
 	fd = open(info->history_path, O_RDONLY);
 	if (fd == -1)
 	{
-		if (errno == ENOENT)
-		{
-			if (write(STDOUT_FILENO, "\033[1;36mCreated .minishell_history \
-in the current directory\n\033[0m", 63) < 63)
-				all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-			fd = open(info->history_path, O_CREAT | O_RDWR, 0644);
-			if (fd == -1)
-				all_free_exit(info, ERR_OPEN, __LINE__, __FILE__);
-			if (close(fd) == -1)
-				all_free_exit(info, ERR_CLOSE, __LINE__, __FILE__);
-		}
+		info->command_history = NULL;
+		info->command_history_begin = NULL;
 		return ;
 	}
 	get_command_history(fd, info);
 	return ;
 }
 
+void	update_command_history_file(t_minishell *info, t_history *history)
+{
+	int	fd;
+
+	if (history == NULL)
+		return ;
+	fd = open(info->history_path, O_CREAT | O_RDWR, 0644);
+	if (fd == -1)
+		all_free_exit(info, ERR_OPEN, __LINE__, __FILE__);
+	while (history->prev)
+		history = history->prev;
+	while (history)
+	{
+		if (ft_putstr_fd(history->command, fd) == false)
+			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
+		if (write(fd, "\n", 1) < 1)
+			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
+		history = history->next;
+	}
+}
 
 void	set_minishell(t_minishell *info)
 {

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/19 21:36:06 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 13:59:22 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/29 18:47:45 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,16 @@
 void		display_what_is_waiting_for(char quo, char **ptr1, char **ptr2,
 					t_minishell *info)
 {
-	int		f;
+	int		write_err_flag;
 
-	f = 1;
+	write_err_flag = 1;
 	if (quo == '\"')
-		f = write(STDOUT_FILENO, "wait :(double quote)> ", 22);
+		write_err_flag = write(STDOUT_FILENO, "wait :(double quote)> ", 22);
 	else if (quo == '\'')
-		f = write(STDOUT_FILENO, "wait :(single quote)> ", 22);
+		write_err_flag = write(STDOUT_FILENO, "wait :(single quote)> ", 22);
 	else if (quo == '|')
-		f = write(STDOUT_FILENO, "wait :(pipe)> ", 14);
-	if (f < 0)
+		write_err_flag = write(STDOUT_FILENO, "wait :(pipe)> ", 14);
+	if (write_err_flag < 0)
 	{
 		if (ptr1)
 			ptr_free((void**)ptr1);

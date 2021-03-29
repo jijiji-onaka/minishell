@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/29 17:29:10 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ bool		parse_command(t_minishell *info, char *command)
 	tmp = skip_space(command);
 	if (!(cmd_grp = split_each_parts(tmp)))
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-	ptr_free((void **)&(command));
+	// ptr_free((void **)&(command));
 	info->ptr_for_free = NULL;
 	cmd_grp = rm_spaces_in_2d_array(cmd_grp, info);
 	if (check_format_of_command(&cmd_grp, info) == false)

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 02:04:00 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/26 22:25:39 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/03/29 18:23:22 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include "read_stdin.h"
 
 void	set_minishell(t_minishell *info);
+void	update_command_history_file(t_minishell *info, t_history *history);
 void	set_prompt_message(t_envlst *env_lst);
 void	set_shell_level(void);
 void	set_env(t_minishell *info);

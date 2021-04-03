@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 02:54:08 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/28 07:46:41 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/02 22:49:59 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void			all_free_minishell_info(t_minishell *info)
 {
 	ptr_free((void**)&(info->current_dir_path));
 	ptr_free((void**)&(info->oldpwd_path));
+	ptr_free((void**)&(info->key.target));
 	free_cmd_lst(&(info->cmd_lst));
 	free_env_lst(&(info->env));
 	free_command_history(&(info->command_history_begin));
@@ -73,7 +74,7 @@ static void		put_error_location_and_exit(char *error_message,
 	char	*location_message;
 	char	*tmp;
 
-	// red_error();
+	red_error();
 	if (write(STDERR_FILENO, info->current_dir_path,
 				ft_strlen(info->current_dir_path)) < 0)
 		exit(EXIT_FAILURE);
@@ -85,6 +86,7 @@ static void		put_error_location_and_exit(char *error_message,
 	ptr_free((void **)&tmp);
 	ft_putendl_fd(location_message, STDERR_FILENO);
 	ptr_free((void **)&location_message);
+	tcsetattr(STDIN_FILENO, TCSANOW, &(g_global.terms[ORIGINAL]));
 	free_env_lst(&(info->env));
 	ptr_free((void**)&(info->current_dir_path));
 	ptr_free((void**)&(info->oldpwd_path));
@@ -103,8 +105,10 @@ void			all_free_exit(t_minishell *info, char *error_message, \
 	if (info->ptr_for_free_2)
 		ptr_free((void**)&info->ptr_for_free_2);
 	free_cmd_lst(&(info->cmd_lst));
-	tcsetattr(STDIN_FILENO, TCSANOW, &(g_global.terms[ORIGINAL]));
 	if (errno == 0)
+	{
+		tcsetattr(STDIN_FILENO, TCSANOW, &(g_global.terms[ORIGINAL]));
 		exit(1);
+	}
 	put_error_location_and_exit(error_message, line_num, file_name, info);
 }

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 16:01:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/29 18:23:10 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/02 22:48:30 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,12 +100,14 @@ void	set_minishell(t_minishell *info)
 	info->exit_too_arg = 0;
 	info->unset_pwd_flag = false;
 	info->unset_oldpwd_flag = false;
+	info->minishell_op_no_edit = false;
 	info->env = NULL;
 	info->history_path = "./.minishell_history";
 	info->command_history = NULL;
 	info->ptr_for_free = NULL;
 	info->ptr_for_free_2 = NULL;
 	info->ptr_2d_for_free = NULL;
+	info->key.target = NULL;
 	set_shell_level();
 	set_env(info);
 	set_command_history(info);

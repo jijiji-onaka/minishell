@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 01:01:05 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/29 21:31:12 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/03 18:42:26 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,17 @@ static void	preparation(int *backup, t_string *command,
 	info->history_flag = false;
 	info->command_history = info->command_history_begin;
 	info->key.save_command_len = 0;
+	info->key.target_start = -1;
+	info->key.target_end = -1;
+	// info->key.target = NULL;
+	info->key.ctrl_lr_flag = false;
+	info->window.line_num = 0;
+	ft_memcpy(info->window.cur_pos, info->window.command_start_pos, 2);
+	// info->window.cur_pos[X] = info->window.command_start_pos[X];
+	// info->window.cur_pos[Y] = info->window.command_start_pos[Y];
+	ft_memcpy(info->window.command_end_pos, info->window.command_start_pos, 2);
+	// info->window.command_end_pos[X] = info->window.command_start_pos[X];
+	// info->window.command_end_pos[Y] = info->window.command_start_pos[Y];
 }
 
 static void	clean_up(int *backup, char **command, t_minishell *info)
@@ -46,6 +57,8 @@ static void	clean_up(int *backup, char **command, t_minishell *info)
 	}
 	if (info->ptr_for_free)
 		ptr_free((void**)&(info->ptr_for_free));
+	// if (info->key.target)
+	// 	ptr_free((void**)&(info->key.target));
 	info->command_history = info->command_history_begin;
 }
 
@@ -97,6 +110,7 @@ char		*waiting_for_input(t_minishell *info)
 		rc = safe_read(buf, &(command.str), info);
 		if (rc == -1)
 			break ;
+		get_window_size(info);
 		check_key(buf, &command, info);
 		if (ft_strchr(buf, '\n') != NULL)
 			break ;

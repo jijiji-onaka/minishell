@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:44:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/29 20:18:24 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/03 18:24:51 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,14 +62,34 @@ typedef struct			s_hist_all
 
 typedef struct			s_key
 {
+	char				*up;
+	char				*down;
 	char				*left;
 	char				*right;
 	char				*clean_right;
 	char				*clean;
 	char				*save;
 	char				*reset;
+	char				*cursor_invisible;
+	char				*cursor_visible;
+	char				*color_change;
+	char				*color_reset;
+	size_t				target_start;
+	size_t				target_end;
+	char				*target;
 	size_t				save_command_len;
+	bool				ctrl_lr_flag;
 }						t_key;
+
+typedef struct			s_window
+{
+	struct winsize		ws;
+	int					prompt_len;
+	int					cur_pos[2];
+	int					command_start_pos[2];
+	int					command_end_pos[2];
+	int					line_num;
+}						t_window;
 
 typedef struct			s_minishell_info
 {
@@ -78,6 +98,7 @@ typedef struct			s_minishell_info
 	bool				unset_pwd_flag;
 	bool				unset_oldpwd_flag;
 	bool				minishell_op_c;
+	bool				minishell_op_no_edit;
 	struct s_envlst		*env;
 	struct s_cmdlst		*cmd_lst;
 	char				*history_path;
@@ -86,6 +107,7 @@ typedef struct			s_minishell_info
 	bool				history_flag;
 	// struct s_hist_all	history;
 	struct s_key		key;
+	struct s_window		window;
 	int					cmd_lst_num;
 	bool				exit_too_arg;
 	char				*ptr_for_free;
@@ -200,5 +222,24 @@ enum	e_format
 # define KEY_DELETE 6
 # define NORMAL_CHAR 7
 # define KEY_NEWLINE 8
+# define KEY_HOME 9
+# define KEY_END 10
+# define KEY_TAB 11
+# define NOTHING_KEY 11
+# define KEY_CTRL_LEFT 12
+# define KEY_CTRL_RIGHT 13
+# define CTRL_B 14
+# define CTRL_F 15
+# define CTRL_G 16
+# define CTRL_Y 17
+# define CTRL_K 18
+# define CTRL_P 19
+# define CTRL_N 20
+/*
+** CURSOR
+*/
+# define X 0
+# define Y 1
+
 
 #endif

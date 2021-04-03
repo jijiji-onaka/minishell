@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/29 18:01:30 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/03 00:56:54 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,22 +82,20 @@ void		initialize_term(void)
 {
 	tcgetattr(STDIN_FILENO, &(g_global.terms[ORIGINAL]));
 	g_global.terms[REPLICA] = g_global.terms[ORIGINAL];
-	g_global.terms[REPLICA].c_lflag &= ~(ICANON | ECHO);
-	g_global.terms[REPLICA].c_cc[VMIN] = 1;
-	g_global.terms[REPLICA].c_cc[VTIME] = 0;
-	tcsetattr(STDIN_FILENO, TCSANOW, &(g_global.terms[REPLICA]));
-	// ft_putstr_fd(tgetstr("ti", NULL), STDIN_FILENO);
-	// ft_putstr_fd(tgetstr("vi", NULL), STDIN_FILENO);
-	// display_welcome_message();
-	// char buf[1024];
-	// ft_bzero(buf, 1024);
-	// struct winsize winsize;
-	// ioctl(STDIN_FILENO, TIOCGWINSZ, &winsize);
-	// ft_putstr_fd(tgetstr("cl", NULL), STDIN_FILENO);
+	// g_global.terms[REPLICA].c_lflag &= ~(ICANON | ECHO);
+	g_global.terms[REPLICA].c_lflag &= ~(ECHO | ICANON | ISIG);
+
+	// g_global.terms[REPLICA].c_cc[VMIN] = 1;
+	// g_global.terms[REPLICA].c_cc[VTIME] = 0;
+	tcsetattr(STDIN_FILENO, TCSAFLUSH, &(g_global.terms[REPLICA]));
+	// tcsetattr(STDIN_FILENO, TCSANOW, &(g_global.terms[REPLICA]));
+
 }
 
 void	set_key(t_minishell *info)
 {
+	info->key.up = "\033[A";
+	info->key.down = "\033[B";
 	info->key.left = tgetstr("le", NULL);
 	if (info->key.left == NULL)
 		all_free_exit(info, ERR_TGETSTR, __LINE__, __FILE__);
@@ -116,6 +114,14 @@ void	set_key(t_minishell *info)
 	info->key.reset = tgetstr("rc", NULL);
 	if (info->key.reset == NULL)
 		all_free_exit(info, ERR_TGETSTR, __LINE__, __FILE__);
+	info->key.cursor_invisible = tgetstr("vi", NULL);
+	if (info->key.cursor_invisible == NULL)
+		all_free_exit(info, ERR_TGETSTR, __LINE__, __FILE__);
+	info->key.cursor_visible = tgetstr("ve", NULL);
+	if (info->key.cursor_visible == NULL)
+		all_free_exit(info, ERR_TGETSTR, __LINE__, __FILE__);
+	info->key.color_change = "\x1b[38;5;106m\x1b[48;5;27m";
+	info->key.color_reset = "\033[0m";
 }
 
 int			main(int argc, char **argv)
@@ -148,6 +154,8 @@ int			main(int argc, char **argv)
 	g_global.info = info;
 	if (argc > 2 && ft_strncmp("-c", argv[1], 3) == 0)
 		return (minishell_option_c(argv[2], &info));
+	if (argc > 1 && ft_strcmp("--noediting", argv[1]) == 0)
+		info.minishell_op_no_edit = true;
 	info.minishell_op_c = false;
 	if (signal(SIGQUIT, &sig_quit) == SIG_ERR)
 		all_free_exit(&info, ERR_SIGNAL, __LINE__, __FILE__);

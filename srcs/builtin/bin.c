@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 00:06:42 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/24 23:54:19 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/02 23:31:13 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 static void	setting_1(char ***environ, char **paths,
 			char ***split, t_minishell *info)
 {
+	tcsetattr(STDIN_FILENO, TCSANOW, &(g_global.terms[ORIGINAL]));
 	*environ = get_environ(info->env, info);
 	*paths = ft_getenv("PATH", info->env, false);
 	if (*paths && (*paths)[0] != '\0')
@@ -72,6 +73,7 @@ static void	clean_up(char ***environ, int i, char ***split, t_minishell *info)
 		all_free_exit(info, ERR_WAIT_PID, __LINE__, __FILE__);
 	if (g_global.exit_status != 130 && g_global.exit_status != 131)
 		g_global.exit_status = WEXITSTATUS(status);
+	tcsetattr(STDIN_FILENO, TCSAFLUSH, &(g_global.terms[REPLICA]));
 }
 
 void		exec_bin(t_minishell *info, t_cmdlst *cmd)

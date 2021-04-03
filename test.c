@@ -243,19 +243,121 @@
 # include "includes/minishell.h"
 #include <sys/ioctl.h>
 #include <unistd.h>
+# include <termcap.h>
+# include <termios.h>
+// # include <readline.h>
+# include <sys/ioctl.h>
 
-static size_t line_length = 80;
-int main( int argc, char *argv[] )
+// int main()
+// {
+// 	// tgetent(NULL, getenv("TERM"));
+// 	// tcgetattr(STDIN_FILENO, &(g_global.terms[0]));
+// 	// g_global.terms[1] = g_global.terms[0];
+// 	// g_global.terms[1].c_lflag &= ~(ICANON | ECHO);
+// 	// g_global.terms[1].c_cc[VMIN] = 1;
+// 	// g_global.terms[1].c_cc[VTIME] = 0;
+// 	// tcsetattr(STDIN_FILENO, TCSANOW, &(g_global.terms[1]));
+// 	// char *tmp = readline("abc");
+// 	// int buf;
+// 	// read(0, &buf, 99);
+// 	// printf("%d\n", buf);
+// 	// read(0, &buf, 99);
+// 	// printf("%d\n", buf);
+// 	// write(1, "[", 1);
+// 	// write(1, s, strlen(s));
+// 	// write(1, "]", 1);
+// 	// tcsetattr(STDIN_FILENO, TCSANOW, &(g_global.terms[0]));
+// 	printf("\x1b[38;5;93maaaaaaaa\033[0m\n");
+// 	printf("\x1b[38;5;109maaaaaaaa\033[0m\n");
+// 	printf("\x1b[38;5;106maaaaaaaa\033[0m\n");
+// 	printf("\x1b[95maaaaaaaa\033[0m\n");
+// 	printf("\x1b[6n");
+// 	char buf[100];
+// 	bzero(buf, 100);
+// 	read(0, buf, 99);
+// 	printf("%s\n", buf);
+// 	// printf("\033[49m");
+// }
+
+#include <stdio.h>
+
+int getCursorPosition(int *rows, int *cols)
 {
-    struct winsize ws;
-    // get terminal size
-    if( ioctl( STDOUT_FILENO, TIOCGWINSZ, &ws ) != -1 ) {
-        printf("terminal_width  =%d\n", ws.ws_col);
-        printf("terminal_height =%d\n", ws.ws_row);
-        if( 0 < ws.ws_col && ws.ws_col == (size_t)ws.ws_col ) {
-            line_length = ws.ws_col;
-        }
-    }
-	printf("line %d\n", line_length);
-    return 0;
+	char buf[32];
+	unsigned int i = 0;
+
+	/* Report cursor location */
+	if (write(1, "aaaa", 4) != 4)
+		return -1;
+	if (write(1, "\x1b[6n", 4) != 4)
+		return -1;
+
+	/* Read the response: ESC [ rows ; cols R */
+	while (i < sizeof(buf) - 1)
+	{
+		if (read(0, buf + i, 1) != 1)
+			break;
+		if (buf[i] == 'R')
+			break;
+		i++;
+	}
+	buf[i] = '\0';
+
+	/* Parse it. */
+	if (buf[0] != '\x1b' || buf[1] != '[')
+		return -1;
+	printf("[%s]\n", buf + 2);
+	*rows = atoi(buf + 2);
+	*cols = atoi(strchr(buf, ';') + 1);
+	// if (sscanf(buf + 2, "%d;%d", rows, cols) != 2)
+	// 	return -1;
+	// return 0;
 }
+
+int main(void)
+{
+//  int cursor_x, cursor_y;
+
+ tgetent(NULL, getenv("TERM"));
+ tcgetattr(STDIN_FILENO, &(g_global.terms[0]));
+ g_global.terms[1] = g_global.terms[0];
+ g_global.terms[1].c_lflag &= ~(ICANON | ECHO);
+ g_global.terms[1].c_cc[VMIN] = 1;
+ g_global.terms[1].c_cc[VTIME] = 0;
+ tcsetattr(STDIN_FILENO, TCSANOW, &(g_global.terms[1]));
+//  printf("%s", "\x1B[6n");
+//  scanf("\x1B[%d;%dR", &cursor_y, &cursor_x);
+
+	int i = 0, j = 0;
+	getCursorPosition(&i, &j);
+ printf("x = %d, y = %d\n", i, j);
+
+//  printf("x = %d, y = %d\n", cursor_x, cursor_y);
+//  char buf[10];
+// //  bzero(buf, 10);
+// //  printf("%s", "\x1B[6n");
+// write(1, "\x1B[6n", 4);
+// //  fflush(stdout);
+// //  fflush(stdin);
+//  int n = read(0, buf, 9);
+//  buf[n] = '\0';
+//  printf("==[%s]==\n", buf);
+//  fflush(stdout);
+ tcsetattr(STDIN_FILENO, TCSANOW, &(g_global.terms[0]));
+}
+
+// static size_t line_length = 80;
+// int main( int argc, char *argv[] )
+// {
+//     struct winsize ws;
+//     // get terminal size
+//     if( ioctl( STDOUT_FILENO, TIOCGWINSZ, &ws ) != -1 ) {
+//         printf("terminal_width  =%d\n", ws.ws_col);
+//         printf("terminal_height =%d\n", ws.ws_row);
+//         if( 0 < ws.ws_col && ws.ws_col == (size_t)ws.ws_col ) {
+//             line_length = ws.ws_col;
+//         }
+//     }
+// 	printf("line %d\n", line_length);
+//     return 0;
+// }

@@ -281,14 +281,12 @@
 
 #include <stdio.h>
 
-int getCursorPosition(int *rows, int *cols)
+int getCursorPosition(int ifd, int ofd, int *rows, int *cols)
 {
 	char buf[32];
 	unsigned int i = 0;
 
 	/* Report cursor location */
-	if (write(1, "aaaa", 4) != 4)
-		return -1;
 	if (write(1, "\x1b[6n", 4) != 4)
 		return -1;
 
@@ -306,44 +304,29 @@ int getCursorPosition(int *rows, int *cols)
 	/* Parse it. */
 	if (buf[0] != '\x1b' || buf[1] != '[')
 		return -1;
-	printf("[%s]\n", buf + 2);
-	*rows = atoi(buf + 2);
-	*cols = atoi(strchr(buf, ';') + 1);
-	// if (sscanf(buf + 2, "%d;%d", rows, cols) != 2)
-	// 	return -1;
-	// return 0;
+	if (sscanf(buf + 2, "%d;%d", rows, cols) != 2)
+		return -1;
+	return 0;
 }
 
 int main(void)
 {
-//  int cursor_x, cursor_y;
+ int cursor_x, cursor_y;
 
- tgetent(NULL, getenv("TERM"));
- tcgetattr(STDIN_FILENO, &(g_global.terms[0]));
- g_global.terms[1] = g_global.terms[0];
- g_global.terms[1].c_lflag &= ~(ICANON | ECHO);
- g_global.terms[1].c_cc[VMIN] = 1;
- g_global.terms[1].c_cc[VTIME] = 0;
- tcsetattr(STDIN_FILENO, TCSANOW, &(g_global.terms[1]));
-//  printf("%s", "\x1B[6n");
-//  scanf("\x1B[%d;%dR", &cursor_y, &cursor_x);
+//  tgetent(NULL, getenv("TERM"));
+//  tcgetattr(STDIN_FILENO, &(g_global.terms[0]));
+//  g_global.terms[1] = g_global.terms[0];
+//  g_global.terms[1].c_lflag &= ~(ICANON | ECHO);
+//  g_global.terms[1].c_cc[VMIN] = 1;
+//  g_global.terms[1].c_cc[VTIME] = 0;
+//  tcsetattr(STDIN_FILENO, TCSANOW, &(g_global.terms[1]));
+ printf("1");
+ printf("%s", "\x1B[6n");
+ scanf("\x1B[%d;%dR", &cursor_y, &cursor_x);
 
-	int i = 0, j = 0;
-	getCursorPosition(&i, &j);
- printf("x = %d, y = %d\n", i, j);
+ printf("x = %d, y = %d\n", cursor_x, cursor_y);
 
-//  printf("x = %d, y = %d\n", cursor_x, cursor_y);
-//  char buf[10];
-// //  bzero(buf, 10);
-// //  printf("%s", "\x1B[6n");
-// write(1, "\x1B[6n", 4);
-// //  fflush(stdout);
-// //  fflush(stdin);
-//  int n = read(0, buf, 9);
-//  buf[n] = '\0';
-//  printf("==[%s]==\n", buf);
-//  fflush(stdout);
- tcsetattr(STDIN_FILENO, TCSANOW, &(g_global.terms[0]));
+//  tcsetattr(STDIN_FILENO, TCSANOW, &(g_global.terms[0]));
 }
 
 // static size_t line_length = 80;

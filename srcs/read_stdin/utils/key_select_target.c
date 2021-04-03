@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/02 21:54:06 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/02 23:08:50 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/03 23:25:08 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,14 @@ void		select_target_left(char *buf, t_string *command, t_minishell *info)
 	}
 	else
 		--info->key.target_start;
-	moving(command->len - info->key.target_start, info->key.left, info);
+	move_direction(command->len - info->key.target_start, info->key.left, info);
 	if (ft_putstr_fd(info->key.save, STDIN_FILENO) == false)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	if (ft_putstr_fd(info->key.reset, STDIN_FILENO) == false)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	print_user_selected_target(info->key.target_start,
 		info->key.target_end, command->str, info);
-	moving(info->key.save_command_len - info->key.target_end,
+	move_direction(info->key.save_command_len - info->key.target_end,
 		info->key.left, info);
 }
 
@@ -73,12 +73,12 @@ void		select_target_right(char *buf, t_string *command, t_minishell *info)
 	}
 	else
 		++info->key.target_end;
-	moving(info->key.save_command_len - command->len,
+	move_direction(info->key.save_command_len - command->len,
 		info->key.right, info);
 	delete_displayed_command(info->key.save_command_len,
 		info->key.left, info->key.clean_right);
 	print_user_selected_target(info->key.target_start,
 		info->key.target_end, command->str, info);
-	moving(info->key.save_command_len - info->key.target_start,
+	move_direction(info->key.save_command_len - info->key.target_start,
 		info->key.left, info);
 }

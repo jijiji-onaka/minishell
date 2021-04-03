@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:44:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/03 18:24:51 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 01:42:16 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,9 @@ typedef struct			s_key
 	char				*cursor_visible;
 	char				*color_change;
 	char				*color_reset;
+	char				*scroll_up;
+	char				*scroll_down;
+	char				*delete_line;
 	size_t				target_start;
 	size_t				target_end;
 	char				*target;
@@ -90,6 +93,13 @@ typedef struct			s_window
 	int					command_end_pos[2];
 	int					line_num;
 }						t_window;
+
+typedef struct			s_cursor
+{
+	int					cur_pos[2];
+	int					command_start_pos[2];
+	int					command_end_pos[2];
+}						t_cursor;
 
 typedef struct			s_minishell_info
 {
@@ -108,6 +118,7 @@ typedef struct			s_minishell_info
 	// struct s_hist_all	history;
 	struct s_key		key;
 	struct s_window		window;
+	struct s_cursor		cursor;
 	int					cmd_lst_num;
 	bool				exit_too_arg;
 	char				*ptr_for_free;
@@ -236,10 +247,12 @@ enum	e_format
 # define CTRL_P 19
 # define CTRL_N 20
 /*
-** CURSOR
+** CURSOR || WINDOW
 */
 # define X 0
 # define Y 1
+# define LEFT_EDGE 1
+# define UPPER_EDGE 1
 
 
 #endif

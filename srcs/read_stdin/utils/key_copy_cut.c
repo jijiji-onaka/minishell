@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/02 05:58:56 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/02 23:28:12 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/03 23:25:08 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void		cut(char *buf, t_string *command, t_minishell *info)
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	free(info->key.target);
 	info->key.target = target;
-	moving(info->key.save_command_len - command->len,
+	move_direction(info->key.save_command_len - command->len,
 		info->key.right, info);
 	delete_displayed_command(info->key.save_command_len, info->key.left,
 		info->key.clean_right);

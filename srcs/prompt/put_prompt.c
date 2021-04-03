@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 00:41:03 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/03 18:27:27 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/03 21:54:34 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	get_prompt_position(t_minishell *info)
 {
 	get_window_size(info);
 	// info->window.line_num = 0;
-	get_cursor_position(info->window.command_start_pos, info);
+	get_cursor_position(info->cursor.command_start_pos, info);
 }
 
 void		put_prompt(t_minishell *info)
@@ -41,5 +41,5 @@ void		put_prompt(t_minishell *info)
 	if (write(STDIN_FILENO, "\033[1m\x1b[35m (;;) > \x1b[0m", 21) < 21)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	get_prompt_position(info);
-	info->window.prompt_len = info->window.command_start_pos[X] - 1;
+	info->window.prompt_len = info->cursor.command_start_pos[X] - 1;
 }

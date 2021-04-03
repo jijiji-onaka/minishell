@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/03 00:56:54 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 01:45:44 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,9 +120,35 @@ void	set_key(t_minishell *info)
 	info->key.cursor_visible = tgetstr("ve", NULL);
 	if (info->key.cursor_visible == NULL)
 		all_free_exit(info, ERR_TGETSTR, __LINE__, __FILE__);
+	info->key.scroll_up = tgetstr("sf", NULL);
+	if (info->key.scroll_up == NULL || *(info->key.scroll_up) == '\0')
+	{
+		info->key.scroll_up = tgetstr("do", NULL);
+		if (info->key.scroll_up == NULL || *(info->key.scroll_up) == '\0')
+		{
+			info->key.scroll_up = tgetstr("nl", NULL);
+			if (info->key.scroll_up == NULL || *(info->key.scroll_up) == '\0')
+				info->key.scroll_up = "\n";
+		}
+	}
+	info->key.scroll_down = tgetstr("sr", NULL);
+	info->key.delete_line = tgetstr("dl", NULL);
+	if (info->key.delete_line == NULL)
+		all_free_exit(info, ERR_TGETSTR, __LINE__, __FILE__);
 	info->key.color_change = "\x1b[38;5;106m\x1b[48;5;27m";
 	info->key.color_reset = "\033[0m";
 }
+
+// if (!SF || !*SF)
+// { /* this is what GNU Emacs does */
+// 	SF = tgetstr("do", &p);
+// 	if (!SF || !*SF)
+// 	{
+// 		SF = tgetstr("nl", &p);
+// 		if (!SF || !*SF)
+// 			SF = "\n";
+// 	}
+// }
 
 int			main(int argc, char **argv)
 {

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 16:26:24 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/03 18:30:36 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/03 23:25:08 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,13 +81,13 @@ static void	init_selected_target(int key, t_string *command, t_minishell *info)
 	{
 		if (info->key.target_end != -1 || info->key.target_start != -1)
 		{
-			moving(info->key.save_command_len - command->len,
+			move_direction(info->key.save_command_len - command->len,
 				info->key.right, info);
 			delete_displayed_command(info->key.save_command_len,
 				info->key.left, info->key.clean_right);
 			if (ft_putstr_fd(command->str, STDOUT_FILENO) == false)
 				all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-			moving(info->key.save_command_len - command->len,
+			move_direction(info->key.save_command_len - command->len,
 				info->key.left, info);
 		}
 		info->key.target_end = -1;

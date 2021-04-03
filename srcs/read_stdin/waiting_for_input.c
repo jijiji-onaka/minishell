@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 01:01:05 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/03 18:42:26 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/03 21:03:18 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,11 @@ static void	preparation(int *backup, t_string *command,
 	// info->key.target = NULL;
 	info->key.ctrl_lr_flag = false;
 	info->window.line_num = 0;
-	ft_memcpy(info->window.cur_pos, info->window.command_start_pos, 2);
-	// info->window.cur_pos[X] = info->window.command_start_pos[X];
-	// info->window.cur_pos[Y] = info->window.command_start_pos[Y];
-	ft_memcpy(info->window.command_end_pos, info->window.command_start_pos, 2);
-	// info->window.command_end_pos[X] = info->window.command_start_pos[X];
-	// info->window.command_end_pos[Y] = info->window.command_start_pos[Y];
+	info->cursor.cur_pos[X] = info->cursor.command_start_pos[X];
+	info->cursor.cur_pos[Y] = info->cursor.command_start_pos[Y];
+	// ft_memcpy(info->cursor.command_end_pos, info->cursor.command_start_pos, 2);
+	info->cursor.command_end_pos[X] = info->cursor.command_start_pos[X];
+	info->cursor.command_end_pos[Y] = info->cursor.command_start_pos[Y];
 }
 
 static void	clean_up(int *backup, char **command, t_minishell *info)

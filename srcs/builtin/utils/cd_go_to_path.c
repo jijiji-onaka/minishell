@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/15 17:43:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/25 22:06:59 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 03:01:19 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,6 +193,6 @@ void		go_to_path(t_minishell *info, char **dir,
 	when_double_slash_root(*dir, info);
 	update_env_value(&(info->env), "PWD", info->current_dir_path, info);
 	if (cd_path_flag)
-		ft_putendl_fd(info->current_dir_path, STDOUT_FILENO);
+		ft_putendl_fd(info->current_dir_path, STDOUT);
 	g_global.exit_status = 0;
 }

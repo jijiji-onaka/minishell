@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 03:17:29 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/03 23:38:57 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 03:01:09 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 // 	}
 // 	str[total++] = 'H';
 // 	str[total] = '\0';
-// 	if (write(STDIN_FILENO, str, total) == false)
+// 	if (write(STDIN, str, total) == false)
 // 		return (false);
 // 	return (true);
 // }
@@ -62,7 +62,7 @@ void		move_up_one_line(char *buf, t_string *command, t_minishell *info)
 	// 	command->len = 0;
 	// 	return ;
 	// }
-	if (ft_putstr_fd(info->key.up, STDIN_FILENO) == false)
+	if (ft_putstr_fd(info->key.up, STDIN) == false)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	command->len -= info->window.ws.ws_col;
 }
@@ -75,13 +75,13 @@ void	move_down_one_line(char *buf, t_string *command, t_minishell *info)
 	// get_cursor_position(&(info->cursor.cur_pos_y), &(info->cursor.cur_pos_x), info);
 	if (command->len + info->window.prompt_len > info->key.save_command_len)
 	{
-		if (ft_putstr_fd(info->key.down, STDIN_FILENO) == false)
+		if (ft_putstr_fd(info->key.down, STDIN) == false)
 			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 		move_direction(info->key.save_command_len + info->window.prompt_len - info->window.ws.ws_col, info->key.left, info);
 		command->len = info->key.save_command_len;
 		return ;
 	}
-	if (ft_putstr_fd(info->key.down, STDIN_FILENO) == false)
+	if (ft_putstr_fd(info->key.down, STDIN) == false)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	command->len += info->window.ws.ws_col;
 }

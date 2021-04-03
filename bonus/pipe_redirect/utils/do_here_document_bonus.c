@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 14:07:59 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 03:01:19 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,13 @@
 static void	preparation(int *backup, char **inputs,
 					char *stopper, t_minishell *info)
 {
-	if (write(STDOUT_FILENO, "wait :(", 7) < 7)
+	if (write(STDOUT, "wait :(", 7) < 7)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	if (write(STDOUT_FILENO, stopper, ft_strlen(stopper)) < 0)
+	if (write(STDOUT, stopper, ft_strlen(stopper)) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	if (write(STDOUT_FILENO, ")> ", 3) < 3)
+	if (write(STDOUT, ")> ", 3) < 3)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	if ((*backup = dup(STDIN_FILENO)) == -1)
+	if ((*backup = dup(STDIN)) == -1)
 		all_free_exit(info, ERR_DUP, __LINE__, __FILE__);
 	if (!(*inputs = ft_strdup("\0")))
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
@@ -42,11 +42,11 @@ static bool	press_newline(char **inputs, char *stopper,
 		all_free_exit(&(g_global.info), ERR_WRITE, __LINE__, __FILE__);
 	if (!(*inputs = re_strdup(inputs, "\0")))
 		all_free_exit(&(g_global.info), ERR_MALLOC, __LINE__, __FILE__);
-	if (write(STDOUT_FILENO, "wait :(", 7) < 7)
+	if (write(STDOUT, "wait :(", 7) < 7)
 		all_free_exit(&(g_global.info), ERR_WRITE, __LINE__, __FILE__);
-	if (write(STDOUT_FILENO, stopper, ft_strlen(stopper)) < 0)
+	if (write(STDOUT, stopper, ft_strlen(stopper)) < 0)
 		all_free_exit(&(g_global.info), ERR_WRITE, __LINE__, __FILE__);
-	if (write(STDOUT_FILENO, ")> ", 3) < 3)
+	if (write(STDOUT, ")> ", 3) < 3)
 		all_free_exit(&(g_global.info), ERR_WRITE, __LINE__, __FILE__);
 	return (false);
 }
@@ -54,7 +54,7 @@ static bool	press_newline(char **inputs, char *stopper,
 static void	clean_up(int *backup, char **inputs, t_minishell *info)
 {
 	if (!g_global.reading)
-		if ((dup2(*backup, STDIN_FILENO)) == -1)
+		if ((dup2(*backup, STDIN)) == -1)
 		{
 			ptr_free((void**)inputs);
 			ptr_free((void**)info->ptr_for_free);

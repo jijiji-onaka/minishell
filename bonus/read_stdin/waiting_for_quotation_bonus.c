@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 00:23:07 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 03:01:09 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static char	*preparation(char first_quo, char **command, int *backup,
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	}
 	display_what_is_waiting_for(first_quo, &res, command, info);
-	if ((*backup = dup(STDIN_FILENO)) == -1)
+	if ((*backup = dup(STDIN)) == -1)
 	{
 		ptr_free((void**)command);
 		ptr_free((void**)res);
@@ -37,7 +37,7 @@ static char	*preparation(char first_quo, char **command, int *backup,
 static void	clean_up(int *backup, char **inputs, t_minishell *info)
 {
 	if (!g_global.reading)
-		if ((dup2(*backup, STDIN_FILENO)) == -1)
+		if ((dup2(*backup, STDIN)) == -1)
 		{
 			ptr_free((void**)inputs);
 			ptr_free((void**)info->ptr_for_free);

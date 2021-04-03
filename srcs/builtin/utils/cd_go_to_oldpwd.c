@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/15 17:51:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/24 22:21:51 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 03:01:28 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void		go_to_oldpwd(t_minishell *info)
 	oldpwd_path = ft_getenv("OLDPWD", info->env, false);
 	if (oldpwd_path == NULL)
 	{
-		if (write(STDERR_FILENO, NO_OLDPWD, 30) < 0)
+		if (write(STDERR, NO_OLDPWD, 30) < 0)
 			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 		g_global.exit_status = EXIT_FAILURE;
 		return ;

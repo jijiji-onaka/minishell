@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 21:03:13 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/24 00:36:05 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 03:01:19 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ bool		execute_command(t_minishell *info, t_cmdlst *cmd)
 	if (final_cmd_check(&type, cmd, info) == false)
 		return (true);
 	if (is_redir(type) || type == SEMICOLON || type == PIPE)
-		return (write(STDOUT_FILENO, "my minishell is failed (T_T)\n", 29));
+		return (write(STDOUT, "my minishell is failed (T_T)\n", 29));
 	exec_command[return_index(type)](info, cmd);
 	info->ptr_for_free = NULL;
 	return (true);

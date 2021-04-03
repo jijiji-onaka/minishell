@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/02 07:10:07 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/02 23:21:27 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 03:01:09 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,10 @@ void		paste(char *buf, t_string *command, t_minishell *info)
 	// printf("[%s]\n", info->key.target);
 	delete_displayed_command(len, info->key.left, info->key.clean_right);
 	// while (++i < info->key.target_end - info->key.target_start - 1)
-	// 	if (ft_putstr_fd(info->key.right, STDIN_FILENO) == false)
+	// 	if (ft_putstr_fd(info->key.right, STDIN) == false)
 	// 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	create_new_command(command, info);
-	if (ft_putstr_fd(command->str, STDIN_FILENO) == false)
+	if (ft_putstr_fd(command->str, STDIN) == false)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	// if (command->len == info->key.save_command_len)
 	// 	puts("+++++++");

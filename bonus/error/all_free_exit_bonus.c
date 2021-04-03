@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 02:54:08 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 14:17:22 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 03:01:28 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static void		put_error_location_and_exit(char *error_message,
 	char	*tmp;
 
 	red_error();
-	if (write(STDERR_FILENO, info->current_dir_path,
+	if (write(STDERR, info->current_dir_path,
 				ft_strlen(info->current_dir_path)) < 0)
 		exit(EXIT_FAILURE);
 	if (!(location_message = ft_str3join("/", file_name, ":")))
@@ -67,7 +67,7 @@ static void		put_error_location_and_exit(char *error_message,
 	if (!(location_message = strjoin_num(location_message, line_num)))
 		ft_perror_exit(ERR_MALLOC);
 	ptr_free((void **)&tmp);
-	ft_putendl_fd(location_message, STDERR_FILENO);
+	ft_putendl_fd(location_message, STDERR);
 	ptr_free((void **)&location_message);
 	free_env_lst(&(info->env));
 	ptr_free((void**)&(info->current_dir_path));

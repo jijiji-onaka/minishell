@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 16:00:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 03:01:28 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static char	*preparation(int *backup, \
 	if (!(res = ft_strdup("")))
 		all_free_exit(&(g_global.info), ERR_MALLOC, __LINE__, __FILE__);
 	display_what_is_waiting_for('|', &res, NULL, &(g_global.info));
-	if ((*backup = dup(STDIN_FILENO)) == -1)
+	if ((*backup = dup(STDIN)) == -1)
 	{
 		ptr_free((void**)&res);
 		all_free_exit(&(g_global.info), ERR_DUP, __LINE__, __FILE__);
@@ -34,7 +34,7 @@ static char	*preparation(int *backup, \
 static void	clean_up(int *backup, char **inputs, t_minishell *info)
 {
 	if (!g_global.reading)
-		if ((dup2(*backup, STDIN_FILENO)) == -1)
+		if ((dup2(*backup, STDIN)) == -1)
 		{
 			ptr_free((void**)inputs);
 			all_free_exit(info, ERR_DUP2, __LINE__, __FILE__);
@@ -71,7 +71,7 @@ static void	*press_eof(char **inputs, t_cmd_grp *cmd_grp_info,
 {
 	ptr_free((void **)inputs);
 	clean_up(backup, inputs, info);
-	if (write(STDERR_FILENO, "minishell: syntax error: unexpected end of file\n"
+	if (write(STDERR, "minishell: syntax error: unexpected end of file\n"
 , 48) < 48)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	ptr_2d_free((void***)(cmd_grp_info->cmd_grp), -1);

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/19 21:36:06 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/29 18:47:45 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 03:01:19 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@ void		display_what_is_waiting_for(char quo, char **ptr1, char **ptr2,
 
 	write_err_flag = 1;
 	if (quo == '\"')
-		write_err_flag = write(STDOUT_FILENO, "wait :(double quote)> ", 22);
+		write_err_flag = write(STDOUT, "wait :(double quote)> ", 22);
 	else if (quo == '\'')
-		write_err_flag = write(STDOUT_FILENO, "wait :(single quote)> ", 22);
+		write_err_flag = write(STDOUT, "wait :(single quote)> ", 22);
 	else if (quo == '|')
-		write_err_flag = write(STDOUT_FILENO, "wait :(pipe)> ", 14);
+		write_err_flag = write(STDOUT, "wait :(pipe)> ", 14);
 	if (write_err_flag < 0)
 	{
 		if (ptr1)

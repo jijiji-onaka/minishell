@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 17:56:17 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/25 02:40:19 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 03:01:28 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@ static bool	display_err(char *arg, t_minishell *info)
 	bool write_err_flag;
 
 	write_err_flag = false;
-	if (write(STDERR_FILENO, "minishell: export: `", 20) < 0)
+	if (write(STDERR, "minishell: export: `", 20) < 0)
 		write_err_flag = true;
 	if (ft_putstr_fd(arg, 2) == false)
 		write_err_flag = true;
-	if (write(STDERR_FILENO, "\': not a valid identifier\n", 26) < 0)
+	if (write(STDERR, "\': not a valid identifier\n", 26) < 0)
 		write_err_flag = true;
 	if (write_err_flag == true)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);

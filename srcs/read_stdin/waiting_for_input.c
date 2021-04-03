@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 01:01:05 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/03 21:03:18 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 03:01:09 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static void	preparation(int *backup, t_string *command,
 					char buf[4], t_minishell *info)
 {
-	if ((*backup = dup(STDIN_FILENO)) == -1)
+	if ((*backup = dup(STDIN)) == -1)
 		all_free_exit(info, ERR_DUP, __LINE__, __FILE__);
 	if (!(command->str = ft_strdup("")))
 	{
@@ -44,7 +44,7 @@ static void	preparation(int *backup, t_string *command,
 static void	clean_up(int *backup, char **command, t_minishell *info)
 {
 	if (!g_global.reading)
-		if ((dup2(*backup, STDIN_FILENO)) == -1)
+		if ((dup2(*backup, STDIN)) == -1)
 		{
 			ptr_free((void**)command);
 			all_free_exit(info, ERR_DUP2, __LINE__, __FILE__);

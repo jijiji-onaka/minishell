@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/02 21:54:06 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/03 23:25:08 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 03:01:09 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,17 @@ static void	print_user_selected_target(size_t target_start, size_t target_end,
 {
 	size_t	i;
 
-	if (ft_putstr_fd(info->key.color_change, STDIN_FILENO) == false)
+	if (ft_putstr_fd(info->key.color_change, STDIN) == false)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	i = target_start;
 	while (i < target_end)
-		if (ft_putchar_fd(command[i++], STDIN_FILENO) == false)
+		if (ft_putchar_fd(command[i++], STDIN) == false)
 			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	if (ft_putstr_fd(info->key.color_reset, STDIN_FILENO) == false)
+	if (ft_putstr_fd(info->key.color_reset, STDIN) == false)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	i = target_end;
 	while (i < info->key.save_command_len)
-		if (ft_putchar_fd(command[i++], STDIN_FILENO) == false)
+		if (ft_putchar_fd(command[i++], STDIN) == false)
 			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 }
 
@@ -45,9 +45,9 @@ void		select_target_left(char *buf, t_string *command, t_minishell *info)
 	else
 		--info->key.target_start;
 	move_direction(command->len - info->key.target_start, info->key.left, info);
-	if (ft_putstr_fd(info->key.save, STDIN_FILENO) == false)
+	if (ft_putstr_fd(info->key.save, STDIN) == false)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	if (ft_putstr_fd(info->key.reset, STDIN_FILENO) == false)
+	if (ft_putstr_fd(info->key.restore, STDIN) == false)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	print_user_selected_target(info->key.target_start,
 		info->key.target_end, command->str, info);
@@ -62,11 +62,11 @@ void		select_target_right(char *buf, t_string *command, t_minishell *info)
 	if (command->len == info->key.save_command_len ||
 		info->key.target_end == info->key.save_command_len)
 		return ;
-	if (ft_putstr_fd(info->key.cursor_visible, STDIN_FILENO) == false)
+	if (ft_putstr_fd(info->key.cursor_visible, STDIN) == false)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	if (info->key.target_end == -1 || info->key.target_start == -1)
 	{
-		if (ft_putstr_fd(info->key.cursor_invisible, STDIN_FILENO) == false)
+		if (ft_putstr_fd(info->key.cursor_invisible, STDIN) == false)
 			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 		info->key.target_start = command->len;
 		info->key.target_end = command->len + 1;

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/19 20:52:49 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 03:01:19 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	apply_last_pipe(t_cmdlst **cmd_lst, int pipefd[2],
 		all_free_exit(info, ERR_FORK, __LINE__, __FILE__);
 	else if (g_global.fork_pid_for_pipe == 0)
 	{
-		connect_std_in_out_and_pipe(pipefd, STDIN_FILENO, info);
+		connect_std_in_out_and_pipe(pipefd, STDIN, info);
 		if (!((*cmd_lst)->checker_redir) && (*cmd_lst && (*cmd_lst)->next
 		&& is_redir((*cmd_lst)->next->type)))
 			*cmd_lst = my_redirect(info, cmd_lst);
@@ -49,8 +49,8 @@ static void	apply_middle_pipe(t_cmdlst **cmd_lst, int old_pipefd[2],
 	else if (g_global.fork_pid_for_pipe == 0)
 	{
 		g_global.exit_status = 0;
-		connect_std_in_out_and_pipe(old_pipefd, STDIN_FILENO, info);
-		connect_std_in_out_and_pipe(new_pipefd, STDOUT_FILENO, info);
+		connect_std_in_out_and_pipe(old_pipefd, STDIN, info);
+		connect_std_in_out_and_pipe(new_pipefd, STDOUT, info);
 		if (!((*cmd_lst)->checker_redir) && (*cmd_lst && (*cmd_lst)->next
 		&& is_redir((*cmd_lst)->next->type)))
 			*cmd_lst = my_redirect(info, cmd_lst);
@@ -76,7 +76,7 @@ static void	apply_first_pipe(t_cmdlst **cmd_lst, int pipefd[2],
 		all_free_exit(info, ERR_FORK, __LINE__, __FILE__);
 	else if (g_global.fork_pid_for_pipe == 0)
 	{
-		connect_std_in_out_and_pipe(pipefd, STDOUT_FILENO, info);
+		connect_std_in_out_and_pipe(pipefd, STDOUT, info);
 		if (!((*cmd_lst)->checker_redir) && (*cmd_lst && (*cmd_lst)->next
 		&& is_redir((*cmd_lst)->next->type)))
 			*cmd_lst = my_redirect(info, cmd_lst);

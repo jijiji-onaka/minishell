@@ -195,7 +195,7 @@
 //     ** Get the terminal mode to non canonical and shut down echo
 //     */
 //     bzero(&termios_new, sizeof(struct termios));
-//     tcgetattr(STDIN_FILENO, &termios_backup);
+//     tcgetattr(STDIN, &termios_backup);
 //     termios_new = termios_backup;
 
 //     termios_new.c_lflag &= ~(ICANON);
@@ -206,7 +206,7 @@
 //     /*
 //     **  Set the change
 //     */
-//     tcsetattr(STDIN_FILENO, TCSAFLUSH, &termios_new);
+//     tcsetattr(STDIN, TCSAFLUSH, &termios_new);
 
 //     /*
 //     ** Get the termcap for clearing screen on the particular terminal
@@ -216,11 +216,11 @@
 //     /*
 //     ** Loop read to get user entries and clear screen for 'c', output char for 'b', break for 'q'
 //     */
-//     while((ret = read(STDIN_FILENO, &buff, 1)) > 0)
+//     while((ret = read(STDIN, &buff, 1)) > 0)
 //     {
 //         if (buff == 'c')
 //             // tputs(termcap, 1, put);
-// 			ft_putstr_fd(tgetstr("ti", NULL), STDIN_FILENO);
+// 			ft_putstr_fd(tgetstr("ti", NULL), STDIN);
 //         else if (buff == 'b')
 //             put(buff);
 //         else if (buff == 'q')
@@ -232,7 +232,7 @@
 //     /*
 //     ** Put back the terminal mode as found before
 //     */
-//     tcsetattr(STDIN_FILENO, TCSAFLUSH, &termios_backup);
+//     tcsetattr(STDIN, TCSAFLUSH, &termios_backup);
 //     return (0);
 // }
 
@@ -251,12 +251,12 @@
 // int main()
 // {
 // 	// tgetent(NULL, getenv("TERM"));
-// 	// tcgetattr(STDIN_FILENO, &(g_global.terms[0]));
+// 	// tcgetattr(STDIN, &(g_global.terms[0]));
 // 	// g_global.terms[1] = g_global.terms[0];
 // 	// g_global.terms[1].c_lflag &= ~(ICANON | ECHO);
 // 	// g_global.terms[1].c_cc[VMIN] = 1;
 // 	// g_global.terms[1].c_cc[VTIME] = 0;
-// 	// tcsetattr(STDIN_FILENO, TCSANOW, &(g_global.terms[1]));
+// 	// tcsetattr(STDIN, TCSANOW, &(g_global.terms[1]));
 // 	// char *tmp = readline("abc");
 // 	// int buf;
 // 	// read(0, &buf, 99);
@@ -266,7 +266,7 @@
 // 	// write(1, "[", 1);
 // 	// write(1, s, strlen(s));
 // 	// write(1, "]", 1);
-// 	// tcsetattr(STDIN_FILENO, TCSANOW, &(g_global.terms[0]));
+// 	// tcsetattr(STDIN, TCSANOW, &(g_global.terms[0]));
 // 	printf("\x1b[38;5;93maaaaaaaa\033[0m\n");
 // 	printf("\x1b[38;5;109maaaaaaaa\033[0m\n");
 // 	printf("\x1b[38;5;106maaaaaaaa\033[0m\n");
@@ -314,19 +314,19 @@ int main(void)
  int cursor_x, cursor_y;
 
 //  tgetent(NULL, getenv("TERM"));
-//  tcgetattr(STDIN_FILENO, &(g_global.terms[0]));
+//  tcgetattr(STDIN, &(g_global.terms[0]));
 //  g_global.terms[1] = g_global.terms[0];
 //  g_global.terms[1].c_lflag &= ~(ICANON | ECHO);
 //  g_global.terms[1].c_cc[VMIN] = 1;
 //  g_global.terms[1].c_cc[VTIME] = 0;
-//  tcsetattr(STDIN_FILENO, TCSANOW, &(g_global.terms[1]));
+//  tcsetattr(STDIN, TCSANOW, &(g_global.terms[1]));
  printf("1");
  printf("%s", "\x1B[6n");
  scanf("\x1B[%d;%dR", &cursor_y, &cursor_x);
 
  printf("x = %d, y = %d\n", cursor_x, cursor_y);
 
-//  tcsetattr(STDIN_FILENO, TCSANOW, &(g_global.terms[0]));
+//  tcsetattr(STDIN, TCSANOW, &(g_global.terms[0]));
 }
 
 // static size_t line_length = 80;
@@ -334,7 +334,7 @@ int main(void)
 // {
 //     struct winsize ws;
 //     // get terminal size
-//     if( ioctl( STDOUT_FILENO, TIOCGWINSZ, &ws ) != -1 ) {
+//     if( ioctl( STDOUT, TIOCGWINSZ, &ws ) != -1 ) {
 //         printf("terminal_width  =%d\n", ws.ws_col);
 //         printf("terminal_height =%d\n", ws.ws_row);
 //         if( 0 < ws.ws_col && ws.ws_col == (size_t)ws.ws_col ) {

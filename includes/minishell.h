@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 02:04:00 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/29 18:23:22 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 02:31:41 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include "pipe_redirect.h"
 # include "prompt.h"
 # include "read_stdin.h"
+# include "safe_function.h"
 
 void	set_minishell(t_minishell *info);
 void	update_command_history_file(t_minishell *info, t_history *history);

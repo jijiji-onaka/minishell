@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 01:45:44 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 03:01:09 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	get_current_term_and_tgetent(t_minishell *info)
 	char	buf[1024];
 
 	ft_bzero(buf, 1024);
-	if (isatty(STDIN_FILENO) == false)
+	if (isatty(STDIN) == false)
 		all_free_exit(info, ERR_ISATTY, __LINE__, __FILE__);
 	term = ft_getenv("TERM", info->env, false);
 	if (term == NULL)
@@ -80,15 +80,15 @@ void	get_current_term_and_tgetent(t_minishell *info)
 
 void		initialize_term(void)
 {
-	tcgetattr(STDIN_FILENO, &(g_global.terms[ORIGINAL]));
+	tcgetattr(STDIN, &(g_global.terms[ORIGINAL]));
 	g_global.terms[REPLICA] = g_global.terms[ORIGINAL];
 	// g_global.terms[REPLICA].c_lflag &= ~(ICANON | ECHO);
 	g_global.terms[REPLICA].c_lflag &= ~(ECHO | ICANON | ISIG);
 
 	// g_global.terms[REPLICA].c_cc[VMIN] = 1;
 	// g_global.terms[REPLICA].c_cc[VTIME] = 0;
-	tcsetattr(STDIN_FILENO, TCSAFLUSH, &(g_global.terms[REPLICA]));
-	// tcsetattr(STDIN_FILENO, TCSANOW, &(g_global.terms[REPLICA]));
+	tcsetattr(STDIN, TCSAFLUSH, &(g_global.terms[REPLICA]));
+	// tcsetattr(STDIN, TCSANOW, &(g_global.terms[REPLICA]));
 
 }
 
@@ -111,8 +111,8 @@ void	set_key(t_minishell *info)
 	info->key.save = tgetstr("sc", NULL);
 	if (info->key.save == NULL)
 		all_free_exit(info, ERR_TGETSTR, __LINE__, __FILE__);
-	info->key.reset = tgetstr("rc", NULL);
-	if (info->key.reset == NULL)
+	info->key.restore = tgetstr("rc", NULL);
+	if (info->key.restore == NULL)
 		all_free_exit(info, ERR_TGETSTR, __LINE__, __FILE__);
 	info->key.cursor_invisible = tgetstr("vi", NULL);
 	if (info->key.cursor_invisible == NULL)

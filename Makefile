@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/23 01:57:04 by tjinichi          #+#    #+#              #
-#    Updated: 2021/04/04 01:48:52 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/04/04 02:30:42 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -202,11 +202,21 @@ ERROR_SRCS = $(addprefix $(ERROR_DIR)/, \
 				ft_perror_exit.c \
 				signal_error_exit.c \
 				syntax_error.c \
+				where_error.c \
 )
 $(OBJDIR)/%.o : $(ERROR_DIR)/setting/%.c
 	@$(CC) $(CFLAGS) -c -o $@ $<
 	@printf " %-100b\r" "$(YELLOW) Compiled $(RESET)$(UNDER_LINE)"$<"$(RESET)"
 $(OBJDIR)/%.o : $(ERROR_DIR)/%.c
+	@$(CC) $(CFLAGS) -c -o $@ $<
+	@printf " %-100b\r" "$(YELLOW) Compiled $(RESET)$(UNDER_LINE)"$<"$(RESET)"
+#===============================================================================
+#========== safe_function function =================================================
+SAFE_DIR = $(SRCDIR)/safe_function
+SAFE_SRCS = $(addprefix $(SAFE_DIR)/, \
+				putstr_fd.c \
+)
+$(OBJDIR)/%.o : $(SAFE_DIR)/%.c
 	@$(CC) $(CFLAGS) -c -o $@ $<
 	@printf " %-100b\r" "$(YELLOW) Compiled $(RESET)$(UNDER_LINE)"$<"$(RESET)"
 #===============================================================================
@@ -220,6 +230,7 @@ SRCS = \
 	$(SEPARATOR_SRCS) \
 	$(MINISHELL_SRCS) \
 	$(ERROR_SRCS) \
+	$(SAFE_SRCS) \
 
 OBJS = $(addprefix $(OBJDIR)/, $(notdir $(SRCS:.c=.o)))
 

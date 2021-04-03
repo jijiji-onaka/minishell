@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 16:50:46 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/03 18:26:49 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 03:01:19 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	trace_history_up(char *buf, t_string *command, t_minishell *info)
 	}
 	else
 		ptr_free((void**)&(command->str));
-	if (ft_putstr_fd(history_command, STDOUT_FILENO) == false)
+	if (ft_putstr_fd(history_command, STDOUT) == false)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	command->str = history_command;
 	command->len = ft_strlen(history_command);
@@ -62,7 +62,7 @@ void	trace_history_down(char *buf, t_string *command, t_minishell *info)
 	if (info->command_history->next)
 		info->command_history = info->command_history->next;
 	ptr_free((void**)&(command->str));
-	if (ft_putstr_fd(history_command, STDOUT_FILENO) == false)
+	if (ft_putstr_fd(history_command, STDOUT) == false)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	command->str = history_command;
 	command->len = ft_strlen(history_command);
@@ -77,12 +77,12 @@ bool	get_cursor_position(int pos[2], t_minishell *info)
 	char	buf[ft_numlen(info->window.ws.ws_col) +
 			ft_numlen(info->window.ws.ws_row) + 4];
 
-	if (write(STDOUT_FILENO, "\x1b[6n", 4) < 4)
+	if (write(STDOUT, "\x1b[6n", 4) < 4)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	i = 0;
 	while (1)
 	{
-		rc = read(STDIN_FILENO, buf + i, 1);
+		rc = read(STDIN, buf + i, 1);
 		if (rc == -1)
 			all_free_exit(info, ERR_READ, __LINE__, __FILE__);
 		if (buf[i] == 'R' || rc == 0)

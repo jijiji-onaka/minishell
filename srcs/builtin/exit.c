@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 18:24:30 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/29 18:25:23 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 03:01:28 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	normal_exit(t_minishell *info)
 {
-	tcsetattr(STDIN_FILENO, TCSANOW, &(g_global.terms[ORIGINAL]));
+	tcsetattr(STDIN, TCSANOW, &(g_global.terms[ORIGINAL]));
 	update_command_history_file(info, info->command_history_begin);
 	all_free_minishell_info(info);
 	exit(g_global.exit_status);
@@ -22,7 +22,7 @@ static void	normal_exit(t_minishell *info)
 
 static void	fail_too_arg_exit(t_minishell *info)
 {
-	if (write(STDERR_FILENO, "minishell: exit: too many arguments\n", 36) < 0)
+	if (write(STDERR, "minishell: exit: too many arguments\n", 36) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	g_global.exit_status = 1;
 	info->exit_too_arg = true;
@@ -31,14 +31,14 @@ static void	fail_too_arg_exit(t_minishell *info)
 
 static void	non_numeric_exit(t_minishell *info, char *arg1)
 {
-	if (write(STDERR_FILENO, "minishell: exit: ", 17) < 0)
+	if (write(STDERR, "minishell: exit: ", 17) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	if (ft_putstr_fd(arg1, 2) == false)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	if (write(STDERR_FILENO, ": numeric argument required\n", 28) < 0)
+	if (write(STDERR, ": numeric argument required\n", 28) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	g_global.exit_status = 255;
-	tcsetattr(STDIN_FILENO, TCSANOW, &(g_global.terms[ORIGINAL]));
+	tcsetattr(STDIN, TCSANOW, &(g_global.terms[ORIGINAL]));
 	update_command_history_file(info, info->command_history_begin);
 	all_free_minishell_info(info);
 	exit(g_global.exit_status);
@@ -47,7 +47,7 @@ static void	non_numeric_exit(t_minishell *info, char *arg1)
 static void	selected_code_exit(t_minishell *info, int exit_code)
 {
 	g_global.exit_status = exit_code % 256;
-	tcsetattr(STDIN_FILENO, TCSANOW, &(g_global.terms[ORIGINAL]));
+	tcsetattr(STDIN, TCSANOW, &(g_global.terms[ORIGINAL]));
 	update_command_history_file(info, info->command_history_begin);
 	all_free_minishell_info(info);
 	exit(g_global.exit_status);
@@ -59,7 +59,7 @@ void		exec_exit(t_minishell *info, t_cmdlst *cmd)
 	int		i;
 
 	if (!(cmd->checker_pipe) && !(cmd->checker_redir))
-		if (!info->minishell_op_c && write(STDERR_FILENO, "exit\n", 5) < 0)
+		if (!info->minishell_op_c && write(STDERR, "exit\n", 5) < 0)
 			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	if (cmd->arg[1] && ft_strcmp(cmd->arg[1], "--") == 0)
 		i = 2;

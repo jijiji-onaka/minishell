@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/21 14:23:17 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 03:01:28 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,12 @@ void		not_builtin(char *command, t_minishell *info
 	if (!(errno_message = decide_error_message(command, info, path_flag,
 		ft_strchr(command, '/'))))
 		errno_message = "command not found";
-	if (write(STDERR_FILENO, "minishell: ", 11) < 0)
+	if (write(STDERR, "minishell: ", 11) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	if (write(STDERR_FILENO, command, ft_strlen(command)) < 0)
+	if (write(STDERR, command, ft_strlen(command)) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	if (write(STDERR_FILENO, ": ", 2) < 0)
+	if (write(STDERR, ": ", 2) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	else if (ft_putendl_fd(errno_message, STDERR_FILENO) == false)
+	else if (ft_putendl_fd(errno_message, STDERR) == false)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 }

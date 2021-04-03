@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 12:11:59 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/25 19:50:04 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 03:01:28 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ bool		not_found_cwd(t_minishell *info, char *arg_dir, char ***ptr)
 {
 	if (errno != ENOENT)
 		all_free_exit(info, ERR_GETCWD, __LINE__, __FILE__);
-	write(STDERR_FILENO, "cd: error retrieving current directory: getcwd: \
+	write(STDERR, "cd: error retrieving current directory: getcwd: \
 cannot access parent directories: No such file or directory\n", 108);
 	update_env_value(&(info->env), "OLDPWD",
 					info->current_dir_path, info);

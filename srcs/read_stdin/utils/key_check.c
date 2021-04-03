@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 16:26:24 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/03 23:25:08 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 03:01:19 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ static void	init_selected_target(int key, t_string *command, t_minishell *info)
 				info->key.right, info);
 			delete_displayed_command(info->key.save_command_len,
 				info->key.left, info->key.clean_right);
-			if (ft_putstr_fd(command->str, STDOUT_FILENO) == false)
+			if (ft_putstr_fd(command->str, STDOUT) == false)
 				all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 			move_direction(info->key.save_command_len - command->len,
 				info->key.left, info);
@@ -105,7 +105,7 @@ void		check_key(char *buf, t_string *command, t_minishell *info)
 	// printf("4[%d]\n", buf[3]);
 	// printf("^[[1;5D");
 	// write(1, buf, strlen(buf));
-	// ft_putchar_fd(*buf, STDOUT_FILENO);
+	// ft_putchar_fd(*buf, STDOUT);
 	// printf("\n[%s]\n", command->str);
 	// 	printf("[%zd]\n", command->len);
 	// 	printf("[%s]\n", command->str + command->len);

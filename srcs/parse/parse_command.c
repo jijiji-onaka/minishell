@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/29 17:29:10 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 03:01:28 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,17 @@ static int	err_fd(long long fd, t_minishell *info)
 {
 	if (fd > INT_MAX)
 	{
-		if (write(STDERR_FILENO,
+		if (write(STDERR,
 "minishell: file descriptor out of range: Bad file descriptor\n", 61) < 0)
 			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	}
 	else if (fd >= 256 && fd <= INT_MAX)
 	{
-		if (write(STDERR_FILENO, "minishell: ", 11) < 0)
+		if (write(STDERR, "minishell: ", 11) < 0)
 			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-		if (ft_putnbr_fd(fd, STDERR_FILENO) == false)
+		if (ft_putnbr_fd(fd, STDERR) == false)
 			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-		if (write(STDERR_FILENO, ": Bad file descriptor\n", 22) < 0)
+		if (write(STDERR, ": Bad file descriptor\n", 22) < 0)
 			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	}
 	g_global.exit_status = EXIT_FAILURE;

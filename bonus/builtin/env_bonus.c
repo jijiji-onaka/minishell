@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 17:18:21 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 03:01:19 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ static void	display_env(t_minishell *info)
 	{
 		if (env_len(env->value, &len) == true)
 		{
-			if (write(STDOUT_FILENO, env->value, len) < 0)
+			if (write(STDOUT, env->value, len) < 0)
 				all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-			if (write(STDOUT_FILENO, "\n", 1) < 0)
+			if (write(STDOUT, "\n", 1) < 0)
 				all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 		}
 		env = env->next;

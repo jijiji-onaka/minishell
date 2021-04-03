@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 01:04:08 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/24 21:53:27 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 03:01:19 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ static void	put_env_value(char *str, t_minishell *info)
 	while (str[i])
 	{
 		if (str[i] == '\"' || str[i] == '\\' || str[i] == '$' || str[i] == '`')
-			if (write(STDOUT_FILENO, "\\", 1) < 0)
+			if (write(STDOUT, "\\", 1) < 0)
 				all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-		if (write(STDOUT_FILENO, str + i, 1) < 0)
+		if (write(STDOUT, str + i, 1) < 0)
 			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 		i++;
 	}
@@ -53,22 +53,22 @@ static void	display_env(t_env env, t_minishell *info)
 	size_t	i;
 	size_t	j;
 
-	if (write(STDOUT_FILENO, "declare -x ", 11) < 0)
+	if (write(STDOUT, "declare -x ", 11) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	if (env.key.str && env.value.str == NULL)
 	{
-		if (write(STDOUT_FILENO, env.key.str, env.key.len) < 0)
+		if (write(STDOUT, env.key.str, env.key.len) < 0)
 			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-		if (write(STDOUT_FILENO, "\n", 1) < 0)
+		if (write(STDOUT, "\n", 1) < 0)
 			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 		return ;
 	}
-	if (write(STDOUT_FILENO, env.key.str, env.key.len) < 0)
+	if (write(STDOUT, env.key.str, env.key.len) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	if (write(STDOUT_FILENO, "=\"", 2) < 0)
+	if (write(STDOUT, "=\"", 2) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	put_env_value(env.value.str, info);
-	if (write(STDOUT_FILENO, "\"\n", 2) < 0)
+	if (write(STDOUT, "\"\n", 2) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 }
 

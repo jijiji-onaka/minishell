@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 20:58:34 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 03:01:19 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void		exec_pwd(t_minishell *info, t_cmdlst *cmd)
 		if (option[0] == '-' && option[1] != '\0')
 			return (error_mandatory(ERR_PWD, 27, info));
 	working_dir = info->current_dir_path;
-	if (ft_putendl_fd(working_dir, STDOUT_FILENO) == false)
+	if (ft_putendl_fd(working_dir, STDOUT) == false)
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	g_global.exit_status = 0;
 }

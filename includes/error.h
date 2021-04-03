@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:51:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/03 00:14:11 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 02:25:33 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,9 @@
 # define ERR_EXPORT "Usage: export [No option] ...\n"
 # define ERR_UNSET "Usage: unset [No option] ...\n"
 
+# define LINE __LINE__
+# define FILE __FILE__
+
 void			all_free_minishell_info(t_minishell *info);
 void			all_free_exit(t_minishell *info, char *error_message, \
 							int line_num, char *file_name);
@@ -68,5 +71,6 @@ void			*ft_perror(char *err_message);
 void			ft_perror_exit(char *error_message);
 void			signal_error_exit(void);
 bool			syntax_error(int type, t_minishell *info);
+t_err			where_err(int line, char *file);
 
 #endif

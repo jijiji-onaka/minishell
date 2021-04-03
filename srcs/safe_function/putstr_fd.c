@@ -1,31 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   safe_read.c                                        :+:      :+:    :+:   */
+/*   putstr_fd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/25 15:25:18 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/31 10:12:19 by tjinichi         ###   ########.fr       */
+/*   Created: 2021/04/04 02:26:44 by tjinichi          #+#    #+#             */
+/*   Updated: 2021/04/04 02:26:52 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/minishell.h"
+#include "../../includes/minishell.h"
 
-ssize_t		safe_read(char buf[4], char **ptr, t_minishell *info)
+void	putstr_fd(char *str, int fd, t_err err, t_minishell *info)
 {
-	ssize_t	rc;
-
-	rc = read(STDIN_FILENO, buf, READ_SIZE);
-	if (rc < 0)
-	{
-		if (ptr)
-			ptr_free((void**)ptr);
-		if (errno == EBADF)
-			return (-1);
-		all_free_exit(info, ERR_READ, __LINE__, __FILE__);
-	}
-	buf[rc] = '\0';
-	// printf("{{{{{{{{{{%s}}}}}}\n", buf);
-	return (rc);
+	if (ft_putstr_fd(str, fd) == false)
+		all_free_exit(info, ERR_WRITE, err.line, err.file);
 }

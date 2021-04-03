@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 23:22:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/03 23:37:37 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 03:26:06 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	move_direction(size_t len, char *direction, t_minishell *info)
 	i = 0;
 	while (i < len)
 	{
-		if (ft_putstr_fd(direction, STDIN_FILENO) == false)
+		if (ft_putstr_fd(direction, STDIN) == false)
 			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 		i++;
 	}
@@ -62,7 +62,13 @@ bool	move_specified_position(int pos_y, int pos_x, int y_len, int x_len)
 	}
 	str[total++] = 'H';
 	str[total] = '\0';
-	if (write(STDIN_FILENO, str, total) == false)
+	if (write(STDIN, str, total) == false)
 		return (false);
 	return (true);
+}
+
+void	dup_pos(int src[2], int dst[2])
+{
+	src[X] = dst[X];
+	src[Y] = dst[Y];
 }

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:44:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 01:42:16 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 03:02:21 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ typedef struct			s_key
 	char				*clean_right;
 	char				*clean;
 	char				*save;
-	char				*reset;
+	char				*restore;
 	char				*cursor_invisible;
 	char				*cursor_visible;
 	char				*color_change;
@@ -100,6 +100,12 @@ typedef struct			s_cursor
 	int					command_start_pos[2];
 	int					command_end_pos[2];
 }						t_cursor;
+
+typedef struct			s_err
+{
+	int					line;
+	char				*file;
+}						t_err;
 
 typedef struct			s_minishell_info
 {
@@ -253,6 +259,12 @@ enum	e_format
 # define Y 1
 # define LEFT_EDGE 1
 # define UPPER_EDGE 1
+/*
+** FD
+*/
+# define STDIN 0
+# define STDOUT 1
+# define STDERR 2
 
 
 #endif

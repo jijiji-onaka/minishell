@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 00:04:05 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 03:01:19 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ static void	put_newline(t_minishell *info)
 
 static void	putstr_space(char **s, t_minishell *info, char *next)
 {
-	if (write(STDOUT_FILENO, *s, ft_strlen(*s)) < 0)
+	if (write(STDOUT, *s, ft_strlen(*s)) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	if (next != NULL)
-		if (write(STDOUT_FILENO, " ", 1) < 0)
+		if (write(STDOUT, " ", 1) < 0)
 			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 }
 

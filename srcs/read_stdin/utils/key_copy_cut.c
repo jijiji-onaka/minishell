@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/02 05:58:56 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/03 23:25:08 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 03:01:19 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void		cut(char *buf, t_string *command, t_minishell *info)
 	delete_displayed_command(info->key.save_command_len, info->key.left,
 		info->key.clean_right);
 	create_new_command(command, info);
-	if (ft_putstr_fd(command->str, STDOUT_FILENO) == false)
+	if (ft_putstr_fd(command->str, STDOUT) == false)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	info->key.target_start = -1;
 	info->key.target_end = -1;

@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/23 01:57:04 by tjinichi          #+#    #+#              #
-#    Updated: 2021/04/04 02:30:42 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/04/04 05:49:18 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -87,6 +87,7 @@ READ_SRCS = $(addprefix $(READ_DIR)/, \
 				utils/key_ctrl_p_n.c \
 				utils/key_select_target.c \
 				utils/key_utils.c \
+				utils/key_ctrl_left_right.c \
 				utils/get_window_size.c \
 				waiting_for_input.c \
 				waiting_for_quotation.c \

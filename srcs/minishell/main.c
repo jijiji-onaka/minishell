@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 03:01:09 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 06:43:59 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,11 +82,13 @@ void		initialize_term(void)
 {
 	tcgetattr(STDIN, &(g_global.terms[ORIGINAL]));
 	g_global.terms[REPLICA] = g_global.terms[ORIGINAL];
-	// g_global.terms[REPLICA].c_lflag &= ~(ICANON | ECHO);
-	g_global.terms[REPLICA].c_lflag &= ~(ECHO | ICANON | ISIG);
+	g_global.terms[REPLICA].c_lflag &= ~(ICANON | ECHO);
 
-	// g_global.terms[REPLICA].c_cc[VMIN] = 1;
-	// g_global.terms[REPLICA].c_cc[VTIME] = 0;
+	//これにするとCtrl + Cをおそらくreadで読み込める
+	// g_global.terms[REPLICA].c_lflag &= ~(ECHO | ICANON | ISIG);
+
+	g_global.terms[REPLICA].c_cc[VMIN] = 1;
+	g_global.terms[REPLICA].c_cc[VTIME] = 0;
 	tcsetattr(STDIN, TCSAFLUSH, &(g_global.terms[REPLICA]));
 	// tcsetattr(STDIN, TCSANOW, &(g_global.terms[REPLICA]));
 

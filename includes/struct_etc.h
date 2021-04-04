@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:44:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 03:02:21 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 11:05:50 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ typedef struct			s_key
 	size_t				target_end;
 	char				*target;
 	size_t				save_command_len;
-	bool				ctrl_lr_flag;
+	bool				shift_ctrl_lr_flag;
 }						t_key;
 
 typedef struct			s_window
@@ -99,6 +99,7 @@ typedef struct			s_cursor
 	int					cur_pos[2];
 	int					command_start_pos[2];
 	int					command_end_pos[2];
+	int					select_pos[2];
 }						t_cursor;
 
 typedef struct			s_err
@@ -245,8 +246,8 @@ enum	e_format
 # define NOTHING_KEY 11
 # define KEY_CTRL_LEFT 12
 # define KEY_CTRL_RIGHT 13
-# define CTRL_B 14
-# define CTRL_F 15
+# define KEY_SHIFT_LEFT 14
+# define KEY_SHIFT_RIGHT 15
 # define CTRL_G 16
 # define CTRL_Y 17
 # define CTRL_K 18

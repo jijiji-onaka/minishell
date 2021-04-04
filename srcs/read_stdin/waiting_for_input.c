@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 01:01:05 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 03:01:09 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 06:43:23 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	preparation(int *backup, t_string *command,
 	info->key.target_start = -1;
 	info->key.target_end = -1;
 	// info->key.target = NULL;
-	info->key.ctrl_lr_flag = false;
+	info->key.shift_ctrl_lr_flag = false;
 	info->window.line_num = 0;
 	info->cursor.cur_pos[X] = info->cursor.command_start_pos[X];
 	info->cursor.cur_pos[Y] = info->cursor.command_start_pos[Y];

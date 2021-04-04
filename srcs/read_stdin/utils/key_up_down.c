@@ -6,11 +6,29 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 16:50:46 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 03:01:19 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 10:17:48 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
+
+void	delete_displayed_command1(t_err err, t_string *command,
+							t_minishell *info)
+{
+	int		i;
+	int		len;
+
+	putstr_fd(info->key.save, STDIN, err, info);
+	move_specified_position(info->cursor.command_end_pos[Y],
+		info->cursor.command_end_pos[X], err, info);
+	dup_pos(info->cursor.cur_pos, info->cursor.command_end_pos);
+	len = get_command_len_from_pos(info->cursor.command_end_pos,
+		info->cursor.command_start_pos, info->window.ws.ws_col);
+	i = -1;
+	while (++i < len)
+		delete_displayed_char(NULL, command, info);
+	putstr_fd(info->key.restore, STDIN, err, info);
+}
 
 void	trace_history_up(char *buf, t_string *command, t_minishell *info)
 {
@@ -18,9 +36,7 @@ void	trace_history_up(char *buf, t_string *command, t_minishell *info)
 
 	if (info->command_history == NULL)
 		return ;
-	if (delete_displayed_command(command->len, info->key.left,
-			info->key.clean_right) == false)
-		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
+	delete_displayed_command1(where_err(LINE, FILE), command, info);
 	history_command = ft_strdup(info->command_history->command);
 	if (history_command == NULL)
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
@@ -33,22 +49,20 @@ void	trace_history_up(char *buf, t_string *command, t_minishell *info)
 	}
 	else
 		ptr_free((void**)&(command->str));
-	if (ft_putstr_fd(history_command, STDOUT) == false)
-		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	command->str = history_command;
-	command->len = ft_strlen(history_command);
-	info->key.save_command_len = command->len;
+	dup_pos(info->cursor.cur_pos, info->cursor.command_start_pos);
+	dup_pos(info->cursor.command_end_pos, info->cursor.cur_pos);
+	display_command(command, info);
 }
 
 void	trace_history_down(char *buf, t_string *command, t_minishell *info)
 {
 	char	*history_command;
 
-	if (info->command_history == NULL || (info->history_flag == false && info->command_history->next == NULL))
+	if (info->command_history == NULL
+		|| (info->history_flag == false && info->command_history->next == NULL))
 		return ;
-	if (delete_displayed_command(command->len, info->key.left,
-			info->key.clean_right) == false)
-		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
+	delete_displayed_command1(where_err(LINE, FILE), command, info);
 	if (info->command_history->next != NULL)
 		history_command = ft_strdup(info->command_history->next->command);
 	else
@@ -62,40 +76,8 @@ void	trace_history_down(char *buf, t_string *command, t_minishell *info)
 	if (info->command_history->next)
 		info->command_history = info->command_history->next;
 	ptr_free((void**)&(command->str));
-	if (ft_putstr_fd(history_command, STDOUT) == false)
-		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	command->str = history_command;
-	command->len = ft_strlen(history_command);
-	info->key.save_command_len = command->len;
-}
-
-bool	get_cursor_position(int pos[2], t_minishell *info)
-{
-	ssize_t	rc;
-	int		i;
-	char	*ptr;
-	char	buf[ft_numlen(info->window.ws.ws_col) +
-			ft_numlen(info->window.ws.ws_row) + 4];
-
-	if (write(STDOUT, "\x1b[6n", 4) < 4)
-		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	i = 0;
-	while (1)
-	{
-		rc = read(STDIN, buf + i, 1);
-		if (rc == -1)
-			all_free_exit(info, ERR_READ, __LINE__, __FILE__);
-		if (buf[i] == 'R' || rc == 0)
-			break ;
-		i++;
-	}
-	buf[i] = '\0';
-	if (buf[0] != '\x1b' || buf[1] != '[')
-		return (false);
-	pos[Y] = ft_atoi(buf + 2);
-	ptr = ft_strchr(buf, ';') + 1;
-	if (ptr == NULL)
-		return (false);
-	pos[X] = ft_atoi(ptr);
-	return (true);
+	dup_pos(info->cursor.cur_pos, info->cursor.command_start_pos);
+	dup_pos(info->cursor.command_end_pos, info->cursor.cur_pos);
+	display_command(command, info);
 }

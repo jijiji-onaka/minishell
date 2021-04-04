@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 16:53:58 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 03:15:35 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 10:03:31 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,18 +42,13 @@ static void	create_new_command(t_string *command, char *buf, t_err err,
 	info->ptr_for_free = NULL;
 }
 
-static void	treat_cursor_pos(int pos[2], int start_pos[2], int window_max_y)
-{
-	if (window_max_y != pos[Y])
-		pos[Y]++;
-	if (start_pos[Y] != UPPER_EDGE)
-		start_pos[Y]--;
-	pos[X] = LEFT_EDGE;
-}
-
 void		print_user_pushed_char(char *buf, t_string *command,
 									t_minishell *info)
 {
+	// printf("\n1 [%d]\n", info->cursor.cur_pos[X]);
+	// printf("2 [%d]\n", info->cursor.cur_pos[Y]);
+	// printf("3 [%d]\n", info->cursor.command_start_pos[X]);
+	// printf("4 [%d]\n", info->cursor.command_start_pos[Y]);
 	create_new_command(command, buf, where_err(LINE, FILE), info);
 	putstr_fd(buf, STDIN, where_err(LINE, FILE), info);
 	command->len++;
@@ -61,15 +56,15 @@ void		print_user_pushed_char(char *buf, t_string *command,
 	info->cursor.cur_pos[X]++;
 	info->cursor.command_end_pos[X]++;
 	if (info->window.ws.ws_col + 1 == info->cursor.command_end_pos[X])
-		treat_cursor_pos(info->cursor.command_end_pos,
-			info->cursor.command_start_pos, info->window.ws.ws_row);
+		handle_forward_cursor_pos(info->cursor.command_end_pos,
+			NULL, info->window.ws.ws_row);
 	if (info->window.ws.ws_col + 1 == info->cursor.cur_pos[X])
 	{
 		putstr_fd(info->key.scroll_up, STDIN, where_err(LINE, FILE), info);
-		treat_cursor_pos(info->cursor.cur_pos,
+		handle_forward_cursor_pos(info->cursor.cur_pos,
 			info->cursor.command_start_pos, info->window.ws.ws_row);
 		move_specified_position(info->cursor.cur_pos[Y], 1,
-			numlen(info->cursor.cur_pos[Y], info->window, Y), 1);
+			where_err(LINE, FILE), info);
 	}
 	putstr_fd(info->key.save, STDIN, where_err(LINE, FILE), info);
 	putstr_fd(command->str + command->len, STDIN, where_err(LINE, FILE), info);

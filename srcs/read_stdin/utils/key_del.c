@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/04 01:48:20 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 03:02:40 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 10:03:12 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,8 @@ static void	edit_command(t_string *command, t_minishell *info)
 static void	erase_under_line(t_minishell *info, t_err err)
 {
 	putstr_fd(info->key.save, STDIN, err, info);
-	move_specified_position(
-		info->cursor.command_end_pos[Y],
-		info->cursor.command_end_pos[X],
-		numlen(info->cursor.cur_pos[Y], info->window, Y),
-		numlen(info->cursor.command_end_pos[X], info->window, X));
+	move_specified_position(info->cursor.command_end_pos[Y],
+		info->cursor.command_end_pos[X], where_err(LINE, FILE), info);
 	putstr_fd(info->key.delete_line, STDIN, err, info);
 	putstr_fd(info->key.restore, STDIN, err, info);
 }
@@ -51,50 +48,30 @@ static void	erase_under_line(t_minishell *info, t_err err)
 static void	move_right_end_of_line_above(t_minishell *info, t_err err)
 {
 	putstr_fd(info->key.save, STDIN, err, info);
-	move_specified_position(
-		info->cursor.command_end_pos[Y],
-		info->cursor.command_end_pos[X],
-		numlen(info->cursor.cur_pos[Y], info->window, Y),
-		numlen(info->cursor.command_end_pos[X], info->window, X));
+	move_specified_position(info->cursor.command_end_pos[Y],
+		info->cursor.command_end_pos[X], where_err(LINE, FILE), info);
 	putstr_fd(info->key.delete_line, STDIN, err, info);
 	putstr_fd(info->key.restore, STDIN, err, info);
-}
-
-static void	treat_cursor_pos(t_cursor *cursor, int window_max_x)
-{
-	if (cursor->cur_pos[X] == LEFT_EDGE)
-	{
-		cursor->cur_pos[X] = window_max_x;
-		if (cursor->cur_pos[Y] != UPPER_EDGE)
-			--cursor->cur_pos[Y];
-	}
-	else
-		--cursor->cur_pos[X];
-	if (cursor->command_end_pos[X] == LEFT_EDGE)
-	{
-		cursor->command_end_pos[X] = window_max_x;
-		if (cursor->command_end_pos[Y] != UPPER_EDGE)
-			--cursor->command_end_pos[Y];
-	}
-	else
-		--cursor->command_end_pos[X];
 }
 
 void		delete_displayed_char(char *buf, t_string *command,
 					t_minishell *info)
 {
-	if (command->len == 0)
+	// printf("\n1 [%d]\n", info->cursor.cur_pos[X]);
+	// printf("2 [%d]\n", info->cursor.cur_pos[Y]);
+	// printf("3 [%d]\n", info->cursor.command_end_pos[X]);
+	// printf("4 [%d]\n", info->cursor.command_end_pos[Y]);
+	// printf("3 [%d]\n", info->cursor.command_start_pos[X]);
+	// printf("4 [%d]\n", info->cursor.command_start_pos[Y]);
+	if (equal_pos(info->cursor.cur_pos, info->cursor.command_start_pos) == true)
 		return ;
 	if (info->cursor.command_end_pos[Y] != info->cursor.cur_pos[Y]
 		|| info->cursor.cur_pos[X] == LEFT_EDGE)
 		erase_under_line(info, where_err(LINE, FILE));
 	if (info->cursor.command_start_pos[Y] != info->cursor.cur_pos[Y]
 		&& (info->cursor.cur_pos[X] == LEFT_EDGE))
-		move_specified_position(
-			info->cursor.cur_pos[Y] - 1,
-			info->window.ws.ws_col ,
-			numlen(info->cursor.cur_pos[Y] - 1, info->window, Y),
-			numlen(info->window.ws.ws_col, info->window, X));
+		move_specified_position(info->cursor.cur_pos[Y] - 1,
+			info->window.ws.ws_col , where_err(LINE, FILE), info);
 	else
 		putstr_fd(info->key.left, STDIN, where_err(LINE, FILE), info);
 	putstr_fd(info->key.save, STDIN, where_err(LINE, FILE), info);
@@ -103,7 +80,10 @@ void		delete_displayed_char(char *buf, t_string *command,
 	edit_command(command, info);
 	putstr_fd(info->key.restore, STDIN, where_err(LINE, FILE), info);
 	--command->len;
-	treat_cursor_pos(&(info->cursor), info->window.ws.ws_col);
+	handle_back_cursor_pos(info->cursor.cur_pos,
+		info->window.ws.ws_col);
+	handle_back_cursor_pos(info->cursor.command_end_pos,
+		info->window.ws.ws_col);
 }
 
 bool		delete_displayed_command(size_t len, char *left, char *clean_right)

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/02 21:54:06 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 03:01:09 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 10:30:35 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void		select_target_left(char *buf, t_string *command, t_minishell *info)
 {
 	size_t	i;
 
-	if (command->len == 0 || info->key.target_start == 0)
+	if (equal_pos(info->cursor.cur_pos, info->cursor.command_start_pos) == true)
 		return ;
 	if (info->key.target_end == -1 || info->key.target_start == -1)
 	{

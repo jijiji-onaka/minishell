@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 23:22:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 03:26:06 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 10:40:51 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	move_direction(size_t len, char *direction, t_minishell *info)
 	i = 0;
 	while (i < len)
 	{
+
 		if (ft_putstr_fd(direction, STDIN) == false)
 			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 		i++;
@@ -39,7 +40,7 @@ int		numlen(int num, t_window window, int x_y)
 		return (window.ws.ws_row);
 }
 
-bool	move_specified_position(int pos_y, int pos_x, int y_len, int x_len)
+static bool	move_specified_position_main(int pos_y, int pos_x, int y_len, int x_len)
 {
 	char	str[y_len + x_len + 5];
 	uint	i;
@@ -67,8 +68,145 @@ bool	move_specified_position(int pos_y, int pos_x, int y_len, int x_len)
 	return (true);
 }
 
+void	move_specified_position(int pos_y, int pos_x, t_err err,
+					t_minishell *info)
+{
+	int	y_len;
+	int	x_len;
+
+	y_len = numlen(pos_y, info->window, Y);
+	x_len = numlen(pos_x, info->window, X);
+	if (move_specified_position_main(pos_y, pos_x, y_len, x_len) == false)
+		all_free_exit(info, ERR_WRITE, err.line, err.file);
+}
+
 void	dup_pos(int src[2], int dst[2])
 {
 	src[X] = dst[X];
 	src[Y] = dst[Y];
+}
+
+bool	equal_pos(int src[2], int dst[2])
+{
+	if (src[X] - dst[X] != 0)
+		return (false);
+	if (src[Y] - dst[Y] != 0)
+		return (false);
+	return (true);
+}
+
+void	handle_forward_cursor_pos(int pos[2],
+			int start_pos[2], int window_max_y)
+{
+	if (start_pos != NULL && start_pos[Y] != UPPER_EDGE
+	&& pos[Y] == window_max_y)
+		start_pos[Y]--;
+	if (window_max_y != pos[Y])
+		pos[Y]++;
+	pos[X] = LEFT_EDGE;
+}
+
+void	handle_back_cursor_pos(int pos[2], int window_max_x)
+{
+	if (pos[X] == LEFT_EDGE)
+	{
+		pos[X] = window_max_x;
+		if (pos[Y] != UPPER_EDGE)
+			--pos[Y];
+	}
+	else
+		--pos[X];
+}
+
+// void	handle_back_cursor_pos(t_cursor *cursor, int window_max_x)
+// {
+// 	if (cursor->cur_pos[X] == LEFT_EDGE)
+// 	{
+// 		cursor->cur_pos[X] = window_max_x;
+// 		if (cursor->cur_pos[Y] != UPPER_EDGE)
+// 			--cursor->cur_pos[Y];
+// 	}
+// 	else
+// 		--cursor->cur_pos[X];
+// 	if (cursor->command_end_pos[X] == LEFT_EDGE)
+// 	{
+// 		cursor->command_end_pos[X] = window_max_x;
+// 		if (cursor->command_end_pos[Y] != UPPER_EDGE)
+// 			--cursor->command_end_pos[Y];
+// 	}
+// 	else
+// 		--cursor->command_end_pos[X];
+// }
+
+void	display_command(t_string *command, t_minishell *info)
+{
+	size_t i;
+
+	i = -1;
+	while (command->str[++i])
+	{
+		if (write(STDIN, command->str + i, 1) < 1)
+			all_free_exit(info, ERR_WRITE, LINE, FILE);
+		++info->cursor.cur_pos[X];
+		++info->cursor.command_end_pos[X];
+		++command->len;
+		++info->key.save_command_len;
+		if (info->window.ws.ws_col + 1 == info->cursor.command_end_pos[X])
+			handle_forward_cursor_pos(info->cursor.command_end_pos,
+				NULL, info->window.ws.ws_row);
+		if (info->window.ws.ws_col + 1 == info->cursor.cur_pos[X])
+		{
+			putstr_fd(info->key.scroll_up, STDIN, where_err(LINE, FILE), info);
+			handle_forward_cursor_pos(info->cursor.cur_pos,
+				info->cursor.command_start_pos, info->window.ws.ws_row);
+			move_specified_position(info->cursor.cur_pos[Y], 1,
+				where_err(LINE, FILE), info
+				);
+		}
+	}
+}
+
+int		get_command_len_from_pos(int pos_end[2], int pos_start[2],
+								int max_window_x)
+{
+	int	len;
+
+	len = 0;
+	if (pos_end[Y] != pos_start[Y])
+		len = (pos_end[Y] - pos_start[Y] - 1) * max_window_x +
+			pos_end[X] + max_window_x - pos_start[X];
+	else
+		len = pos_end[X] - pos_start[X];
+	return (len);
+}
+
+bool	get_cursor_position(int pos[2], t_minishell *info)
+{
+	ssize_t	rc;
+	int		i;
+	char	*ptr;
+	char	buf[ft_numlen(info->window.ws.ws_col) +
+			ft_numlen(info->window.ws.ws_row) + 4];
+
+	if (write(STDOUT, "\x1b[6n", 4) < 4)
+		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
+	i = 0;
+	while (1)
+	{
+		rc = read(STDIN, buf + i, 1);
+		if (rc == -1)
+			all_free_exit(info, ERR_READ, __LINE__, __FILE__);
+		if (buf[i] == 'R' || rc == 0)
+			break ;
+		i++;
+	}
+	buf[i] = '\0';
+	if (buf[0] != '\x1b' || buf[1] != '[')
+		return (false);
+	pos[Y] = ft_atoi(buf + 2);
+	ptr = ft_strchr(buf, ';') + 1;
+	if (ptr == NULL)
+		return (false);
+	pos[X] = ft_atoi(ptr);
+	return (true);
 }

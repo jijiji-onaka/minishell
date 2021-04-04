@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 16:49:37 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 03:01:09 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 10:01:58 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,74 +14,32 @@
 
 void	move_cursor_left(char *buf, t_string *command, t_minishell *info)
 {
-	if (command->len == 0)
-		return ;
+	if (equal_pos(info->cursor.cur_pos, info->cursor.command_start_pos) == true)
+		return;
+	if (info->cursor.command_start_pos[Y] != info->cursor.cur_pos[Y]
+		&& (info->cursor.cur_pos[X] == LEFT_EDGE))
+		move_specified_position(info->cursor.cur_pos[Y] - 1,
+			info->window.ws.ws_col, where_err(LINE, FILE), info);
+	else
+		putstr_fd(info->key.left, STDIN, where_err(LINE, FILE), info);
 	--command->len;
-	--info->cursor.cur_pos[X];
-	// printf("\n%d\n", command->len);
-	// printf("%d\n", info->cursor.cur_pos[X]);
-	move_direction(1, info->key.left, info);
-	// ft_putstr_fd(info->key.left, STDIN);
+	handle_back_cursor_pos(info->cursor.cur_pos, info->window.ws.ws_col);
 }
 
 void	move_cursor_right(char *buf, t_string *command, t_minishell *info)
 {
-	if (command->len == info->key.save_command_len)
+	if (equal_pos(info->cursor.cur_pos, info->cursor.command_end_pos) == true)
 		return ;
 	++command->len;
 	++info->cursor.cur_pos[X];
-	move_direction(1, info->key.right, info);
-	// ft_putstr_fd(info->key.right, STDIN);
-}
-
-void	move_left_directly_word_toward(char *buf, t_string *command,
-								t_minishell *info)
-{
-	char	*str;
-	size_t	len;
-	size_t	i;
-	char	*left;
-
-	info->key.ctrl_lr_flag = false;
-	if (command->len == 0)
-		return;
-	len = command->len;
-	str = command->str;
-	i = 0;
-	left = info->key.left;
-	while (i < len)
+	if (info->window.ws.ws_col + 1 == info->cursor.cur_pos[X])
 	{
-		if (i != 0 && str[len - i] != ' ' && str[len - i - 1] == ' ')
-			break;
-		i++;
-		if (ft_putstr_fd(left, STDIN) == false)
-			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
+		putstr_fd(info->key.scroll_up, STDIN, where_err(LINE, FILE), info);
+		handle_forward_cursor_pos(info->cursor.cur_pos,
+			info->cursor.command_start_pos, info->window.ws.ws_row);
+		move_specified_position(info->cursor.cur_pos[Y], 1,
+			where_err(LINE, FILE), info);
 	}
-	command->len -= i;
-}
-
-void	move_right_directly_word_toward(char *buf, t_string *command,
-								t_minishell *info)
-{
-	char	*str;
-	size_t	len;
-	size_t	i;
-	char	*right;
-
-	info->key.ctrl_lr_flag = false;
-	if (command->len == info->key.save_command_len)
-		return ;
-	len = command->len;
-	str = command->str;
-	i = len;
-	right = info->key.right;
-	while (str[i])
-	{
-		if (i != 0 && i != len && str[i] == ' ' && str[i - 1] != ' ')
-			break;
-		i++;
-		if (ft_putstr_fd(right, STDIN) == false)
-			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	}
-	command->len = i;
+	else
+		putstr_fd(info->key.right, STDIN, where_err(LINE, FILE), info);
 }

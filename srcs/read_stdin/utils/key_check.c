@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 16:26:24 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 03:01:19 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/04 11:07:40 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	key_ctrl_left_and_right(t_minishell *info)
 {
-	info->key.ctrl_lr_flag = true;
+	info->key.shift_ctrl_lr_flag = true;
 	return (NOTHING_KEY);
 }
 
@@ -36,10 +36,6 @@ static int	is_what_key(char *buf, char *command, t_minishell *info)
 		return (KEY_HOME);
 	else if (buf[0] == 5)
 		return (KEY_END);
-	else if (buf[0] == 2)
-		return (CTRL_B);
-	else if (buf[0] == 6)
-		return (CTRL_F);
 	else if (buf[0] == 7)
 		return (CTRL_G);
 	else if (buf[0] == 25)
@@ -62,12 +58,16 @@ static int	is_what_key(char *buf, char *command, t_minishell *info)
 		return (KEY_LEFT);
 	else if (buf[0] == 27 && buf[1] == 91 && buf[2] == 49)
 		return (key_ctrl_left_and_right(info));
-	else if (info->key.ctrl_lr_flag == true)
+	else if (info->key.shift_ctrl_lr_flag == true)
 	{
 		if (buf[0] == 59 && buf[1] == 53 && buf[2] == 68)
 			return (KEY_CTRL_LEFT);
 		else if (buf[0] == 59 && buf[1] == 53 && buf[2] == 67)
 			return (KEY_CTRL_RIGHT);
+		else if (buf[0] == 59 && buf[1] == 50 && buf[2] == 68)
+			return (KEY_SHIFT_LEFT);
+		else if (buf[0] == 59 && buf[1] == 50 && buf[2] == 67)
+			return (KEY_SHIFT_RIGHT);
 	}
 	else if (ft_isprint(buf[0]))
 		return (NORMAL_CHAR);
@@ -76,7 +76,7 @@ static int	is_what_key(char *buf, char *command, t_minishell *info)
 
 static void	init_selected_target(int key, t_string *command, t_minishell *info)
 {
-	if (key != CTRL_B && key != CTRL_F && key != CTRL_Y &&
+	if (key != KEY_SHIFT_LEFT && key != KEY_SHIFT_RIGHT && key != CTRL_Y &&
 		key != CTRL_K && key != CTRL_G)
 	{
 		if (info->key.target_end != -1 || info->key.target_start != -1)
@@ -92,6 +92,7 @@ static void	init_selected_target(int key, t_string *command, t_minishell *info)
 		}
 		info->key.target_end = -1;
 		info->key.target_start = -1;
+		dup_pos(info->cursor.select_pos, info->cursor.cur_pos);
 	}
 }
 
@@ -115,8 +116,8 @@ void		check_key(char *buf, t_string *command, t_minishell *info)
 		move_cursor_left, move_cursor_right,
 		ctrl_d_exit, clear_terminal, delete_displayed_char,
 		print_user_pushed_char, pushed_newline,
-		go_line_beginning, go_line_end, do_nothing,
-		move_left_directly_word_toward, move_right_directly_word_toward,
+		go_command_beginning, go_command_end, do_nothing,
+		move_word_directly_to_left, move_word_directly_to_right,
 		select_target_left, select_target_right,
 		copy, paste, cut,
 		move_up_one_line, move_down_one_line,

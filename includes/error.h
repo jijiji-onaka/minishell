@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:51:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 02:25:33 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/06 04:50:08 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@
 # define ERR_DB_INPUT "minishell: `<<\' is not supported by mandatory.\n"
 # define ERR_TR_INPUT "minishell: `<<<\' is not supported by mandatory.\n"
 # define ERR_MANDATORY "That command is not supported by mandatory.\n"
+# define ERR_GET_WINDOW_SIZE "Failed to get window size.\n"
 # define ERR_ENV "Usage: env [No option] [No argument]\n"
 # define ERR_PWD "Usage: pwd [No option] ...\n"
 # define ERR_ECHO "Usage: echo [-n] ...\n"

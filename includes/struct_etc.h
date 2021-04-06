@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:44:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 11:05:50 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/06 09:42:29 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 typedef struct stat		t_stat;
 typedef struct termios	t_termios;
 typedef struct dirent	t_dirent;
+typedef struct winsize	t_ws;
 
 typedef struct			s_string
 {
@@ -68,8 +69,8 @@ typedef struct			s_key
 	char				*right;
 	char				*clean_right;
 	char				*clean;
-	char				*save;
-	char				*restore;
+	char				*cursor_save;
+	char				*cursor_restore;
 	char				*cursor_invisible;
 	char				*cursor_visible;
 	char				*color_change;
@@ -77,6 +78,7 @@ typedef struct			s_key
 	char				*scroll_up;
 	char				*scroll_down;
 	char				*delete_line;
+	char				*beep_sound;
 	size_t				target_start;
 	size_t				target_end;
 	char				*target;
@@ -88,10 +90,9 @@ typedef struct			s_window
 {
 	struct winsize		ws;
 	int					prompt_len;
-	int					cur_pos[2];
-	int					command_start_pos[2];
-	int					command_end_pos[2];
-	int					line_num;
+	// int					cur_pos[2];
+	// int					command_start_pos[2];
+	// int					command_end_pos[2];
 }						t_window;
 
 typedef struct			s_cursor
@@ -122,9 +123,7 @@ typedef struct			s_minishell_info
 	struct s_history	*command_history;
 	struct s_history	*command_history_begin;
 	bool				history_flag;
-	// struct s_hist_all	history;
 	struct s_key		key;
-	struct s_window		window;
 	struct s_cursor		cursor;
 	int					cmd_lst_num;
 	bool				exit_too_arg;
@@ -248,11 +247,12 @@ enum	e_format
 # define KEY_CTRL_RIGHT 13
 # define KEY_SHIFT_LEFT 14
 # define KEY_SHIFT_RIGHT 15
-# define CTRL_G 16
-# define CTRL_Y 17
-# define CTRL_K 18
+# define KEY_SHIFT_UP 16
+# define CTRL_B 17
+# define KEY_SHIFT_DOWN 18
 # define CTRL_P 19
 # define CTRL_N 20
+# define TO_BE_CONTINUE 21
 /*
 ** CURSOR || WINDOW
 */
@@ -260,6 +260,8 @@ enum	e_format
 # define Y 1
 # define LEFT_EDGE 1
 # define UPPER_EDGE 1
+# define SELECT_LEFT 0
+# define SELECT_RIGHT 1
 /*
 ** FD
 */

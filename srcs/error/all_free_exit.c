@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 02:54:08 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 03:01:28 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/06 08:58:56 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ void			all_free_exit(t_minishell *info, char *error_message, \
 		ptr_free((void**)&info->ptr_for_free);
 	if (info->ptr_for_free_2)
 		ptr_free((void**)&info->ptr_for_free_2);
+	ptr_free((void**)&(info->key.target));
 	free_cmd_lst(&(info->cmd_lst));
 	// if (errno == 0)
 	// 	exit(1);

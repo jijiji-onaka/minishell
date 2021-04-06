@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/31 03:56:08 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 06:01:56 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/06 07:39:03 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	go_command_beginning(char *buf, t_string *command, t_minishell *info)
 	size_t	len;
 	char	*left;
 
-	len = command->len;
+	len = get_now_index(info);
 	left = info->key.left;
 	i = 0;
 	while (i < len)
@@ -34,9 +34,10 @@ void	go_command_end(char *buf, t_string *command, t_minishell *info)
 	size_t	len;
 	char	*right;
 
-	i = command->len;
+	i = get_now_index(info);
 	right = info->key.right;
-	len = info->key.save_command_len;
+	len = get_command_len_from_pos(info->cursor.command_end_pos,
+			info->cursor.command_start_pos, info);
 	while (i < len)
 	{
 		move_cursor_right(buf, command, info);

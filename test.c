@@ -267,10 +267,14 @@
 // 	// write(1, s, strlen(s));
 // 	// write(1, "]", 1);
 // 	// tcsetattr(STDIN, TCSANOW, &(g_global.terms[0]));
-// 	printf("\x1b[38;5;93maaaaaaaa\033[0m\n");
-// 	printf("\x1b[38;5;109maaaaaaaa\033[0m\n");
-// 	printf("\x1b[38;5;106maaaaaaaa\033[0m\n");
-// 	printf("\x1b[95maaaaaaaa\033[0m\n");
+	// printf("\x1b[38;5;93maaaaaaaa\033[0m\n");
+	// printf("\x1b[38;5;109maaaaaaaa\033[0m\n");
+	// printf("\x1b[38;5;106maaaaaaaa\033[0m\n");
+	// printf("\x1b[95maaaaaaaa\033[0m");
+	// printf("\x1b[4Daaaaa");
+	// printf("\tわたしの毎月の小遣いは、\\200です\n");
+    // printf("\a");        /* ビープ音がなる */
+	// else
 // 	printf("\x1b[6n");
 // 	char buf[100];
 // 	bzero(buf, 100);
@@ -309,25 +313,75 @@ int getCursorPosition(int ifd, int ofd, int *rows, int *cols)
 	return 0;
 }
 
-int main(void)
-{
- int cursor_x, cursor_y;
+int getWindowSize(int ifd, int ofd, int *rows, int *cols) {
+    struct winsize ws;
 
-//  tgetent(NULL, getenv("TERM"));
-//  tcgetattr(STDIN, &(g_global.terms[0]));
-//  g_global.terms[1] = g_global.terms[0];
-//  g_global.terms[1].c_lflag &= ~(ICANON | ECHO);
-//  g_global.terms[1].c_cc[VMIN] = 1;
-//  g_global.terms[1].c_cc[VTIME] = 0;
-//  tcsetattr(STDIN, TCSANOW, &(g_global.terms[1]));
- printf("1");
- printf("%s", "\x1B[6n");
- scanf("\x1B[%d;%dR", &cursor_y, &cursor_x);
+if (ioctl(1, TIOCGWINSZ, &ws) == -1 || ws.ws_col == 0 || 1) {
+    /* ioctl() failed. Try to query the terminal itself. */
+    int orig_row, orig_col, retval;
 
- printf("x = %d, y = %d\n", cursor_x, cursor_y);
+    /* Get the initial position so we can restore it later. */
+    retval = getCursorPosition(ifd,ofd,&orig_row,&orig_col);
+    if (retval == -1) goto failed;
 
-//  tcsetattr(STDIN, TCSANOW, &(g_global.terms[0]));
+    /* Go to right/bottom margin and get position. */
+    if (write(ofd,"\x1b[999C\x1b[999B",12) != 12) goto failed;
+    retval = getCursorPosition(ifd,ofd,rows,cols);
+    if (retval == -1) goto failed;
+
+    /* Restore position. */
+    char seq[32];
+    snprintf(seq,32,"\x1b[%d;%dH",orig_row,orig_col);
+    if (write(ofd,seq,strlen(seq)) == -1) {
+        /* Can't recover... */
+    }
+    return 0;
+} else {
+    *cols = ws.ws_col;
+    *rows = ws.ws_row;
+    return 0;
 }
+
+failed:
+    return -1;
+}
+
+int main()
+{
+		tgetent(NULL, getenv("TERM"));
+	tcgetattr(STDIN, &(g_global.terms[0]));
+	g_global.terms[1] = g_global.terms[0];
+	g_global.terms[1].c_lflag &= ~(ICANON | ECHO);
+	g_global.terms[1].c_cc[VMIN] = 1;
+	g_global.terms[1].c_cc[VTIME] = 0;
+	tcsetattr(STDIN, TCSANOW, &(g_global.terms[1]));
+	int row = 0;
+	int col = 0;
+	getWindowSize(0, 1, &row, &col);
+	printf("%d\n", col);
+	printf("%d\n", row);
+	tcsetattr(STDIN, TCSANOW, &(g_global.terms[0]));
+}
+
+// int main(void)
+// {
+//  int cursor_x, cursor_y;
+
+// //  tgetent(NULL, getenv("TERM"));
+// //  tcgetattr(STDIN, &(g_global.terms[0]));
+// //  g_global.terms[1] = g_global.terms[0];
+// //  g_global.terms[1].c_lflag &= ~(ICANON | ECHO);
+// //  g_global.terms[1].c_cc[VMIN] = 1;
+// //  g_global.terms[1].c_cc[VTIME] = 0;
+// //  tcsetattr(STDIN, TCSANOW, &(g_global.terms[1]));
+//  printf("1");
+//  printf("%s", "\x1B[6n");
+//  scanf("\x1B[%d;%dR", &cursor_y, &cursor_x);
+
+//  printf("x = %d, y = %d\n", cursor_x, cursor_y);
+
+// //  tcsetattr(STDIN, TCSANOW, &(g_global.terms[0]));
+// }
 
 // static size_t line_length = 80;
 // int main( int argc, char *argv[] )

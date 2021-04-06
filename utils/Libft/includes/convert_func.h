@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/10 20:46:17 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/15 20:45:31 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/06 10:04:46 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,8 @@ char			*skip_space(char *s);
 void			str_tolower(char **s);
 char			**split_by_str(char *str, char *charset);
 char			**ft_split(char const *s, char c);
+long long		signed_max(long long x, long long y);
+long long		signed_min(long long x, long long y);
+long long		ft_abs(long long x);
 
 #endif

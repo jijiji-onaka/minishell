@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 00:41:03 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 03:30:46 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/06 08:31:36 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ void		put_prompt(t_minishell *info)
 	putstr_fd(working_dir, STDOUT, where_err(LINE, FILE), info);
 	if (write(STDOUT, "\033[1m\x1b[35m (;;) > \x1b[0m", 21) < 21)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	get_window_size(info);
+	// get_window_size(info);
 	get_cursor_position(info->cursor.command_start_pos, info);
-	info->window.prompt_len = info->cursor.command_start_pos[X] - 1;
+		// puts("errrr");
+	// info->window.prompt_len = info->cursor.command_start_pos[X] - 1;
 }

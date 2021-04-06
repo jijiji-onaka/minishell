@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 06:43:59 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/06 07:45:30 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,11 +110,11 @@ void	set_key(t_minishell *info)
 	info->key.clean = tgetstr("cl", NULL);
 	if (info->key.clean == NULL)
 		all_free_exit(info, ERR_TGETSTR, __LINE__, __FILE__);
-	info->key.save = tgetstr("sc", NULL);
-	if (info->key.save == NULL)
+	info->key.cursor_save = tgetstr("sc", NULL);
+	if (info->key.cursor_save == NULL)
 		all_free_exit(info, ERR_TGETSTR, __LINE__, __FILE__);
-	info->key.restore = tgetstr("rc", NULL);
-	if (info->key.restore == NULL)
+	info->key.cursor_restore = tgetstr("rc", NULL);
+	if (info->key.cursor_restore == NULL)
 		all_free_exit(info, ERR_TGETSTR, __LINE__, __FILE__);
 	info->key.cursor_invisible = tgetstr("vi", NULL);
 	if (info->key.cursor_invisible == NULL)
@@ -137,6 +137,7 @@ void	set_key(t_minishell *info)
 	info->key.delete_line = tgetstr("dl", NULL);
 	if (info->key.delete_line == NULL)
 		all_free_exit(info, ERR_TGETSTR, __LINE__, __FILE__);
+	info->key.beep_sound = "\007";
 	info->key.color_change = "\x1b[38;5;106m\x1b[48;5;27m";
 	info->key.color_reset = "\033[0m";
 }

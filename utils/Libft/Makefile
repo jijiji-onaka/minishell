@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/23 20:15:31 by tjinichi          #+#    #+#              #
-#    Updated: 2021/03/26 21:49:43 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/04/06 10:05:40 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,6 +42,8 @@ CONVERT_SRCS = $(addprefix $(CONVERT_DIR)/, \
 				str_tolower.c \
 				ft_split.c \
 				split_by_chrs.c \
+				signed_max_min.c \
+				ft_abs.c \
 )
 #========== count function =====================================================
 COUNT_DIR = $(SRCDIR)/count_func

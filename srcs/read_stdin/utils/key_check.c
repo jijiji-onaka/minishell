@@ -6,95 +6,41 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 16:26:24 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 11:07:40 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/06 14:44:17 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-static int	key_ctrl_left_and_right(t_minishell *info)
-{
-	info->key.shift_ctrl_lr_flag = true;
-	return (NOTHING_KEY);
-}
-
-/*
-** KEY_TAB and NOTHING_KEY have the same value
-*/
-
-static int	is_what_key(char *buf, char *command, t_minishell *info)
-{
-	if (buf[0] == 4 && command[0] == '\0')
-		return (CTRL_D);
-	else if (buf[0] == 12)
-		return (CTRL_L);
-	else if (buf[0] == 127)
-		return (KEY_DELETE);
-	else if (buf[0] == 10)
-		return (KEY_NEWLINE);
-	else if (buf[0] == 1)
-		return (KEY_HOME);
-	else if (buf[0] == 5)
-		return (KEY_END);
-	else if (buf[0] == 7)
-		return (CTRL_G);
-	else if (buf[0] == 25)
-		return (CTRL_Y);
-	else if (buf[0] == 11)
-		return (CTRL_K);
-	else if (buf[0] == 16)
-		return (CTRL_P);
-	else if (buf[0] == 14)
-		return (CTRL_N);
-	else if (info->minishell_op_no_edit == false && buf[0] == 9)
-		return (KEY_TAB);
-	else if (buf[0] == 27 && buf[1] == 91 && buf[2] == 65)
-		return (KEY_UP);
-	else if (buf[0] == 27 && buf[1] == 91 && buf[2] == 66)
-		return (KEY_DOWN);
-	else if (buf[0] == 27 && buf[1] == 91 && buf[2] == 67)
-		return (KEY_RIGHT);
-	else if (buf[0] == 27 && buf[1] == 91 && buf[2] == 68)
-		return (KEY_LEFT);
-	else if (buf[0] == 27 && buf[1] == 91 && buf[2] == 49)
-		return (key_ctrl_left_and_right(info));
-	else if (info->key.shift_ctrl_lr_flag == true)
-	{
-		if (buf[0] == 59 && buf[1] == 53 && buf[2] == 68)
-			return (KEY_CTRL_LEFT);
-		else if (buf[0] == 59 && buf[1] == 53 && buf[2] == 67)
-			return (KEY_CTRL_RIGHT);
-		else if (buf[0] == 59 && buf[1] == 50 && buf[2] == 68)
-			return (KEY_SHIFT_LEFT);
-		else if (buf[0] == 59 && buf[1] == 50 && buf[2] == 67)
-			return (KEY_SHIFT_RIGHT);
-	}
-	else if (ft_isprint(buf[0]))
-		return (NORMAL_CHAR);
-	return (NOTHING_KEY);
-}
-
 static void	init_selected_target(int key, t_string *command, t_minishell *info)
 {
-	if (key != KEY_SHIFT_LEFT && key != KEY_SHIFT_RIGHT && key != CTRL_Y &&
-		key != CTRL_K && key != CTRL_G)
+	int	original_pos;
+	int	i;
+
+	if (key != KEY_SHIFT_LEFT && key != KEY_SHIFT_RIGHT && key != CTRL_B &&
+		key != KEY_SHIFT_UP && key != KEY_SHIFT_DOWN && key != TO_BE_CONTINUE)
 	{
-		if (info->key.target_end != -1 || info->key.target_start != -1)
-		{
-			move_direction(info->key.save_command_len - command->len,
-				info->key.right, info);
-			delete_displayed_command(info->key.save_command_len,
-				info->key.left, info->key.clean_right);
-			if (ft_putstr_fd(command->str, STDOUT) == false)
-				all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-			move_direction(info->key.save_command_len - command->len,
-				info->key.left, info);
-		}
-		info->key.target_end = -1;
-		info->key.target_start = -1;
-		dup_pos(info->cursor.select_pos, info->cursor.cur_pos);
+		original_pos = get_command_len_from_pos(info->cursor.command_end_pos,
+							info->cursor.cur_pos, info);
+		dup_pos(info->cursor.cur_pos, info->cursor.command_start_pos);
+		dup_pos(info->cursor.command_end_pos, info->cursor.command_start_pos);
+		move_specified_position(info->cursor.command_start_pos[Y],
+			info->cursor.command_start_pos[X], where_err(LINE, FILE), info);
+		display_command(command, info);
+		i = -1;
+		while (++i < original_pos)
+			move_cursor_left(NULL, NULL, info);
 	}
 }
+
+// static int	warning_multibyte(char *buf, t_string *command, t_minishell *info)
+// {
+// 	putstr_fd("\nminishell: Only single-byte characters are supported.\n",
+// 		STDERR, where_err(LINE, FILE), info);
+// 	command->str[0] = '\0';
+// 	buf[0] = '\n';
+// 	return (KEY_NEWLINE);
+// }
 
 void		check_key(char *buf, t_string *command, t_minishell *info)
 {
@@ -104,13 +50,6 @@ void		check_key(char *buf, t_string *command, t_minishell *info)
 	// printf("2[%d]\n", buf[1]);
 	// printf("3[%d]\n", buf[2]);
 	// printf("4[%d]\n", buf[3]);
-	// printf("^[[1;5D");
-	// write(1, buf, strlen(buf));
-	// ft_putchar_fd(*buf, STDOUT);
-	// printf("\n[%s]\n", command->str);
-	// 	printf("[%zd]\n", command->len);
-	// 	printf("[%s]\n", command->str + command->len);
-	// 	printf("[%zd]\n", info->key.save_command_len);
 	void	(*const do_each_key[])(char *, t_string *, t_minishell *) = {
 		trace_history_up, trace_history_down,
 		move_cursor_left, move_cursor_right,
@@ -119,11 +58,15 @@ void		check_key(char *buf, t_string *command, t_minishell *info)
 		go_command_beginning, go_command_end, do_nothing,
 		move_word_directly_to_left, move_word_directly_to_right,
 		select_target_left, select_target_right,
-		copy, paste, cut,
-		move_up_one_line, move_down_one_line,
+		copy_command, paste_selected_str, cut_command,
+		move_up_one_line, move_down_one_line, do_nothing,
 	};
 
-	key = is_what_key(buf, command->str, info);
+	putstr_fd(info->key.cursor_visible, STDIN, where_err(LINE, FILE), info);
+	key = get_key_id(buf, command, info);
 	init_selected_target(key, command, info);
 	do_each_key[key](buf, command, info);
+	if (key != KEY_SHIFT_LEFT && key != KEY_SHIFT_RIGHT && key != CTRL_B
+			&& key != TO_BE_CONTINUE)
+		dup_pos(info->cursor.select_pos, info->cursor.cur_pos);
 }

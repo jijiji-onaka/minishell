@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/19 22:58:37 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/19 22:59:59 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 12:24:45 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int			check_more_pipe(char **inputs, t_cmd_grp *cmd_grp_info,
 	{
 		if (i != 0 && split[i][0] == '|' && split[i][1] != '|' && !split[i + 1])
 			return (add_command_group(split, cmd_grp_info, i + 1, info));
-		if (check_format_of_command(&split, info) == false)
+		if (check_syntax(&split, info) == false)
 			return (false);
 		i++;
 	}

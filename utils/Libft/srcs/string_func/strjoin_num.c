@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 04:02:54 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/18 02:43:52 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 02:43:06 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 ** and doesn't take into account the minus.
 */
 
-char			*strjoin_num(char *s, long long num)
+char	*strjoin_num(char *s, long long num)
 {
 	char		*res;
 	long long	num_len;
@@ -26,7 +26,8 @@ char			*strjoin_num(char *s, long long num)
 
 	num_len = ft_numlen(num);
 	s_len = ft_strlen(s);
-	if (!(res = malloc(sizeof(char) * (s_len + num_len + 1))))
+	res = malloc(sizeof(char) * (s_len + num_len + 1));
+	if (res == NULL)
 		return (NULL);
 	i = 0;
 	while (s[i])

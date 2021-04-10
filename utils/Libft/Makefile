@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/23 20:15:31 by tjinichi          #+#    #+#              #
-#    Updated: 2021/04/06 10:05:40 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/04/09 02:58:27 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,14 +35,12 @@ CONVERT_SRCS = $(addprefix $(CONVERT_DIR)/, \
 				ft_itoa.c \
 				ft_tolower.c \
 				ft_toupper.c \
-				ft_stod.c \
-				ft_stoi.c \
-				ft_stov.c \
 				skip_space.c \
 				str_tolower.c \
 				ft_split.c \
 				split_by_chrs.c \
 				signed_max_min.c \
+				unsigned_max_min.c \
 				ft_abs.c \
 )
 #========== count function =====================================================
@@ -156,6 +154,8 @@ WRITE_SRCS = $(addprefix $(WRITE_DIR)/, \
 				ft_putendl_fd.c \
 				red_error.c \
 				yellow_warning.c \
+				where_error.c \
+				libft_error.c \
 )
 #========== Srcs and Objs ======================================================
 SRCS = \

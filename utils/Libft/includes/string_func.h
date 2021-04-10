@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/10 20:46:45 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/25 19:27:11 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 02:01:31 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "libft.h"
 
-typedef struct	s_index
+typedef struct s_index
 {
 	size_t		begin;
 	size_t		end;

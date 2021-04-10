@@ -6,113 +6,80 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 00:23:07 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 03:01:09 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 12:45:23 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static char	*preparation(char first_quo, char **command, int *backup,
-					t_minishell *info)
+static void	preparation(int *backup, t_string *add_command,
+					char buf[READ_SIZE + 1], t_minishell *info)
 {
-	char	*res;
-
-	if (!(res = ft_strdup("\0")))
+	add_command->str = ft_strdup("");
+	if (add_command->str == NULL)
+		all_free_exit(info, ERR_MALLOC, LINE, FILE);
+	*backup = dup(STDIN);
+	if (*backup == -1)
 	{
-		ptr_free((void**)command);
-		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-	}
-	display_what_is_waiting_for(first_quo, &res, command, info);
-	if ((*backup = dup(STDIN)) == -1)
-	{
-		ptr_free((void**)command);
-		ptr_free((void**)res);
-		all_free_exit(info, ERR_DUP, __LINE__, __FILE__);
+		ptr_free((void **)(add_command->str));
+		all_free_exit(info, ERR_DUP, LINE, FILE);
 	}
 	g_global.reading = true;
-	info->ptr_for_free = *command;
-	return (res);
+	// buf[0] = '\0';
 }
 
-static void	clean_up(int *backup, char **inputs, t_minishell *info)
+static void	clean_up(int *backup, char **command, t_minishell *info)
 {
+	ptr_free((void**)command);
 	if (!g_global.reading)
 		if ((dup2(*backup, STDIN)) == -1)
-		{
-			ptr_free((void**)inputs);
-			ptr_free((void**)info->ptr_for_free);
-			info->ptr_for_free = NULL;
 			all_free_exit(info, ERR_DUP2, __LINE__, __FILE__);
-		}
 	if (ft_close(backup) == false)
-	{
-		ptr_free((void**)inputs);
-		ptr_free((void**)info->ptr_for_free);
-		info->ptr_for_free = NULL;
 		all_free_exit(info, ERR_CLOSE, __LINE__, __FILE__);
-	}
-	info->ptr_for_free = NULL;
-	ptr_free((void **)inputs);
 }
 
-static void	*press_eof(char match, char **inputs, \
-				int *backup, t_minishell *info)
+static bool	is_valid_command(t_string *command, t_string *add_command,
+					char *first_quo, t_minishell *info)
 {
-	ptr_free((void **)inputs);
-	clean_up(backup, inputs, info);
-	if (write(2, "minishell: unexpected EOF while looking for matching `", 54)
-				< 0)
-		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	if (write(2, &match, 1) < 0)
-		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	if (write(2, "`\nminishell: syntax error: unexpected end of file\n", 50)
-				< 0)
-		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	return (NULL);
-}
-
-static bool	press_newline(char *first_quo, char **inputs, \
-					char **command, t_minishell *info)
-{
-	if (is_valid_quotations(inputs, first_quo) != false)
+	if (add_command->str == NULL)
+		add_command->str = ft_strdup("");
+	if (add_command->str == NULL)
+		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	command->len += ft_strlen(add_command->str) + 1;
+	if (!(command->str = re_str3join(&(command->str),
+			(command->str), "\n", add_command->str)))
+		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	if (is_valid_command_quotations(add_command->str, first_quo) == true)
 		return (true);
-	if (!(*command = re_str3join(command, *command, "\n", *inputs)))
+	display_what_is_waiting_for(*first_quo, NULL, &(command->str), info);
+	add_command->str = re_strdup(&(add_command->str), "");
+	if (add_command->str == NULL)
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-	if (!(*inputs = re_strdup(inputs, "\0")))
-	{
-		ptr_free((void**)command);
-		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-	}
-	display_what_is_waiting_for(*first_quo, inputs, command, info);
 	return (false);
 }
 
-char		*waiting_for_quotation(char first_quo, char **command, \
+char	*waiting_for_quotation(char first_quo, t_string *command, \
 						t_minishell *info)
 {
+	char		buf[READ_SIZE + 1];
+	t_string	add_command;
 	ssize_t		rc;
-	char		buf;
-	char		*inputs;
 	int			backup;
 
-	inputs = preparation(first_quo, command, &backup, info);
-	buf = '\0';
+	display_what_is_waiting_for(first_quo, NULL, &(command->str), info);
+	preparation(&backup, &add_command, buf, info);
 	while (g_global.reading)
 	{
-		if ((rc = safe_read(&buf, &inputs, info)) < 0)
+		rc = safe_read(buf, &(command->str), info);
+		if (rc == -1)
 			break ;
-		ctrl_d_rm(&inputs, info);
-		if (rc == 0 && inputs[0] == '\0')
-			return (press_eof(first_quo, &inputs, &backup, info));
-		if (buf == '\n' && press_newline(&first_quo, &inputs, command, info))
-			break ;
-		if (buf != '\n' && rc != 0 && !(inputs = re_strjoinch(&inputs, buf)))
-			all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+		check_key_multiple_line(first_quo, buf, &add_command, info);
+		if (ft_strchr(buf, '\n') != NULL)
+			if (is_valid_command(command, &add_command, &first_quo, info) == true)
+				break ;
 	}
-	if (!(*command = re_str3join(command, *command, "\n", inputs)))
-		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-	clean_up(&backup, &inputs, info);
+	clean_up(&backup, &(add_command.str), info);
 	if (!g_global.reading)
-		return (reset_prompt(command, &inputs));
-	return (*command);
+		return (reset_prompt(&(command->str), NULL));
+	return (command->str);
 }

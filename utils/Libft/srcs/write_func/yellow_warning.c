@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/17 22:17:29 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/04 14:30:29 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 02:57:33 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,5 @@
 
 void	yellow_warning(void)
 {
-	write(1, "\033[33m\033[1m[Warning]\033[0m\n", 23);
+	write(2, "\033[33m\033[1m[Warning]\033[0m\n", 23);
 }

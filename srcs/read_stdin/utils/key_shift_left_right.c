@@ -47,9 +47,10 @@ static void	put_selected_target(t_minishell *info, t_string *command)
 
 void		select_target_left(char *buf, t_string *command, t_minishell *info)
 {
-
+	(void)buf;
 	info->key.shift_ctrl_lr_flag = false;
-	if (equal_pos(info->cursor.select_pos, info->cursor.command_start_pos) == true)
+	if (equal_pos(info->cursor.select_pos, info->cursor.command_start_pos)
+		== true)
 		return ;
 	move_specified_position(info->cursor.command_start_pos[Y],
 		info->cursor.command_start_pos[X], where_err(LINE, FILE), info);
@@ -63,11 +64,10 @@ void		select_target_left(char *buf, t_string *command, t_minishell *info)
 
 void		select_target_right(char *buf, t_string *command, t_minishell *info)
 {
-	int		index;
-	int		end;
-
+	(void)buf;
 	info->key.shift_ctrl_lr_flag = false;
-	if (equal_pos(info->cursor.select_pos, info->cursor.command_end_pos) == true)
+	if (equal_pos(info->cursor.select_pos, info->cursor.command_end_pos)
+		== true)
 		return ;
 	putstr_fd(info->key.cursor_save, STDIN, where_err(LINE, FILE), info);
 	move_specified_position(info->cursor.command_start_pos[Y],

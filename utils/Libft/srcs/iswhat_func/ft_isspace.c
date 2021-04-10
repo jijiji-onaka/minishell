@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/09 19:11:36 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/09 19:12:03 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 08:57:54 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,6 @@
 bool	ft_isspace(int c)
 {
 	if (c && c == ' ')
-		return (1);
-	return (0);
+		return (true);
+	return (false);
 }

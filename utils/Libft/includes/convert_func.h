@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/10 20:46:17 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/06 10:04:46 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 02:36:24 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ char			**split_by_str(char *str, char *charset);
 char			**ft_split(char const *s, char c);
 long long		signed_max(long long x, long long y);
 long long		signed_min(long long x, long long y);
+size_t			unsigned_max(size_t x, size_t y);
+size_t			unsigned_min(size_t x, size_t y);
 long long		ft_abs(long long x);
 
 #endif

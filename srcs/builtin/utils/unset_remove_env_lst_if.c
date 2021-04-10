@@ -6,33 +6,33 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/15 17:55:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/25 00:16:40 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/08 07:59:53 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-static int	compare(char *s1, char *s2, size_t n)
-{
-	size_t			i;
-	unsigned char	*u_s1;
-	unsigned char	*u_s2;
+// static int	compare(char *s1, char *s2, size_t n)
+// {
+// 	size_t			i;
+// 	unsigned char	*u_s1;
+// 	unsigned char	*u_s2;
 
-	if (!s1 || !s2)
-		return (INT_MIN);
-	i = 0;
-	u_s1 = (unsigned char *)s1;
-	u_s2 = (unsigned char *)s2;
-	while (i < n)
-	{
-		if (u_s1[i] == '\0' || u_s1[i] != u_s2[i])
-			return (u_s1[i] - u_s2[i]);
-		i++;
-	}
-	if (s1[i] != '=' && s1[i] != '\0')
-		return (-1);
-	return (0);
-}
+// 	if (!s1 || !s2)
+// 		return (INT_MIN);
+// 	i = 0;
+// 	u_s1 = (unsigned char *)s1;
+// 	u_s2 = (unsigned char *)s2;
+// 	while (i < n)
+// 	{
+// 		if (u_s1[i] == '\0' || u_s1[i] != u_s2[i])
+// 			return (u_s1[i] - u_s2[i]);
+// 		i++;
+// 	}
+// 	if (s1[i] != '=' && s1[i] != '\0')
+// 		return (-1);
+// 	return (0);
+// }
 
 void		remove_env_lst_if(t_envlst **env, char *data)
 {

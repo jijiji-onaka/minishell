@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/30 23:34:18 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/17 11:52:26 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 02:37:41 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static int	merge(char **array, t_index info, char **work, int (*cmp_by)())
 	return (EXIT_SUCCESS);
 }
 
-int			merge_strsort(char **array, size_t begin, \
+int	merge_strsort(char **array, size_t begin, \
 				size_t end, int (*cmp_by)())
 {
 	char		**work;
@@ -55,7 +55,8 @@ int			merge_strsort(char **array, size_t begin, \
 	size_t		j;
 	t_index		info;
 
-	if (!(work = malloc(sizeof(char *) * (end - begin + 1))))
+	work = malloc(sizeof(char *) * (end - begin + 1));
+	if (work == NULL)
 		return (false);
 	i = 1;
 	while (i <= end - begin)
@@ -64,7 +65,7 @@ int			merge_strsort(char **array, size_t begin, \
 		while (j <= end - i)
 		{
 			info.begin = j;
-			info.end = (j + i * 2 - 1 < end ? j + i * 2 - 1 : end);
+			info.end = unsigned_min(j + i * 2 - 1, end);
 			info.mid = j + i - 1;
 			merge(array, info, work, cmp_by);
 			j += i * 2;

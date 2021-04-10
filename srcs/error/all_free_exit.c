@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 02:54:08 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/06 08:58:56 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/08 08:35:27 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,7 @@ static void		free_env_lst(t_envlst **envlst)
 static void		free_cmd_lst(t_cmdlst **cmdlst)
 {
 	t_cmdlst	*cmdlst_tmp;
-	size_t		i;
 
-	i = 0;
 	while (*cmdlst)
 	{
 		cmdlst_tmp = (*cmdlst)->next;
@@ -44,19 +42,26 @@ static void		free_cmd_lst(t_cmdlst **cmdlst)
 	}
 }
 
-static void		free_command_history(t_history **history)
+static void		free_command_history(t_hist_list **history)
 {
-	t_history *next;
+	t_hist_list *next;
 
 	while (*history)
 	{
-		next = (*history)->prev;
+		next = (*history)->old_hist;
+		// printf("[%s]\n", (*history)->command);
 		ptr_free((void **)&((*history)->command));
 		// ptr_free((void **)&(*history));
 		free(*history);
 		*history = next;
 	}
 }
+
+// __attribute__((destructor))
+// void end()
+// {
+// 	system("leaks minishell");
+// }
 
 void			all_free_minishell_info(t_minishell *info)
 {
@@ -65,7 +70,8 @@ void			all_free_minishell_info(t_minishell *info)
 	ptr_free((void**)&(info->key.target));
 	free_cmd_lst(&(info->cmd_lst));
 	free_env_lst(&(info->env));
-	free_command_history(&(info->command_history_begin));
+	free_command_history(&(info->history.begin));
+	// free(info->)
 }
 
 static void		put_error_location_and_exit(char *error_message,
@@ -95,7 +101,7 @@ static void		put_error_location_and_exit(char *error_message,
 void			all_free_exit(t_minishell *info, char *error_message, \
 					int line_num, char *file_name)
 {
-	tcsetattr(STDIN, TCSANOW, &(g_global.terms[ORIGINAL]));
+	tcsetattr(STDIN, TCSANOW, &(info->terminal[ORIGINAL]));
 	if (info == NULL)
 		signal_error_exit();
 	if (info->ptr_2d_for_free)

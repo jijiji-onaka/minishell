@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/03 20:41:03 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/25 02:40:09 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/08 07:59:18 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void		add_env_value(t_string *key, t_string *value, t_minishell *info)
 {
 
 	char	*search;
-	char	*tmp;
+	// char	*tmp;
 
 	key->str[key->len - 1] = '\0';
 	search = ft_getenv(key->str, info->env, false);

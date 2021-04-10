@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/22 22:06:26 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/10 21:12:39 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 02:44:16 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 size_t	ft_strlen(const char *str)
 {
-	size_t i;
+	size_t	i;
 
 	if (!str)
 	{

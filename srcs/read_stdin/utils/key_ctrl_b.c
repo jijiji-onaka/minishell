@@ -15,8 +15,8 @@
 static char	*create_new_command(t_string *command, t_minishell *info)
 {
 	char	*new;
-	size_t	index[3];
-	size_t	len;
+	int		index[3];
+	int		len;
 	int		insert_index;
 
 	len = ft_strlen(command->str) + ft_strlen(info->key.target);
@@ -42,11 +42,11 @@ static char	*create_new_command(t_string *command, t_minishell *info)
 
 void		paste_selected_str(char *buf, t_string *command, t_minishell *info)
 {
-	size_t	len;
 	char	*tmp;
 	int		original_pos;
 	int		i;
 
+	(void)buf;
 	if (info->key.target == NULL)
 		return ;
 	original_pos = get_command_len_from_pos(info->cursor.command_end_pos,

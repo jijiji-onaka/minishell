@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/15 17:31:39 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/24 20:41:30 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/08 07:57:27 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 static bool	when_cwd_is_not_symbolic(t_minishell *info, char *each_dir,
 							char *arg_dir)
 {
-	char	*new;
-
+	(void)each_dir;
+	(void)arg_dir;
 	update_env_value(&(info->env), "PWD", info->current_dir_path, info);
 	g_global.exit_status = 0;
 	return (true);

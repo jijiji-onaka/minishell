@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 12:11:59 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 03:01:28 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/08 07:58:39 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void		go_to_upper_dir(char *now, t_minishell *info)
 {
 	int		i;
 	char	**split;
-	bool	flag;
+	// bool	flag;
 
 	i = -1;
 	upper_dir(now, info);

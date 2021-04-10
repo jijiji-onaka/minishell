@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/23 10:30:25 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/22 02:08:37 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 03:27:55 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	mini_len = ft_strlen(&s[start]);
 	if (mini_len < len)
 		len = mini_len;
-	if (!(str = malloc(sizeof(char) * (len + 1))))
+	str = malloc(sizeof(char) * (len + 1));
+	if (str == NULL)
 		return (NULL);
 	i = 0;
 	while (i < len)

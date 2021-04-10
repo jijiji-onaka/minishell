@@ -6,14 +6,14 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/23 01:57:04 by tjinichi          #+#    #+#              #
-#    Updated: 2021/04/06 10:20:16 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/04/09 12:32:41 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
 CC = gcc
-# CFLAGS = -g #-Wall -Werror -Wextra #            -fsanitize=address
+# CFLAGS = -g -Wall -Werror -Wextra #            -fsanitize=address
 CFLAGS = -g          -fsanitize=address
 
 SRCFILE =	 \
@@ -69,13 +69,11 @@ $(OBJDIR)/%.o : $(BUILTIN_DIR)/%.c
 #========== read stdin function ================================================
 READ_DIR = $(SRCDIR)/read_stdin
 READ_SRCS = $(addprefix $(READ_DIR)/, \
-				utils/ctrl_d_exit.c \
-				utils/ctrl_d_rm.c \
+				utils/key_ctrl_d.c \
+				utils/check_format.c \
 				utils/check_more_pipe.c \
 				utils/reset_prompt.c \
 				utils/rm_chr_in_str.c \
-				utils/safe_read.c \
-				utils/safe_malloc.c \
 				utils/get_key_id.c \
 				utils/key_check.c \
 				utils/key_up_down.c \
@@ -117,7 +115,7 @@ PARSE_SRCS = $(addprefix $(PARSE_DIR)/, \
 				utils/split_each_arg.c \
 				utils/split_each_parts.c \
 				check_format/free_syntax_error.c \
-				check_format/check_format_of_command.c \
+				check_format/check_syntax.c \
 				parse_command.c \
 )
 $(OBJDIR)/%.o : $(PARSE_DIR)/check_format/%.c
@@ -189,6 +187,8 @@ MINISHELL_SRCS = $(addprefix $(MINISHELL_DIR)/, \
 				setting/set_env.c \
 				setting/set_minishell.c \
 				setting/set_shell_level.c \
+				setting/command_history.c \
+				setting/command_history_2.c \
 				main.c \
 				signal.c \
 )
@@ -206,7 +206,6 @@ ERROR_SRCS = $(addprefix $(ERROR_DIR)/, \
 				ft_perror_exit.c \
 				signal_error_exit.c \
 				syntax_error.c \
-				where_error.c \
 )
 $(OBJDIR)/%.o : $(ERROR_DIR)/setting/%.c
 	@$(CC) $(CFLAGS) -c -o $@ $<
@@ -219,6 +218,8 @@ $(OBJDIR)/%.o : $(ERROR_DIR)/%.c
 SAFE_DIR = $(SRCDIR)/safe_function
 SAFE_SRCS = $(addprefix $(SAFE_DIR)/, \
 				put_fd.c \
+				safe_malloc.c \
+				safe_read.c \
 )
 $(OBJDIR)/%.o : $(SAFE_DIR)/%.c
 	@$(CC) $(CFLAGS) -c -o $@ $<
@@ -358,7 +359,7 @@ PARSE_B_SRCS = $(addprefix $(PARSE_DIR)/, \
 				utils/split_each_parts_bonus.c \
 				utils/is_valid_quotation_bonus.c  \
 				check_format/free_syntax_error_bonus.c \
-				check_format/check_format_of_command_bonus.c \
+				check_format/check_syntax_bonus.c \
 				parse_command_bonus.c \
 )
 $(OBJDIR)/%.o : $(PARSE_DIR)/check_format/%.c

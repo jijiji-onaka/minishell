@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/23 13:00:41 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/17 22:33:34 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 02:38:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 
 	if (!f || !s)
 		return (NULL);
-	if (!(res = malloc(sizeof(char) * (ft_strlen(s) + 1))))
+	res = malloc(sizeof(char) * (ft_strlen(s) + 1));
+	if (res == NULL)
 		return (NULL);
 	i = 0;
 	while (s[i])

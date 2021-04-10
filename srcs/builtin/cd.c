@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/23 01:13:20 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/25 22:06:35 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/08 08:00:37 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void		set_oldpwd(t_minishell *info, char *oldpwd)
 
 static void set_shell_path_flag(t_minishell *info)
 {
+	(void)info;
 	if (g_global.info.unset_pwd_flag == true)
 		g_global.info.unset_pwd_flag = false;
 	if (g_global.info.unset_oldpwd_flag == true)
@@ -78,7 +79,7 @@ static void set_shell_path_flag(t_minishell *info)
 void		exec_cd(t_minishell *info, t_cmdlst *cmd)
 {
 	char	**arg;
-	bool	cd_path_flag;
+	// bool	cd_path_flag;
 
 	arg = cmd->arg;
 	set_shell_path_flag(info);

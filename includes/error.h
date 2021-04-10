@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:51:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/06 04:50:08 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 11:16:02 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@
 # define SYNTAX_EOL "minishell: syntax error: unexpected end of file\n"
 # define NEWLINE -2
 # define NO_OLDPWD "minishell: cd: OLDPWD not set\n"
+# define SYNTAX_1 "minishell: unexpected EOF while looking for matching `"
+# define SYNTAX_2 "minishell: syntax error: unexpected end of file\n"
 # define SYNTAX "minishell: syntax error near unexpected "
 # define SYNTAX_OP "minishell: syntax error near unexpected token `>\'\n"
 # define SYNTAX_DB_OP "minishell: syntax error near unexpected token `>>\'\n"
@@ -61,6 +63,8 @@
 # define ERR_ECHO "Usage: echo [-n] ...\n"
 # define ERR_EXPORT "Usage: export [No option] ...\n"
 # define ERR_UNSET "Usage: unset [No option] ...\n"
+# define FIRST_PIPE -1
+# define LAST_PIPE -2
 
 # define LINE __LINE__
 # define FILE __FILE__
@@ -72,6 +76,5 @@ void			*ft_perror(char *err_message);
 void			ft_perror_exit(char *error_message);
 void			signal_error_exit(void);
 bool			syntax_error(int type, t_minishell *info);
-t_err			where_err(int line, char *file);
 
 #endif

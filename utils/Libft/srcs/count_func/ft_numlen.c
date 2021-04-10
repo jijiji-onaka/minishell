@@ -6,13 +6,13 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 01:57:21 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/17 22:12:29 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 02:44:04 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/count_func.h"
 
-size_t		ft_numlen(long long n)
+size_t	ft_numlen(long long n)
 {
 	size_t		cnt;
 

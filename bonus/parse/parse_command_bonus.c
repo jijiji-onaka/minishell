@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 03:01:28 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 12:24:45 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ bool		parse_command(t_minishell *info, char *command)
 	ptr_free((void **)&(command));
 	info->ptr_for_free = NULL;
 	cmd_grp = rm_spaces_in_2d_array(cmd_grp, info);
-	if (check_format_of_command(&cmd_grp, info) == false)
+	if (check_syntax(&cmd_grp, info) == false)
 		return (false);
 	info->ptr_2d_for_free = cmd_grp;
 	i = -1;

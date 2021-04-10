@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/23 12:32:53 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/17 22:10:32 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 02:29:57 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 ** Returns allocate.
 */
 
-char			*ft_itoa(int n)
+char	*ft_itoa(int n)
 {
 	char	*res;
 	int		i;
@@ -25,7 +25,8 @@ char			*ft_itoa(int n)
 		return (ft_strdup("0"));
 	if (n == -2147483648)
 		return (ft_strdup("-2147483648"));
-	if (!(res = malloc(sizeof(char) * (ft_numlen(n) + 1))))
+	res = malloc(sizeof(char) * (ft_numlen(n) + 1));
+	if (res == NULL)
 		return (NULL);
 	i = ft_numlen(n) - 1;
 	res[i + 1] = '\0';

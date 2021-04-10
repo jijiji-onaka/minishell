@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 18:24:30 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 03:01:28 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/08 08:20:12 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 static void	normal_exit(t_minishell *info)
 {
-	tcsetattr(STDIN, TCSANOW, &(g_global.terms[ORIGINAL]));
-	update_command_history_file(info, info->command_history_begin);
+	tcsetattr(STDIN, TCSANOW, &(info->terminal[ORIGINAL]));
+	update_command_history_file(info, info->history.begin);
 	all_free_minishell_info(info);
 	exit(g_global.exit_status);
 }
@@ -38,8 +38,8 @@ static void	non_numeric_exit(t_minishell *info, char *arg1)
 	if (write(STDERR, ": numeric argument required\n", 28) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	g_global.exit_status = 255;
-	tcsetattr(STDIN, TCSANOW, &(g_global.terms[ORIGINAL]));
-	update_command_history_file(info, info->command_history_begin);
+	tcsetattr(STDIN, TCSANOW, &(info->terminal[ORIGINAL]));
+	update_command_history_file(info, info->history.begin);
 	all_free_minishell_info(info);
 	exit(g_global.exit_status);
 }
@@ -47,8 +47,8 @@ static void	non_numeric_exit(t_minishell *info, char *arg1)
 static void	selected_code_exit(t_minishell *info, int exit_code)
 {
 	g_global.exit_status = exit_code % 256;
-	tcsetattr(STDIN, TCSANOW, &(g_global.terms[ORIGINAL]));
-	update_command_history_file(info, info->command_history_begin);
+	tcsetattr(STDIN, TCSANOW, &(info->terminal[ORIGINAL]));
+	update_command_history_file(info, info->history.begin);
 	all_free_minishell_info(info);
 	exit(g_global.exit_status);
 }

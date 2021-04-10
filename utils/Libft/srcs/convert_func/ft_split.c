@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/23 11:43:10 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/04 03:18:40 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 02:22:13 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static size_t	word_length(char const *s, char c)
 	return (i);
 }
 
-static char		**insert_word(char const *s, char c, size_t wc, char **res)
+static char	**insert_word(char const *s, char c, size_t wc, char **res)
 {
 	size_t		i;
 	size_t		j;
@@ -53,8 +53,9 @@ static char		**insert_word(char const *s, char c, size_t wc, char **res)
 		while (*s == c)
 			s++;
 		len = word_length(s, c);
-		if (!(res[i] = malloc(sizeof(char) * (len + 1))))
-			return (ptr_2d_free((void***)&res, i));
+		res[i] = malloc(sizeof(char) * (len + 1));
+		if (res[i] == NULL)
+			return (ptr_2d_free((void ***)&res, i));
 		j = 0;
 		while (j < len)
 		{
@@ -67,7 +68,7 @@ static char		**insert_word(char const *s, char c, size_t wc, char **res)
 	return (res);
 }
 
-char			**ft_split(char const *s, char c)
+char	**ft_split(char const *s, char c)
 {
 	char		**res;
 	size_t		wc;
@@ -77,12 +78,14 @@ char			**ft_split(char const *s, char c)
 	wc = word_count(s, c);
 	if (wc == 0)
 	{
-		if (!(res = malloc(sizeof(char *) * 1)))
+		res = malloc(sizeof(char *) * 1);
+		if (res == NULL)
 			return (NULL);
 		res[0] = NULL;
 		return (res);
 	}
-	if (!(res = malloc(sizeof(char *) * (wc + 1))))
+	res = malloc(sizeof(char *) * (wc + 1));
+	if (res == NULL)
 		return (NULL);
 	res = insert_word(s, c, wc, res);
 	return (res);

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/15 17:43:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 03:01:19 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/08 07:58:23 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ static bool	change_root_dir(t_minishell *info, bool absolute_path)
 static bool	change_dir(char *dir, t_minishell *info)
 {
 	char	*oldpwd;
-	bool	flag;
 
 	if (!(oldpwd = ft_strdup(ft_getenv("PWD", info->env, false))))
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
@@ -82,7 +81,7 @@ static bool	change_dir(char *dir, t_minishell *info)
 		ptr_free((void**)&oldpwd);
 		return (false);
 	}
-	flag = false;
+	// flag = false;
 	set_oldpwd(info, oldpwd);
 	info->oldpwd_path = re_strdup(&(info->oldpwd_path), oldpwd);
 	ptr_free((void**)&oldpwd);
@@ -107,6 +106,7 @@ bool	safe_readdir(t_dirent **dirp, DIR *dp, t_minishell *info)
 	*dirp = readdir(dp);
 	if (*dirp != NULL)
 		return (true);
+	(void)info;
 	// if (errno != 0 && errno != ENOENT)
 	// 	all_free_exit(info, ERR_READDIR, __LINE__, __FILE__);
 	return (false);
@@ -159,11 +159,11 @@ bool		is_cd_path(t_minishell *info, char **dir)
 	char		*cdpath;
 	char		**split;
 	bool		ret;
-	bool		srcdir_absolute_flag;
+	// bool		srcdir_absolute_flag;
 
-	srcdir_absolute_flag = false;
-	if ((*dir)[0] == '/')
-		srcdir_absolute_flag = true;
+	// srcdir_absolute_flag = false;
+	// if ((*dir)[0] == '/')
+	// 	srcdir_absolute_flag = true;
 	cdpath = ft_getenv("CDPATH", info->env, false);
 	if (cdpath == NULL || cdpath[0] == ':')
 		return (false);
@@ -180,7 +180,7 @@ bool		is_cd_path(t_minishell *info, char **dir)
 void		go_to_path(t_minishell *info, char **dir,
 				bool option_p_flag)
 {
-	bool	flag;
+	// bool	flag;
 	bool	cd_path_flag;
 
 	(void)option_p_flag;

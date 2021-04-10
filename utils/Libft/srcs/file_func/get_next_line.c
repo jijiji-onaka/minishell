@@ -6,13 +6,13 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/18 23:19:23 by sehattor          #+#    #+#             */
-/*   Updated: 2021/03/28 04:25:42 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 02:48:33 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/file_func.h"
 
-static char			*read_and_strchr(t_gnl_list *node)
+static char	*read_and_strchr(t_gnl_list *node)
 {
 	char	*nl_ptr;
 
@@ -65,7 +65,7 @@ static t_gnl_list	*setup_list(int fd, t_gnl_list **head)
 	return (new);
 }
 
-static bool			get_line(t_gnl_list *node, char **line)
+static bool	get_line(t_gnl_list *node, char **line)
 {
 	char	*nl_ptr;
 
@@ -94,7 +94,7 @@ static bool			get_line(t_gnl_list *node, char **line)
 	return (true);
 }
 
-int					get_next_line(int fd, char **line)
+int	get_next_line(int fd, char **line)
 {
 	static t_gnl_list	*head;
 	t_gnl_list			*node;

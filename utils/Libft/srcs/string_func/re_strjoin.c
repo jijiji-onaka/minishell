@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/15 01:45:50 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/26 20:41:34 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 02:41:58 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,10 @@ char	*re_strjoin(char **freed, char *s1, char *s2)
 	size_t	i;
 	size_t	j;
 
-	if (!(res = malloc(ft_strlen(s1) + ft_strlen(s2) + 1)))
+	res = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (res == NULL)
 	{
-		ptr_free((void**)freed);
+		ptr_free((void **)freed);
 		return (NULL);
 	}
 	i = 0;

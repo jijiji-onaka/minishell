@@ -6,13 +6,13 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 02:15:05 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/15 20:38:24 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 02:33:52 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/iswhat_func.h"
 
-bool		is_float(char *s)
+bool	is_float(char *s)
 {
 	bool	flag;
 

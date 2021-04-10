@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 17:22:21 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/19 21:21:19 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 12:24:45 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,13 @@
 # include "standard_lib.h"
 
 bool		free_syntax_error(int type, char ***cmd_grp, t_minishell *info);
-bool		check_format_of_command(char ***grp, t_minishell *info);
+bool		check_syntax(char ***grp, t_minishell *info);
 bool		cmdlst_add_back(t_minishell *info,
 				char **command, int type, int fd);
 int			binary_search(char *cmd);
-bool		is_valid_quotations(char **command, char *first_quo);
+bool		is_valid_command_quotations(char *command, char *first_quo);
+int			is_valid_command_pipe(char *command);
+int			is_valid_command_slash(char *command);
 bool		change_env_and_quo_and_slash(char **ptr, t_minishell *info);
 bool		change_only_env(char **ptr, t_minishell *info);
 int			after_changed_len(char *ptr, t_minishell *info, t_str *string);

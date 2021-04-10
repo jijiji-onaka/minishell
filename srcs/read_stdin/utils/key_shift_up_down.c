@@ -12,7 +12,7 @@
 
 #include "../../../includes/minishell.h"
 
-static int	get_start_and_cut_len(int *start, int *cut_len, int *original_pos,
+static void		get_start_and_len(int *start, int *cut_len, int *original_pos,
 								t_minishell *info)
 {
 	int	length;
@@ -27,7 +27,6 @@ static int	get_start_and_cut_len(int *start, int *cut_len, int *original_pos,
 		if (original_pos)
 			*original_pos = get_command_len_from_pos(info->cursor.select_pos,
 								info->cursor.command_start_pos, info);
-		return (SELECT_LEFT);
 	}
 	else
 	{
@@ -37,48 +36,48 @@ static int	get_start_and_cut_len(int *start, int *cut_len, int *original_pos,
 		if (original_pos)
 			*original_pos = get_command_len_from_pos(info->cursor.cur_pos,
 								info->cursor.command_start_pos, info);
-		return (SELECT_RIGHT);
 	}
 }
 
-static int	get_start_and_copy_len(int *start, int *cut_len, int *original_pos,
-								t_minishell *info)
-{
-	int	length;
+// static int	get_start_and_len(int *start, int *cut_len, int *original_pos,
+// 								t_minishell *info)
+// {
+// 	int	length;
 
-	length = get_command_len_from_pos(info->cursor.select_pos,
-				info->cursor.cur_pos, info);
-	if (length < 0)
-	{
-		*cut_len = -length;
-		*start = get_command_len_from_pos(info->cursor.select_pos,
-					info->cursor.command_start_pos, info);
-		if (original_pos)
-			*original_pos = get_command_len_from_pos(info->cursor.select_pos,
-								info->cursor.command_start_pos, info);
-		return (SELECT_LEFT);
-	}
-	else
-	{
-		*cut_len = length;
-		*start = get_command_len_from_pos(info->cursor.cur_pos,
-					info->cursor.command_start_pos, info);
-		if (original_pos)
-			*original_pos = get_command_len_from_pos(info->cursor.cur_pos,
-								info->cursor.command_start_pos, info);
-		return (SELECT_RIGHT);
-	}
-}
+// 	length = get_command_len_from_pos(info->cursor.select_pos,
+// 				info->cursor.cur_pos, info);
+// 	if (length < 0)
+// 	{
+// 		*cut_len = -length;
+// 		*start = get_command_len_from_pos(info->cursor.select_pos,
+// 					info->cursor.command_start_pos, info);
+// 		if (original_pos)
+// 			*original_pos = get_command_len_from_pos(info->cursor.select_pos,
+// 								info->cursor.command_start_pos, info);
+// 		return (SELECT_LEFT);
+// 	}
+// 	else
+// 	{
+// 		*cut_len = length;
+// 		*start = get_command_len_from_pos(info->cursor.cur_pos,
+// 					info->cursor.command_start_pos, info);
+// 		if (original_pos)
+// 			*original_pos = get_command_len_from_pos(info->cursor.cur_pos,
+// 								info->cursor.command_start_pos, info);
+// 		return (SELECT_RIGHT);
+// 	}
+// }
 
 void		copy_command(char *buf, t_string *command, t_minishell *info)
 {
 	int		start;
 	int		copy_len;
 
+	(void)buf;
 	info->key.shift_ctrl_lr_flag = false;
 	// copy_len = get_command_len_from_pos(info->cursor.select_pos,
 	// 				info->cursor.cur_pos, info);
-	get_start_and_copy_len(&start, &copy_len, NULL, info);
+	get_start_and_len(&start, &copy_len, NULL, info);
 	// printf("[[[[[[[%d]]]\n", start);
 	// printf("[[[[[[[%d]]]\n", copy_len);
 	free(info->key.target);
@@ -94,8 +93,8 @@ void		copy_command(char *buf, t_string *command, t_minishell *info)
 static char	*create_new_command(t_string *command, int start, int len,
 									t_minishell *info)
 {
-	size_t	old_i;
-	size_t	new_i;
+	int		old_i;
+	int		new_i;
 	int		end;
 	char	*new;
 
@@ -122,7 +121,7 @@ static char	*create_new_command(t_string *command, int start, int len,
 }
 
 
-static void	move_original_cursor_pos(int l_r, int move_len, t_minishell *info)
+static void	move_original_cursor_pos(int move_len, t_minishell *info)
 {
 	int		i;
 
@@ -143,10 +142,10 @@ void		cut_command(char *buf, t_string *command, t_minishell *info)
 	int		cut_len;
 	char	*tmp;
 	int		original_pos;
-	int		l_r;
 
+	(void)buf;
 	info->key.shift_ctrl_lr_flag = false;
-	l_r = get_start_and_cut_len(&start, &cut_len, &original_pos, info);
+	get_start_and_len(&start, &cut_len, &original_pos, info);
 	free(info->key.target);
 	if (cut_len == 0)
 		info->key.target = ft_substr(command->str, 0, -1);
@@ -162,5 +161,5 @@ void		cut_command(char *buf, t_string *command, t_minishell *info)
 	dup_pos(info->cursor.cur_pos, info->cursor.command_start_pos);
 	dup_pos(info->cursor.command_end_pos, info->cursor.cur_pos);
 	display_command(command, info);
-	move_original_cursor_pos(l_r, original_pos, info);
+	move_original_cursor_pos(original_pos, info);
 }

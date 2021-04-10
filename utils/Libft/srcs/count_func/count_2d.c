@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/16 17:33:56 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/17 22:30:36 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 02:44:20 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 size_t	count_2d(char **array_2d)
 {
-	size_t i;
+	size_t	i;
 
 	if (array_2d == NULL)
 	{

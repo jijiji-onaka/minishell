@@ -6,31 +6,31 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 01:04:08 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 03:01:19 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/08 07:58:57 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-static int	length_and_return_flag(char *value, size_t *i, size_t *j)
-{
-	int		flag;
+// static int	length_and_return_flag(char *value, size_t *i, size_t *j)
+// {
+// 	int		flag;
 
-	if (value[0] == '_' && value[1] == '=')
-		return (2);
-	*i = 0;
-	flag = false;
-	while (value[*i])
-	{
-		if (flag == false && value[*i] == '=')
-		{
-			flag = true;
-			*j = *i;
-		}
-		(*i)++;
-	}
-	return (flag);
-}
+// 	if (value[0] == '_' && value[1] == '=')
+// 		return (2);
+// 	*i = 0;
+// 	flag = false;
+// 	while (value[*i])
+// 	{
+// 		if (flag == false && value[*i] == '=')
+// 		{
+// 			flag = true;
+// 			*j = *i;
+// 		}
+// 		(*i)++;
+// 	}
+// 	return (flag);
+// }
 
 static void	put_env_value(char *str, t_minishell *info)
 {
@@ -50,8 +50,8 @@ static void	put_env_value(char *str, t_minishell *info)
 
 static void	display_env(t_env env, t_minishell *info)
 {
-	size_t	i;
-	size_t	j;
+	// size_t	i;
+	// size_t	j;
 
 	if (write(STDOUT, "declare -x ", 11) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);

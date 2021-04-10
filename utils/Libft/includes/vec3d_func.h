@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/16 18:40:42 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/11 21:22:33 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 02:01:24 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@
 
 # include <math.h>
 
-typedef struct	s_p3
+typedef struct s_p3
 {
 	double		x;
 	double		y;
 	double		z;
 }				t_p3;
 
-typedef struct	s_ray
+typedef struct s_ray
 {
 	t_p3	o;
 	t_p3	d;

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 03:01:28 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 12:24:45 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,21 +53,21 @@ static int	check_redirect_fd(t_minishell *info, char **command)
 	if (!((*command)[i] == '>' || (*command)[i] == '<'))
 		return (1);
 	*command = *command + i;
-	if (fd > INT_MAX || fd >= 256 && fd <= INT_MAX)
+	if (fd > INT_MAX || (fd >= 256 && fd <= INT_MAX))
 		return (err_fd(fd, info));
 	return (fd);
 }
 
-static bool	check_quotation(char **command, t_minishell *info)
-{
-	char	quo;
+// static bool	check_quotation(char **command, t_minishell *info)
+// {
+// 	char	quo;
 
-	quo = '\0';
-	if (is_valid_quotations(command, &quo) == false)
-		if (waiting_for_quotation(quo, command, info) == false)
-			return (false);
-	return (true);
-}
+// 	quo = '\0';
+// 	if (is_valid_quotations(command, &quo) == false)
+// 		if (waiting_for_quotation(quo, command, info) == false)
+// 			return (false);
+// 	return (true);
+// }
 
 static int	parsing(t_minishell *info, char **command)
 {
@@ -78,8 +78,8 @@ static int	parsing(t_minishell *info, char **command)
 
 	if ((*command)[0] == ';')
 		return (cmdlst_add_back(info, NULL, SEMICOLON, 0));
-	if (check_quotation(command, info) == false)
-		return (false);
+	// if (check_quotation(command, info) == false)
+	// 	return (false);
 	begin = *command;
 	if ((fd_for_redir = check_redirect_fd(info, &(*command))) == -1)
 	{
@@ -111,7 +111,7 @@ bool		parse_command(t_minishell *info, char *command)
 	// ptr_free((void **)&(command));
 	info->ptr_for_free = NULL;
 	cmd_grp = rm_spaces_in_2d_array(cmd_grp, info);
-	if (check_format_of_command(&cmd_grp, info) == false)
+	if (check_syntax(&cmd_grp, info) == false)
 		return (false);
 	info->ptr_2d_for_free = cmd_grp;
 	i = -1;

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 16:37:31 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/25 02:40:28 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/08 08:00:04 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void			update_env_value(t_envlst **env, char *key, char *value,
 							t_minishell *info)
 {
 	t_envlst	*begin;
-	t_envlst	*save;
+	// t_envlst	*save;
 
 	begin = *env;
 	while (*env)
@@ -100,8 +100,8 @@ void			update_env_value(t_envlst **env, char *key, char *value,
 			*env = begin;
 			return ;
 		}
-		if ((*env)->next == NULL)
-			save = *env;
+		// if ((*env)->next == NULL)
+		// 	save = *env;
 		*env = (*env)->next;
 	}
 	// save->next = make_env(env_name, value, info);

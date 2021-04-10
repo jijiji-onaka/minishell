@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 23:22:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/06 15:15:09 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 13:33:30 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	move_direction(size_t len, char *direction, t_minishell *info)
 	}
 }
 
-int		numlen(int num, t_ws winsize, int x_y, t_minishell *info)
+int		numlen(int num, t_ws winsize, int x_y)
 {
 	if (num >= 0 && num < 10)
 		return (1);
@@ -76,8 +76,8 @@ void	move_specified_position(int pos_y, int pos_x, t_err err,
 	t_ws	winsize;
 
 	winsize = get_window_size(info);
-	y_len = numlen(pos_y, winsize, Y, info);
-	x_len = numlen(pos_x, winsize, X, info);
+	y_len = numlen(pos_y, winsize, Y);
+	x_len = numlen(pos_x, winsize, X);
 	if (move_specified_position_main(pos_y, pos_x, y_len, x_len) == false)
 		all_free_exit(info, ERR_WRITE, err.line, err.file);
 }
@@ -186,10 +186,18 @@ void	display_command(t_string *command, t_minishell *info)
 		command->len++;
 		winsize = get_window_size(info);
 		if (is_right_edge(winsize, info->cursor.cur_pos)
-				|| is_right_edge(winsize, info->cursor.command_end_pos))
+				|| is_right_edge(winsize, info->cursor.command_end_pos)
+				|| command->str[i] == '\n')
 			scroll_window(info, winsize);
+		if (command->str[i] == '\n')
+		{
+			info->cursor.cur_pos[X] = winsize.ws_col;
+			info->cursor.command_end_pos[X] = winsize.ws_col;
+			// info->cursor.cur_pos[Y] = info->cursor.cur_pos[Y] + 1;
+		}
 		handle_forward_cursor_pos(info->cursor.cur_pos,
 			info->cursor.command_start_pos, info->cursor.command_end_pos, info);
+
 		i++;
 	}
 	move_specified_position(info->cursor.command_start_pos[Y],
@@ -214,14 +222,20 @@ int		get_command_len_from_pos(int pos_end[2], int pos_start[2],
 	return (len);
 }
 
-int		get_now_index(t_minishell *info)
+int		get_now_index(t_minishell *info, t_string *command)
 {
 	int			len;
 	int			max_window_x;
 	t_cursor	cursor;
+	int			newline_num;
 
-	len = 0;
 	cursor = info->cursor;
+	newline_num = 0;
+	len = -1;
+	while (command->str[++len])
+		if (command->str[len] == '\n')
+			newline_num++;
+	len = 0;
 	max_window_x = get_window_size_x(info);
 	if (cursor.cur_pos[Y] != cursor.command_start_pos[Y])
 		len = (cursor.cur_pos[Y] - cursor.command_start_pos[Y] - 1)
@@ -229,6 +243,8 @@ int		get_now_index(t_minishell *info)
 			+ max_window_x - cursor.command_start_pos[X];
 	else
 		len = cursor.cur_pos[X] - cursor.command_start_pos[X];
+	// printf("%d\n", cursor.cur_pos[Y] - cursor.command_start_pos[Y] - 1 - newline_num);
+	// printf("%d\n", len);
 	return (len);
 }
 
@@ -270,7 +286,8 @@ void	delete_displayed_command(t_err err, t_string *command,
 	int		i;
 	int		len;
 
-	putstr_fd(info->key.cursor_save, STDIN, err, info);
+	(void)command;
+	// putstr_fd(info->key.cursor_save, STDIN, err, info);
 	move_specified_position(info->cursor.command_end_pos[Y],
 		info->cursor.command_end_pos[X], err, info);
 	dup_pos(info->cursor.cur_pos, info->cursor.command_end_pos);
@@ -278,8 +295,14 @@ void	delete_displayed_command(t_err err, t_string *command,
 		info->cursor.command_start_pos, info);
 	i = -1;
 	while (++i < len)
-		delete_displayed_char(NULL, command, info);
-	putstr_fd(info->key.cursor_restore, STDIN, err, info);
+	{
+		move_cursor_left(NULL, NULL, info);
+		putstr_fd(info->key.clean_right, STDIN, err, info);
+		// delete_displayed_char(NULL, command, info);
+	}
+	// putstr_fd(info->key.cursor_restore, STDIN, err, info);
+	move_specified_position(info->cursor.command_start_pos[Y],
+		info->cursor.command_start_pos[X], err, info);
 }
 
 void		do_nothing(char *buf, t_string *command, t_minishell *info)

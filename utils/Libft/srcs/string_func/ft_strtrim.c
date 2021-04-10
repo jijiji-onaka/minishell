@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/23 10:55:09 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/03 22:01:18 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 02:38:29 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 ** but I'll return an empty character at strtrim.
 */
 
-char			*ft_strtrim(char const *s1, char const *set)
+char	*ft_strtrim(char const *s1, char const *set)
 {
 	size_t	tail;
 	char	*str;

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_format_of_command.c                          :+:      :+:    :+:   */
+/*   check_syntax.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 00:05:31 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 14:04:09 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 11:05:56 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static bool	pipe_end(t_minishell *info, int i, char ***grp, int type)
 		return (free_syntax_error(F_DB_PIPE, grp, info));
 	if (i == 1)
 		return (free_syntax_error(F_PIPE, grp, info));
-	waiting_for_next_command(grp, i + 1, info);
+	// waiting_for_next_command(grp, i + 1, info);
 	if (*grp == NULL)
 		return (false);
 	return (true);
@@ -60,7 +60,7 @@ static bool	display_format_error_message(int before, int now,
 	return (free_syntax_error(now, grp, info));
 }
 
-bool		check_format_of_command(char ***grp, t_minishell *info)
+bool		check_syntax(char ***grp, t_minishell *info)
 {
 	int			i[2];
 	int			now_type;

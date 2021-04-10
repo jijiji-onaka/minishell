@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 18:44:56 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 03:01:28 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/08 08:00:46 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static bool	is_valid_env_name(char *env_name, t_minishell *info)
 void		exec_unset(t_minishell *info, t_cmdlst *cmd)
 {
 	int		i;
-	bool	valid_flag;
+	// bool	valid_flag;
 	char	**args;
 
 	args = cmd->arg;
@@ -59,7 +59,7 @@ void		exec_unset(t_minishell *info, t_cmdlst *cmd)
 	if (args[1][0] == '-')
 		return (error_mandatory(ERR_UNSET, 29, info));
 	i = 0;
-	valid_flag = false;
+	// valid_flag = false;
 	while (args[++i])
 	{
 		if (is_valid_env_name(args[i], info))

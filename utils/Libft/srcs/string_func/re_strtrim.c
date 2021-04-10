@@ -6,13 +6,13 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/03 22:01:51 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/15 23:09:54 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 02:42:12 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/string_func.h"
 
-char			*re_strtrim(char **freed, char *s1, char const *set)
+char	*re_strtrim(char **freed, char *s1, char const *set)
 {
 	size_t	tail;
 	char	*str;

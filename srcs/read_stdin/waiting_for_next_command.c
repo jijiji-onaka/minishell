@@ -6,101 +6,97 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 16:00:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 03:01:28 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 13:11:44 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static char	*preparation(int *backup, \
-			t_cmd_grp *cmd_grp_info, char ***cmd_grp, int array_size)
+static void	preparation(int *backup, t_string *add_command, t_minishell *info)
 {
-	char	*res;
-
-	if (!(res = ft_strdup("")))
-		all_free_exit(&(g_global.info), ERR_MALLOC, __LINE__, __FILE__);
-	display_what_is_waiting_for('|', &res, NULL, &(g_global.info));
-	if ((*backup = dup(STDIN)) == -1)
+	add_command->str = ft_strdup("");
+	if (add_command->str == NULL)
+		all_free_exit(info, ERR_MALLOC, LINE, FILE);
+	*backup = dup(STDIN);
+	if (*backup == -1)
 	{
-		ptr_free((void**)&res);
-		all_free_exit(&(g_global.info), ERR_DUP, __LINE__, __FILE__);
+		ptr_free((void **)(add_command->str));
+		all_free_exit(info, ERR_DUP, LINE, FILE);
 	}
-	cmd_grp_info->cmd_grp = cmd_grp;
-	cmd_grp_info->array_size = array_size;
 	g_global.reading = true;
-	return (res);
 }
 
-static void	clean_up(int *backup, char **inputs, t_minishell *info)
+static void	clean_up(int *backup, char **command, t_minishell *info)
 {
+	ptr_free((void**)command);
 	if (!g_global.reading)
 		if ((dup2(*backup, STDIN)) == -1)
-		{
-			ptr_free((void**)inputs);
 			all_free_exit(info, ERR_DUP2, __LINE__, __FILE__);
-		}
 	if (ft_close(backup) == false)
-	{
-		ptr_free((void**)inputs);
 		all_free_exit(info, ERR_CLOSE, __LINE__, __FILE__);
-	}
-	ptr_free((void **)inputs);
 }
 
-static bool	press_newline(char **inputs,
-					t_cmd_grp *cmd_grp_info, t_minishell *info)
+static void	command_joint(t_string *command, t_string *add_command,
+							int (*is_valid)(char *), t_minishell *info)
 {
-	int	rc;
-
-	rc = check_more_pipe(inputs, cmd_grp_info, info);
-	if (rc != NEXT_CMD && rc != NEWLINE)
+	if (is_valid == is_valid_command_pipe)
 	{
-		if (rc == false)
-			ptr_2d_free((void***)(cmd_grp_info->cmd_grp), -1);
-		info->cmd_lst_num = cmd_grp_info->array_size;
-		return (false);
-	}
-	if (!(*inputs = re_strdup(inputs, " ")))
-		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-	display_what_is_waiting_for('|', inputs, NULL, info);
-	return (NEXT_CMD);
-}
-
-static void	*press_eof(char **inputs, t_cmd_grp *cmd_grp_info,
-				int *backup, t_minishell *info)
-{
-	ptr_free((void **)inputs);
-	clean_up(backup, inputs, info);
-	if (write(STDERR, "minishell: syntax error: unexpected end of file\n"
-, 48) < 48)
-		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	ptr_2d_free((void***)(cmd_grp_info->cmd_grp), -1);
-	return (NULL);
-}
-
-char		*waiting_for_next_command(char ***cmd_grp, int array_size,
-								t_minishell *info)
-{
-	ssize_t		rc;
-	char		buf;
-	char		*inputs;
-	t_cmd_grp	cmd_grp_info;
-	int			backup;
-
-	inputs = preparation(&backup, &cmd_grp_info, cmd_grp, array_size);
-	while (g_global.reading)
-	{
-		if ((rc = safe_read(&buf, &inputs, info)) < 0)
-			break ;
-		ctrl_d_rm(&inputs, info);
-		if (rc == 0 && inputs[0] == '\0')
-			return (press_eof(&inputs, &cmd_grp_info, &backup, info));
-		if (buf == '\n' && !(rc = press_newline(&inputs, &cmd_grp_info, info)))
-			return (NULL);
-		if (buf != '\n' && !(inputs = re_strjoinch(&inputs, buf)))
+		command->len = command->len + ft_strlen(add_command->str) + 1;
+		command->str = re_str3join(&(command->str), (command->str),
+			" ", add_command->str);
+		if (command->str == NULL)
 			all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	}
-	clean_up(&backup, &inputs, info);
-	ptr_2d_free((void***)(cmd_grp_info.cmd_grp), -1);
-	return (reset_prompt(&inputs, NULL));
+	else
+	{
+		command->str[command->len - 1] = '\0';
+		command->len = command->len + ft_strlen(add_command->str) - 1;
+		command->str = re_strjoin(&(command->str), (command->str),
+			add_command->str);
+		if (command->str == NULL)
+			all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	}
+}
+
+static bool	is_valid_command(t_string *command, t_string *add_command,
+						int (*is_valid)(char *), t_minishell *info)
+{
+	if (add_command->str == NULL)
+		add_command->str = ft_strdup("");
+	if (add_command->str == NULL)
+		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	command_joint(command, add_command, is_valid, info);
+	if (is_valid(add_command->str) == true)
+		return (true);
+	display_what_is_waiting_for('T', NULL, &(command->str), info);
+	add_command->str = re_strdup(&(add_command->str), "");
+	if (add_command->str == NULL)
+		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	return (false);
+}
+
+char		*waiting_for_next_command(t_string *command,
+				int (*is_valid)(char *), t_minishell *info)
+{
+	char		buf[READ_SIZE + 1];
+	t_string	add_command;
+	ssize_t		rc;
+	int			backup;
+
+	display_what_is_waiting_for('T', NULL, &(command->str), info);
+	preparation(&backup, &add_command, info);
+	while (g_global.reading)
+	{
+		rc = safe_read(buf, &(command->str), info);
+		if (rc == -1)
+			break ;
+		check_key_multiple_line('|', buf, &add_command, info);
+		if (ft_strchr(buf, '\n') != NULL)
+			if (is_valid_command(command, &add_command, is_valid, info) == true)
+				break ;
+	}
+	clean_up(&backup, &(add_command.str), info);
+	if (!g_global.reading)
+		return (reset_prompt(&(command->str), NULL));
+	return (command->str);
 }

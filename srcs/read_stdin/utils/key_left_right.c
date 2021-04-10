@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 16:49:37 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/06 09:39:47 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 12:10:20 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 
 void	move_cursor_left(char *buf, t_string *command, t_minishell *info)
 {
+	(void)buf;
+	(void)command;
 	if (equal_pos(info->cursor.cur_pos, info->cursor.command_start_pos) == true)
 		return;
 	if (info->cursor.cur_pos[X] == LEFT_EDGE)
@@ -25,8 +27,6 @@ void	move_cursor_left(char *buf, t_string *command, t_minishell *info)
 	}
 	else
 		putstr_fd(info->key.left, STDIN, where_err(LINE, FILE), info);
-	// if (command)
-	// 	--command->len;
 	handle_back_cursor_pos(info->cursor.cur_pos, get_window_size_x(info));
 }
 
@@ -34,6 +34,8 @@ void	move_cursor_right(char *buf, t_string *command, t_minishell *info)
 {
 	t_ws	winsize;
 
+	(void)buf;
+	(void)command;
 	if (equal_pos(info->cursor.cur_pos, info->cursor.command_end_pos) == true)
 		return ;
 	winsize = get_window_size(info);

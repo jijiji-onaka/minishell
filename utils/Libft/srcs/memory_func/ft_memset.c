@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/22 12:17:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/11 21:29:03 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 02:46:30 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	*ft_memset(void *b, int c, size_t len)
 
 	if (!b)
 		return (NULL);
-	ptr = (unsigned char*)b;
+	ptr = (unsigned char *)b;
 	while (len)
 	{
 		*ptr = (unsigned char)c;

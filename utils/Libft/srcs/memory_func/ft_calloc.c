@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/22 23:24:41 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/11 21:28:38 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 02:46:15 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ void	*ft_calloc(size_t count, size_t size)
 		count = 1;
 		size = 1;
 	}
-	if (!(res = malloc(count * size)))
+	res = malloc(count * size);
+	if (res == NULL)
 		return (NULL);
 	ft_bzero(res, count * size);
 	return (res);

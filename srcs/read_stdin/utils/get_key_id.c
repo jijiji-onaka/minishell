@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/06 10:08:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/06 10:18:59 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/08 08:01:09 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static int	get_key_id_3(char *buf, t_string *command, t_minishell *info)
 	return (NOTHING_KEY);
 }
 
-static int	get_key_id_2(char *buf, t_string *command, t_minishell *info)
+static int	get_key_id_2(char *buf, t_minishell *info)
 {
 	if (buf[0] == 5)
 		return (KEY_END);
@@ -94,7 +94,7 @@ int			get_key_id(char *buf, t_string *command, t_minishell *info)
 		return (KEY_NEWLINE);
 	else if (buf[0] == 1)
 		return (KEY_HOME);
-	key = get_key_id_2(buf, command, info);
+	key = get_key_id_2(buf, info);
 	if (key != -42)
 		return (key);
 	key = get_key_id_3(buf, command, info);

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_format_of_command_bonus.c                    :+:      :+:    :+:   */
+/*   check_syntax_bonus.c                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -60,7 +60,7 @@ static bool	display_format_error_message(int before, int now,
 	return (free_syntax_error(now, grp, info));
 }
 
-bool		check_format_of_command(char ***grp, t_minishell *info)
+bool		check_syntax(char ***grp, t_minishell *info)
 {
 	int			i[2];
 	int			now_type;

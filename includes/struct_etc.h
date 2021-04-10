@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:44:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/06 09:42:29 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 13:13:35 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,20 +46,19 @@ typedef struct			s_envlst
 	struct s_envlst		*qnext;
 }						t_envlst;
 
-typedef struct			s_history
+typedef struct			s_hist_list
 {
 	char				*command;
-	struct s_history	*next;
-	struct s_history	*prev;
-}						t_history;
+	struct s_hist_list	*new_hist;
+	struct s_hist_list	*old_hist;
+}						t_hist_list;
 
-typedef struct			s_hist_all
+typedef struct			s_history
 {
-	char				*history_path;
-	struct s_history	*command_history;
-	struct s_history	*command_history_begin;
-	bool				history_flag;
-}						t_hist_all;
+	char				*file_path;
+	struct s_hist_list	*list;
+	struct s_hist_list	*begin;
+}						t_history;
 
 typedef struct			s_key
 {
@@ -78,22 +77,12 @@ typedef struct			s_key
 	char				*scroll_up;
 	char				*scroll_down;
 	char				*delete_line;
-	char				*beep_sound;
 	size_t				target_start;
 	size_t				target_end;
 	char				*target;
 	size_t				save_command_len;
 	bool				shift_ctrl_lr_flag;
 }						t_key;
-
-typedef struct			s_window
-{
-	struct winsize		ws;
-	int					prompt_len;
-	// int					cur_pos[2];
-	// int					command_start_pos[2];
-	// int					command_end_pos[2];
-}						t_window;
 
 typedef struct			s_cursor
 {
@@ -103,11 +92,11 @@ typedef struct			s_cursor
 	int					select_pos[2];
 }						t_cursor;
 
-typedef struct			s_err
-{
-	int					line;
-	char				*file;
-}						t_err;
+// typedef struct			s_err
+// {
+// 	int					line;
+// 	char				*file;
+// }						t_err;
 
 typedef struct			s_minishell_info
 {
@@ -119,12 +108,12 @@ typedef struct			s_minishell_info
 	bool				minishell_op_no_edit;
 	struct s_envlst		*env;
 	struct s_cmdlst		*cmd_lst;
-	char				*history_path;
-	struct s_history	*command_history;
-	struct s_history	*command_history_begin;
-	bool				history_flag;
+	struct s_history	history;
 	struct s_key		key;
 	struct s_cursor		cursor;
+	struct termios		terminal[2];
+	char				multiple_line_char;
+	char				chr;
 	int					cmd_lst_num;
 	bool				exit_too_arg;
 	char				*ptr_for_free;
@@ -162,7 +151,6 @@ typedef struct			s_global
 	int					sig_sign;
 	t_minishell			info;
 	bool				reading;
-	t_termios			terms[2];
 }						t_global;
 t_global				g_global;
 
@@ -260,8 +248,8 @@ enum	e_format
 # define Y 1
 # define LEFT_EDGE 1
 # define UPPER_EDGE 1
-# define SELECT_LEFT 0
-# define SELECT_RIGHT 1
+// # define SELECT_LEFT 0
+// # define SELECT_RIGHT 1
 /*
 ** FD
 */

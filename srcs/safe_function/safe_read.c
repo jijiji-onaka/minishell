@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 15:25:18 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 03:16:33 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 08:42:05 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ ssize_t		safe_read(char buf[4], char **ptr, t_minishell *info)
 {
 	ssize_t	rc;
 
+	ft_bzero(buf, READ_SIZE);
 	rc = read(STDIN, buf, READ_SIZE);
 	if (rc < 0)
 	{

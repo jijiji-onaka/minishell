@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 00:31:11 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/24 21:47:58 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/08 07:59:12 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ static t_envlst	*make_envlst(t_string key, t_string value,
 						t_envlst *next, t_envlst *qnext)
 {
 	t_envlst	*new;
-	char		*equ_ptr;
-	size_t		key_len;
+	// char		*equ_ptr;
+	// size_t		key_len;
 
 	new = malloc(sizeof(t_envlst));
 	if (new == NULL)

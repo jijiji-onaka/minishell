@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/18 23:39:11 by sehattor          #+#    #+#             */
-/*   Updated: 2021/03/26 21:48:41 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 02:33:29 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 size_t	gnl_strlen(char *s)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	if (!s)
@@ -34,27 +34,25 @@ char	*gnl_strjoin(char **s1, char *s2)
 	if (str == NULL)
 		return (NULL);
 	i = 0;
-	if ((*s1))
-		while ((*s1)[i])
-		{
-			str[i] = (*s1)[i];
-			i++;
-		}
-	ptr_free((void**)s1);
+	while ((*s1) && (*s1)[i])
+	{
+		str[i] = (*s1)[i];
+		i++;
+	}
+	ptr_free((void **)s1);
 	j = 0;
-	if (s2)
-		while (s2[j] && s2[j] != '\n')
-		{
-			str[i + j] = s2[j];
-			j++;
-		}
+	while (s2 && s2[j] && s2[j] != '\n')
+	{
+		str[i + j] = s2[j];
+		j++;
+	}
 	str[i + j] = '\0';
 	return (str);
 }
 
 char	*get_next_word(char *buf, char *nl_ptr)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (buf[i] && nl_ptr[i])
@@ -66,10 +64,10 @@ char	*get_next_word(char *buf, char *nl_ptr)
 	return (buf);
 }
 
-int		clear_one_node(int fd, t_gnl_list **head)
+int	clear_one_node(int fd, t_gnl_list **head)
 {
-	t_gnl_list *begin;
-	t_gnl_list *tmp;
+	t_gnl_list	*begin;
+	t_gnl_list	*tmp;
 
 	begin = *head;
 	while (begin && begin->next)
@@ -95,7 +93,7 @@ int		clear_one_node(int fd, t_gnl_list **head)
 	return (GNL_EOF);
 }
 
-int		clear_all_node(t_gnl_list **head)
+int	clear_all_node(t_gnl_list **head)
 {
 	t_gnl_list	*lst;
 	t_gnl_list	*next;
@@ -104,7 +102,7 @@ int		clear_all_node(t_gnl_list **head)
 	while (lst)
 	{
 		next = lst->next;
-		ptr_free((void**)&(lst->buf));
+		ptr_free((void **)&(lst->buf));
 		free(lst);
 		lst = next;
 	}

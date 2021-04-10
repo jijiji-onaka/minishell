@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 03:17:29 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/06 07:46:10 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/08 08:14:26 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,10 @@
 
 void		move_up_one_line(char *buf, t_string *command, t_minishell *info)
 {
+	(void)buf;
+	(void)command;
 	if (info->cursor.cur_pos[Y] == info->cursor.command_start_pos[Y])
-	{
-		putstr_fd(info->key.beep_sound, STDOUT, where_err(LINE, FILE), info);
 		return ;
-	}
 	if (info->cursor.cur_pos[Y] - info->cursor.command_start_pos[Y] == 1
 			&& info->cursor.cur_pos[X] < info->cursor.command_start_pos[X])
 	{
@@ -36,11 +35,10 @@ void		move_up_one_line(char *buf, t_string *command, t_minishell *info)
 
 void	move_down_one_line(char *buf, t_string *command, t_minishell *info)
 {
+	(void)buf;
+	(void)command;
 	if (info->cursor.cur_pos[Y] == info->cursor.command_end_pos[Y])
-	{
-		putstr_fd(info->key.beep_sound, STDOUT, where_err(LINE, FILE), info);
 		return ;
-	}
 	if (info->cursor.command_end_pos[Y] - info->cursor.cur_pos[Y] == 1
 			&& info->cursor.command_end_pos[X] < info->cursor.cur_pos[X])
 	{

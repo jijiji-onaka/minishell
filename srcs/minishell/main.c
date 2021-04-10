@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/06 07:45:30 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/08 08:20:12 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,19 +78,19 @@ void	get_current_term_and_tgetent(t_minishell *info)
 		all_free_exit(info, ERR_TGETENT, __LINE__, __FILE__);
 }
 
-void		initialize_term(void)
+void		initialize_term(t_minishell *info)
 {
-	tcgetattr(STDIN, &(g_global.terms[ORIGINAL]));
-	g_global.terms[REPLICA] = g_global.terms[ORIGINAL];
-	g_global.terms[REPLICA].c_lflag &= ~(ICANON | ECHO);
+	tcgetattr(STDIN, &(info->terminal[ORIGINAL]));
+	info->terminal[REPLICA] = info->terminal[ORIGINAL];
+	info->terminal[REPLICA].c_lflag &= ~(ICANON | ECHO);
 
 	//これにするとCtrl + Cをおそらくreadで読み込める
-	// g_global.terms[REPLICA].c_lflag &= ~(ECHO | ICANON | ISIG);
+	// info->terminal[REPLICA].c_lflag &= ~(ECHO | ICANON | ISIG);
 
-	g_global.terms[REPLICA].c_cc[VMIN] = 1;
-	g_global.terms[REPLICA].c_cc[VTIME] = 0;
-	tcsetattr(STDIN, TCSAFLUSH, &(g_global.terms[REPLICA]));
-	// tcsetattr(STDIN, TCSANOW, &(g_global.terms[REPLICA]));
+	info->terminal[REPLICA].c_cc[VMIN] = 1;
+	info->terminal[REPLICA].c_cc[VTIME] = 0;
+	tcsetattr(STDIN, TCSAFLUSH, &(info->terminal[REPLICA]));
+	// tcsetattr(STDIN, TCSANOW, &(info->terminal[REPLICA]));
 
 }
 
@@ -137,8 +137,10 @@ void	set_key(t_minishell *info)
 	info->key.delete_line = tgetstr("dl", NULL);
 	if (info->key.delete_line == NULL)
 		all_free_exit(info, ERR_TGETSTR, __LINE__, __FILE__);
-	info->key.beep_sound = "\007";
+	// info->key.beep_sound = "\a";
+	// printf("[[[[[%s]]]]]\n", info->history.begin->command);
 	info->key.color_change = "\x1b[38;5;106m\x1b[48;5;27m";
+	// printf("[[[[[%s]]]]]\n", info->history.begin->command);
 	info->key.color_reset = "\033[0m";
 }
 
@@ -190,8 +192,9 @@ int			main(int argc, char **argv)
 		all_free_exit(&info, ERR_SIGNAL, __LINE__, __FILE__);
 	if (signal(SIGINT, &sig_int) == SIG_ERR)
 		all_free_exit(&info, ERR_SIGNAL, __LINE__, __FILE__);
-	initialize_term();
+	initialize_term(&info);
 	get_current_term_and_tgetent(&info);
+	// printf("[[[[[%s]]]]]\n", info.history->begin->command);
 	set_key(&info);
 	console_loop(&info);
 	return (0);

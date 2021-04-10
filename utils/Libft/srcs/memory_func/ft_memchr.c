@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/22 20:31:50 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/11 21:28:45 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 03:12:21 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@ void	*ft_memchr(const void *s, int c, size_t n)
 
 	if (!s)
 		return (NULL);
-	str = (unsigned char*)s;
+	str = (unsigned char *)s;
 	chr = (unsigned char)c;
 	while (n > 0)
 	{
 		if (*str == chr)
 		{
-			return ((void*)str);
+			return ((void *)str);
 		}
 		str++;
 		n--;

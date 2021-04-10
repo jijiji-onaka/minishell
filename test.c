@@ -251,12 +251,12 @@
 // int main()
 // {
 // 	// tgetent(NULL, getenv("TERM"));
-// 	// tcgetattr(STDIN, &(g_global.terms[0]));
-// 	// g_global.terms[1] = g_global.terms[0];
-// 	// g_global.terms[1].c_lflag &= ~(ICANON | ECHO);
-// 	// g_global.terms[1].c_cc[VMIN] = 1;
-// 	// g_global.terms[1].c_cc[VTIME] = 0;
-// 	// tcsetattr(STDIN, TCSANOW, &(g_global.terms[1]));
+// 	// tcgetattr(STDIN, &(info->terminal[0]));
+// 	// info->terminal[1] = info->terminal[0];
+// 	// info->terminal[1].c_lflag &= ~(ICANON | ECHO);
+// 	// info->terminal[1].c_cc[VMIN] = 1;
+// 	// info->terminal[1].c_cc[VTIME] = 0;
+// 	// tcsetattr(STDIN, TCSANOW, &(info->terminal[1]));
 // 	// char *tmp = readline("abc");
 // 	// int buf;
 // 	// read(0, &buf, 99);
@@ -266,7 +266,7 @@
 // 	// write(1, "[", 1);
 // 	// write(1, s, strlen(s));
 // 	// write(1, "]", 1);
-// 	// tcsetattr(STDIN, TCSANOW, &(g_global.terms[0]));
+// 	// tcsetattr(STDIN, TCSANOW, &(info->terminal[0]));
 	// printf("\x1b[38;5;93maaaaaaaa\033[0m\n");
 	// printf("\x1b[38;5;109maaaaaaaa\033[0m\n");
 	// printf("\x1b[38;5;106maaaaaaaa\033[0m\n");
@@ -346,21 +346,44 @@ failed:
     return -1;
 }
 
+int	is_valid_pipe1(char *command)
+{
+	char	*ptr;
+
+	while (ft_isspace(*command))
+		command++;
+	if (command[0] == '|')
+		return (-1);
+	while (*command)
+	{
+		while (*command && *command != '|')
+			command++;
+		if (command[0] == '|')
+			if (skip_space(command + 1)[0] == '\0')
+				return (-2);
+		if (command[0] == '\0')
+			return (1);
+		if (command[0] == '|' && command[1] == '|' && command[2] == '|')
+			return (1);
+		command++;
+	}
+	return (1);
+}
+
 int main()
 {
-		tgetent(NULL, getenv("TERM"));
-	tcgetattr(STDIN, &(g_global.terms[0]));
-	g_global.terms[1] = g_global.terms[0];
-	g_global.terms[1].c_lflag &= ~(ICANON | ECHO);
-	g_global.terms[1].c_cc[VMIN] = 1;
-	g_global.terms[1].c_cc[VTIME] = 0;
-	tcsetattr(STDIN, TCSANOW, &(g_global.terms[1]));
-	int row = 0;
-	int col = 0;
-	getWindowSize(0, 1, &row, &col);
-	printf("%d\n", col);
-	printf("%d\n", row);
-	tcsetattr(STDIN, TCSANOW, &(g_global.terms[0]));
+	printf("-2 : %d\n", is_valid_pipe1("pwd |"));
+	printf("-2 : %d\n", is_valid_pipe1("pwd | "));
+	printf("-2 : %d\n", is_valid_pipe1("pwd | pwd |"));
+	printf("1  : %d\n", is_valid_pipe1("pwd | pwd | | pwd "));
+	printf("1  : %d\n", is_valid_pipe1("pwd | pwd ||| pwd"));
+	printf("1  : %d\n", is_valid_pipe1("pwd"));
+	printf("1  : %d\n", is_valid_pipe1("pwd | pwd"));
+	printf("1  : %d\n", is_valid_pipe1(""));
+	printf("-1 : %d\n", is_valid_pipe1("|||||||||||"));
+	printf("-1 : %d\n", is_valid_pipe1("| pwd"));
+	printf("1  : %d\n", is_valid_pipe1("pwd | pwd  "));
+	printf("1  : %d\n", is_valid_pipe1("pwd |\\"));
 }
 
 // int main(void)
@@ -368,19 +391,19 @@ int main()
 //  int cursor_x, cursor_y;
 
 // //  tgetent(NULL, getenv("TERM"));
-// //  tcgetattr(STDIN, &(g_global.terms[0]));
-// //  g_global.terms[1] = g_global.terms[0];
-// //  g_global.terms[1].c_lflag &= ~(ICANON | ECHO);
-// //  g_global.terms[1].c_cc[VMIN] = 1;
-// //  g_global.terms[1].c_cc[VTIME] = 0;
-// //  tcsetattr(STDIN, TCSANOW, &(g_global.terms[1]));
+// //  tcgetattr(STDIN, &(info->terminal[0]));
+// //  info->terminal[1] = info->terminal[0];
+// //  info->terminal[1].c_lflag &= ~(ICANON | ECHO);
+// //  info->terminal[1].c_cc[VMIN] = 1;
+// //  info->terminal[1].c_cc[VTIME] = 0;
+// //  tcsetattr(STDIN, TCSANOW, &(info->terminal[1]));
 //  printf("1");
 //  printf("%s", "\x1B[6n");
 //  scanf("\x1B[%d;%dR", &cursor_y, &cursor_x);
 
 //  printf("x = %d, y = %d\n", cursor_x, cursor_y);
 
-// //  tcsetattr(STDIN, TCSANOW, &(g_global.terms[0]));
+// //  tcsetattr(STDIN, TCSANOW, &(info->terminal[0]));
 // }
 
 // static size_t line_length = 80;

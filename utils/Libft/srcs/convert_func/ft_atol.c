@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 02:17:41 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/20 21:54:39 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/09 02:02:11 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ long long	ft_atol(const char *str, bool *overflow, bool *digit_flag)
 	i = 0;
 	res = 0;
 	f = 1;
-	while (str[i] && (str[i] == ' ' || str[i] == '\n' || str[i] == '\t' ||
-			str[i] == '\v' || str[i] == '\f' || str[i] == '\r'))
+	while (str[i] && (str[i] == ' ' || str[i] == '\n' || str[i] == '\t'
+			|| str[i] == '\v' || str[i] == '\f' || str[i] == '\r'))
 		i++;
 	if (str[i] == '-' || str[i] == '+')
 		f = 44 - str[i++];

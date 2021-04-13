@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/23 01:57:04 by tjinichi          #+#    #+#              #
-#    Updated: 2021/04/13 15:54:27 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/04/13 15:56:29 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -287,13 +287,13 @@ $(LIBFT): FORCE
 all: $(NAME)
 
 clean:
-	# @make clean -C $(LIBS)
+	@make clean -C $(LIBS)
 	@rm -f $(COMMAND_HISTORY)
 	@rm -rf $(OBJDIR)
 	@printf "$(RED)$(BOLD)[minishell] \nremoved object file and objs directory$(RESET)\n"
 
 fclean:
-	# @make fclean -C $(LIBS)
+	@make fclean -C $(LIBS)
 	@rm -rf $(OBJDIR)
 	@printf "$(RED)$(BOLD)[minishell] \nremoved object file and objs directory\n"
 	@rm -f $(NAME)

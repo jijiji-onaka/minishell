@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/04 02:27:12 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/10 14:53:23 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/13 13:13:24 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,6 @@ void		*safe_malloc(size_t len, t_err err, t_minishell *info);
 bool		safe_opendir(DIR **dp, char *dir, t_minishell *info);
 bool		safe_readdir(struct dirent **dirp, DIR *dp, t_minishell *info);
 void		safe_closedir(DIR **dp, t_minishell *info);
+bool		safe_chdir(char *dir, char **split, t_minishell *info);
 
 #endif

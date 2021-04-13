@@ -68,7 +68,7 @@ static bool	is_valid_command(t_string *command, t_string *add_command,
 	command_joint(command, add_command, is_valid, info);
 	if (is_valid(add_command->str) == true)
 		return (true);
-	display_what_is_waiting_for('*', NULL, &(command->str), info);
+	display_what_is_waiting_for(42, NULL, &(command->str), info);
 	add_command->str = re_strdup(&(add_command->str), "");
 	if (add_command->str == NULL)
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
@@ -83,7 +83,7 @@ char	*read_add_command(t_string *command,
 	ssize_t		rc;
 	int			backup;
 
-	display_what_is_waiting_for('*', NULL, &(command->str), info);
+	display_what_is_waiting_for(42, NULL, &(command->str), info);
 	preparation(&backup, &add_command, info);
 	while (g_global.reading)
 	{

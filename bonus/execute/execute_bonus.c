@@ -6,14 +6,26 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 21:03:13 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 03:01:19 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/13 14:49:19 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell_bonus.h"
+#include "../../bonus_includes/minishell_bonus.h"
 
 static bool	final_cmd_check(int *type, t_cmdlst *cmd, t_minishell *info)
 {
+	// int		i;
+	// int		tmp_type;
+
+	// if (at_first_change_only_env(cmd, type, info) == false)
+	// 	return (false);
+	// i = -1;
+	// while (cmd->arg[++i])
+	// 	change_env_and_quo_and_slash(&(cmd->arg[i]), info);
+	// tmp_type = binary_search(cmd->arg[0]);
+	// if (!((tmp_type >= 1 && tmp_type <= 4) || tmp_type == PIPE))
+	// 	*type = tmp_type;
+	// return (true);
 	int		i;
 	int		tmp_type;
 
@@ -31,27 +43,34 @@ static bool	final_cmd_check(int *type, t_cmdlst *cmd, t_minishell *info)
 	return (true);
 }
 
-bool		execute_command(t_minishell *info, t_cmdlst **cmd)
+bool	execute_command(t_minishell *info, t_cmdlst **cmd)
 {
-	int		type;
-	void	(*const exec_command[])(t_minishell *, t_cmdlst *) = {
-		exec_bin, exec_exit, exec_pwd, exec_echo, exec_cd, exec_env,
-		exec_export, exec_unset,
-	};
-
-	type = (*cmd)->type;
 	if ((*cmd)->type == SEMICOLON)
 		return (true);
-	if (final_cmd_check(&type, *cmd, info) == false)
+	if (final_cmd_check(&((*cmd)->type), *cmd, info) == false)
 		return (true);
-	if (is_redir(type) || type == SEMICOLON || type == PIPE || type == DB_AND)
+	if (is_redir((*cmd)->type) || (*cmd)->type == SEMICOLON || (*cmd)->type == PIPE)
 		return (write(STDOUT, "my minishell is failed (T_T)\n", 29));
-	exec_command[return_index(type)](info, *cmd);
-	info->ptr_for_free = NULL;
-	if ((*cmd) && (*cmd)->next && (*cmd)->next->type == DB_AND)
-		*cmd = do_and(cmd);
-	if ((*cmd) && (*cmd)->next && (*cmd)->next->type == DB_PIPE)
-		*cmd = do_db_pipe(cmd);
+	if ((*cmd)->type == BIN)
+		exec_bin(info, *cmd);
+	else if ((*cmd)->type == EXIT)
+		exec_exit(info, *cmd);
+	else if ((*cmd)->type == PWD)
+		exec_pwd(info, *cmd);
+	else if ((*cmd)->type == CMD_ECHO)
+		exec_echo(info, *cmd);
+	else if ((*cmd)->type == CD)
+		exec_cd(info, *cmd);
+	else if ((*cmd)->type == ENV)
+		exec_env(info, *cmd);
+	else if ((*cmd)->type == EXPORT)
+		exec_export(info, *cmd);
+	else if ((*cmd)->type == UNSET)
+		exec_unset(info, *cmd);
+	// if ((*cmd) && (*cmd)->next && (*cmd)->next->type == DB_AND)
+	// 	*cmd = do_and(cmd);
+	// if ((*cmd) && (*cmd)->next && (*cmd)->next->type == DB_PIPE)
+	// 	*cmd = do_db_pipe(cmd);
 	return (true);
 }
 
@@ -68,7 +87,7 @@ static bool	is_after_pipe(t_cmdlst *lst)
 	return (false);
 }
 
-void		do_(t_cmdlst **lst, t_minishell *info)
+static void	execute_command_loop_2(t_cmdlst **lst, t_minishell *info)
 {
 	if ((*lst)->type == DB_AND)
 		do_and((lst));
@@ -78,30 +97,31 @@ void		do_(t_cmdlst **lst, t_minishell *info)
 		execute_command(info, lst);
 }
 
-void		execute_command_loop(t_minishell *info)
+void	execute_command_loop(t_minishell *info)
 {
 	t_cmdlst	*lst;
 
 	lst = info->cmd_lst;
-	while (lst)
+	while (lst && !(info->exit_too_arg))
 	{
 		if (is_after_pipe(lst))
 		{
 			if (NULL == my_pipe(info, &(lst), 2))
 				break ;
 		}
-		if (is_redir(lst->type))
+		else if (is_redir(lst->type))
 		{
 			if (NULL == redir_first(info, &(lst)))
 				break ;
 		}
-		if (lst->next && is_redir(lst->next->type))
+		else if (lst->next && is_redir(lst->next->type))
 		{
 			if (NULL == my_redirect(info, &(lst)))
 				break ;
 		}
 		else
-			do_(&lst, info);
+			execute_command_loop_2(&lst, info);
+			// execute_command(info, lst);
 		if (lst)
 			lst = lst->next;
 	}

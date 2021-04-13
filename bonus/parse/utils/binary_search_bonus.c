@@ -5,22 +5,22 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/17 03:43:49 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
+/*   Created: 2021/03/02 11:16:32 by tjinichi          #+#    #+#             */
+/*   Updated: 2021/04/13 14:28:50 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/minishell_bonus.h"
+#include "../../../bonus_includes/minishell_bonus.h"
 
-int		binary_search(char *cmd)
+int	binary_search(char *cmd)
 {
+	int			ret;
 	const char	*base[CMD_NUM] = {"\0", "&&", ";", "<", "<<", ">", ">>",
 	"cd", "echo", "env", "export", "pwd", "unset", "|", "||"};
-	int			ret;
 
 	if (is_command_exit(cmd) == true)
 		return (EXIT);
-	if (search_env("PATH", 4, g_global.info.env, NULL) == NULL)
+	if (ft_getenv("PATH", g_global.info.env, false) == NULL)
 		ret = str_bsearch(cmd, base, CMD_NUM, ft_strcmp);
 	else
 		ret = str_bsearch(cmd, base, CMD_NUM, strcmp_regardless_of_case);

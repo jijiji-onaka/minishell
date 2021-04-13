@@ -5,12 +5,13 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/18 03:15:15 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
+/*   Created: 2021/04/13 14:14:09 by tjinichi          #+#    #+#             */
+/*   Updated: 2021/04/13 14:30:51 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell_bonus.h"
+#include "../../bonus_includes/minishell_bonus.h"
+
 
 t_cmdlst		*do_and(t_cmdlst **cmd)
 {

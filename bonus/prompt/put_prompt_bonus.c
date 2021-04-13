@@ -6,35 +6,64 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 00:41:03 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 03:01:28 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/13 15:53:43 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell_bonus.h"
+#include "../../bonus_includes/minishell_bonus.h"
 
-void		put_prompt(t_minishell *info)
+void	put_prompt(t_minishell *info)
 {
 	char	*user_name;
 	char	*working_dir;
 
-	user_name = search_env("USER", 4, info->env, NULL);
+	if (isatty(STDIN) == false)
+		return ;
+	user_name = ft_getenv("USER", info->env, false);
 	working_dir = info->current_dir_path;
 	if (!user_name)
-	{
-		if (write(STDERR, "Who am I?", 9) < 0)
-			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	}
-	else if (write(STDERR, user_name, ft_strlen(user_name)) < 0)
-		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	if (write(STDERR, "\033[1m\x1b[35m (;;) \x1b[0m", 19) < 0)
+		user_name = "Who am I?";
+	putstr_fd(user_name, STDOUT, where_err(LINE, FILE), info);
+	if (write(STDOUT, " \033[38;5;44m\x1b[1m42\x1b[0m ", 22) < 22)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	if (!working_dir)
+		working_dir = "Where am I?";
+	putstr_fd(working_dir, STDOUT, where_err(LINE, FILE), info);
+	if (write(STDOUT, " \033[38;5;44m\x1b[1m>\x1b[0m ", 21) < 21)
+		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
+	get_cursor_position(info->cursor.command_start_pos, info);
+}
+
+void	display_what_is_waiting_for(char chr, char **ptr1, char **ptr2,
+					t_minishell *info)
+{
+	int		write_num;
+
+	write_num = 1;
+	if (chr == '\"')
+		write_num = write(STDOUT, "(dquote)>) ", 11);
+	else if (chr == '\'')
+		write_num = write(STDOUT, "(quote)>) ", 10);
+	else
+		write_num = write(STDOUT, "(normal command)> ", 18);
+	if (write_num < 0)
 	{
-		if (write(STDERR, "Where am I?", 11) < 0)
-			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
+		if (ptr1)
+			ptr_free((void **)ptr1);
+		if (ptr2)
+			ptr_free((void **)ptr2);
+		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	}
-	else if (write(STDERR, working_dir, ft_strlen(working_dir)) < 0)
-		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	if (write(STDERR, "\033[1m\x1b[35m (;;) > \x1b[0m", 21) < 0)
-		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
+	get_cursor_position(info->cursor.command_start_pos, info);
+	dup_pos(info->cursor.cur_pos, info->cursor.command_start_pos);
+	dup_pos(info->cursor.command_end_pos, info->cursor.command_start_pos);
+}
+
+char	*reset_prompt(char **ptr1, char **ptr2)
+{
+	if (ptr1)
+		ptr_free((void **)ptr1);
+	if (ptr2)
+		ptr_free((void **)ptr2);
+	return (NULL);
 }

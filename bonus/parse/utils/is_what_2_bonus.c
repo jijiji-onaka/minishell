@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 18:27:21 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/17 04:48:13 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/13 14:33:25 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/minishell_bonus.h"
+#include "../../../bonus_includes/minishell_bonus.h"
 
 static bool	check_fd_redirect(char **str)
 {
@@ -35,10 +35,10 @@ bool		is_except_separator(char *str, int quo)
 	if (quo != -1 && quo == *str)
 		return (1);
 	return (!((*str == '|' || *str == '>'
-	|| *str == '<'
-	|| *str == ';'
-	|| *str == '&'
-	|| check_fd_redirect(&str))));
+				|| *str == '<'
+				|| *str == ';'
+				|| *str == '&'
+				|| check_fd_redirect(&str))));
 }
 
 bool		is_separator(char *str, int *flag)

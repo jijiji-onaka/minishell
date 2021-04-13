@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 21:55:45 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/11 13:51:17 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/13 13:20:50 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void		cleanup_redirect_put(int **fd, int *backup,
 void		read_from_file(int fd, t_cmdlst *begin, t_minishell *info);
 t_cmdlst	*skip_cmdlst(t_cmdlst **cmd_lst, size_t how_many, bool flag);
 void		write_to_file(int fd, int std, t_cmdlst *begin,
-					t_minishell *info);
+				t_minishell *info);
 t_cmdlst	*my_pipe(t_minishell *info, t_cmdlst **cmd_lst, int fd);
 bool		is_now_middle_pipe(t_cmdlst *lst);
 void		skip_command(t_cmdlst **cmd_lst);

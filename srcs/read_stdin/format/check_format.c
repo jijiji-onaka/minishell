@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/09 12:25:33 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/10 12:13:00 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/13 13:17:24 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,5 +70,5 @@ void	*check_format(t_string *command, t_minishell *info)
 		if (check == 6)
 			break ;
 	}
-	return ((void *)1);
+	return ("OK");
 }

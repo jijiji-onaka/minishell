@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 00:41:03 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/10 15:46:11 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/13 15:20:59 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,11 @@ void	display_what_is_waiting_for(char chr, char **ptr1, char **ptr2,
 
 	write_num = 1;
 	if (chr == '\"')
-		write_num = write(STDOUT, "wait :(double quote)> ", 22);
+		write_num = write(STDOUT, "dquote> ", 8);
 	else if (chr == '\'')
-		write_num = write(STDOUT, "wait :(single quote)> ", 22);
+		write_num = write(STDOUT, "quote> ", 7);
 	else
-		write_num = write(STDOUT, "wait :(normal command)> ", 24);
+		write_num = write(STDOUT, "normal command> ", 16);
 	if (write_num < 0)
 	{
 		if (ptr1)

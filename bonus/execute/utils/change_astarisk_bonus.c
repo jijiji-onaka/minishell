@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/17 07:53:13 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/10 12:51:37 by tjinichi         ###   ########.fr       */
+/*   Created: 2021/04/13 14:37:01 by tjinichi          #+#    #+#             */
+/*   Updated: 2021/04/13 14:49:14 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/minishell_bonus.h"
+#include "../../../bonus_includes/minishell_bonus.h"
 
 static int		all_file_len(t_wild_lst *lst)
 {
@@ -33,7 +33,7 @@ static void		create_sorted_files(t_wild_lst *lst,
 	char		*new;
 	t_wild_lst	*next;
 
-	lst = merge_lst_sort(lst);
+	lst = file_sort(lst);
 	if (!(new = malloc((sizeof(char) * (all_file_len(lst) + 1)))))
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	i = 0;

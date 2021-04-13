@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 02:09:10 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/10 12:51:37 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/13 14:57:18 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/minishell_bonus.h"
+#include "../../../bonus_includes/minishell_bonus.h"
 
 bool	err_no_such_file_or_directory(char *filename, t_minishell *info)
 {
@@ -28,7 +28,8 @@ bool	err_ambiguous_redirect(char **filename, t_minishell *info)
 	char	*tmp;
 	int		num;
 
-	if (!(tmp = ft_strdup(*filename)))
+	tmp = ft_strdup(*filename);
+	if (tmp == NULL)
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	change_env_and_quo_and_slash(filename, info);
 	num = word_count(*filename, ' ');

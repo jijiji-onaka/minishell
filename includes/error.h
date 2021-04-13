@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:51:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/11 13:24:12 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/13 13:11:37 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,5 +79,6 @@ bool	syntax_error(int type, t_minishell *info);
 void	free_env_lst(t_envlst **envlst);
 void	free_command_history(t_hist_list **history);
 void	free_cmd_lst(t_cmdlst **cmdlst);
+void	error_mandatory(char *err_message, int num, t_minishell *info);
 
 #endif

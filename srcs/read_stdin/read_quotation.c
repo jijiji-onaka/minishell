@@ -16,6 +16,7 @@ static void	preparation(int *backup, t_string *add_command,
 					char buf[READ_SIZE + 1], t_minishell *info)
 {
 	add_command->str = ft_strdup("");
+	add_command->len = 0;
 	if (add_command->str == NULL)
 		all_free_exit(info, ERR_MALLOC, LINE, FILE);
 	*backup = dup(STDIN);

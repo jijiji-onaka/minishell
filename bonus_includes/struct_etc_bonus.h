@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:44:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 14:38:50 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/13 16:06:43 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ typedef struct s_envlst
 	struct s_envlst		*qnext;
 }						t_envlst;
 
-typedef struct			s_wild_lst
+typedef struct s_wild_lst
 {
 	char				*value;
 	struct s_wild_lst	*next;

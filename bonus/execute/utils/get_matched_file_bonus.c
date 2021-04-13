@@ -6,19 +6,17 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/13 14:40:15 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 14:49:08 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/13 16:11:32 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../bonus_includes/minishell_bonus.h"
 
-static char			*make_current_dir(char *current_dir, int depth,
+static char	*make_current_dir(char *current_dir, int depth,
 						struct dirent *dp, char *asta)
 {
 	char	*res;
 
-	(void)depth;
-	(void)asta;
 	if (asta[ft_strlen(asta) - 1] == '/')
 		res = ft_strjoin(dp->d_name, "/");
 	if (ft_strcmp(current_dir, ".") == 0 && (int)word_count(asta, '/') == depth)
@@ -30,7 +28,7 @@ static char			*make_current_dir(char *current_dir, int depth,
 	return (res);
 }
 
-static void			lstadd_front(t_wild_lst **lst, t_wild_lst *new)
+static void	lstadd_front(t_wild_lst **lst, t_wild_lst *new)
 {
 	if (!lst || !new)
 		return ;
@@ -69,7 +67,7 @@ static t_wild_lst	*reach_max_depth(char *asta, char *current_dir,
 	return (*lst);
 }
 
-static bool			is_dir(char *name)
+static bool	is_dir(char *name)
 {
 	struct stat	stat_buf;
 
@@ -78,7 +76,7 @@ static bool			is_dir(char *name)
 	return (S_ISDIR(stat_buf.st_mode));
 }
 
-t_wild_lst			*get_matched_files(t_wild_lst **lst,
+t_wild_lst	*get_matched_files(t_wild_lst **lst,
 							char *current_dir, int depth, char *asta)
 {
 	DIR				*dir;
@@ -87,12 +85,14 @@ t_wild_lst			*get_matched_files(t_wild_lst **lst,
 
 	if (depth == 0)
 		return (reach_max_depth(asta, current_dir, lst));
-	if ((dir = opendir(current_dir)) == NULL)
+	if (safe_opendir(&dir, current_dir, &(g_global.info)) == false)
 		return (0);
-	while ((dp = readdir(dir)) != NULL)
+	while (1)
 	{
+		if (safe_readdir(&dp, dir, &(g_global.info)) == false)
+			break ;
 		if (asta[0] != '.' && dp->d_name[0] == '.')
-			continue;
+			continue ;
 		tmp = make_current_dir(current_dir, depth, dp, asta);
 		if (asta[ft_strlen(asta) - 1] == '/')
 			if (is_dir(tmp) == false)
@@ -100,8 +100,6 @@ t_wild_lst			*get_matched_files(t_wild_lst **lst,
 		if (!(get_matched_files(lst, tmp, depth - 1, asta)))
 			free(tmp);
 	}
-	if (errno != 0)
-		NULL;
 	if (closedir(dir) == -1)
 		NULL;
 	return (NULL);

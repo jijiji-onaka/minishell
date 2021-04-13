@@ -6,14 +6,13 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/13 14:14:09 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 14:30:51 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/13 16:15:26 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../bonus_includes/minishell_bonus.h"
 
-
-t_cmdlst		*do_and(t_cmdlst **cmd)
+t_cmdlst	*do_and(t_cmdlst **cmd)
 {
 	if (g_global.exit_status == 0)
 		return (*cmd);
@@ -26,7 +25,7 @@ t_cmdlst		*do_and(t_cmdlst **cmd)
 	return (*cmd);
 }
 
-t_cmdlst		*do_db_pipe(t_cmdlst **cmd)
+t_cmdlst	*do_db_pipe(t_cmdlst **cmd)
 {
 	if (g_global.exit_status != 0)
 		return (*cmd);

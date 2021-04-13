@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 21:03:13 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 14:49:19 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/13 16:15:56 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,6 @@
 
 static bool	final_cmd_check(int *type, t_cmdlst *cmd, t_minishell *info)
 {
-	// int		i;
-	// int		tmp_type;
-
-	// if (at_first_change_only_env(cmd, type, info) == false)
-	// 	return (false);
-	// i = -1;
-	// while (cmd->arg[++i])
-	// 	change_env_and_quo_and_slash(&(cmd->arg[i]), info);
-	// tmp_type = binary_search(cmd->arg[0]);
-	// if (!((tmp_type >= 1 && tmp_type <= 4) || tmp_type == PIPE))
-	// 	*type = tmp_type;
-	// return (true);
 	int		i;
 	int		tmp_type;
 
@@ -49,7 +37,8 @@ bool	execute_command(t_minishell *info, t_cmdlst **cmd)
 		return (true);
 	if (final_cmd_check(&((*cmd)->type), *cmd, info) == false)
 		return (true);
-	if (is_redir((*cmd)->type) || (*cmd)->type == SEMICOLON || (*cmd)->type == PIPE)
+	if (is_redir((*cmd)->type)
+		|| (*cmd)->type == SEMICOLON || (*cmd)->type == PIPE)
 		return (write(STDOUT, "my minishell is failed (T_T)\n", 29));
 	if ((*cmd)->type == BIN)
 		exec_bin(info, *cmd);
@@ -67,10 +56,6 @@ bool	execute_command(t_minishell *info, t_cmdlst **cmd)
 		exec_export(info, *cmd);
 	else if ((*cmd)->type == UNSET)
 		exec_unset(info, *cmd);
-	// if ((*cmd) && (*cmd)->next && (*cmd)->next->type == DB_AND)
-	// 	*cmd = do_and(cmd);
-	// if ((*cmd) && (*cmd)->next && (*cmd)->next->type == DB_PIPE)
-	// 	*cmd = do_db_pipe(cmd);
 	return (true);
 }
 
@@ -121,7 +106,6 @@ void	execute_command_loop(t_minishell *info)
 		}
 		else
 			execute_command_loop_2(&lst, info);
-			// execute_command(info, lst);
 		if (lst)
 			lst = lst->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/13 15:05:11 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 15:44:54 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/13 16:20:34 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ static void	clean_up(int *backup, t_string *command, t_minishell *info)
 	}
 }
 
-bool		do_here_document(t_minishell *info, int fd, char *stopper,
+bool	do_here_document(t_minishell *info, int fd, char *stopper,
 									bool expand_flag)
 {
 	char		buf[READ_SIZE + 1];

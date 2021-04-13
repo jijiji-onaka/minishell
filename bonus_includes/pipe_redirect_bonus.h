@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 21:55:45 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 15:06:49 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/13 16:06:56 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@
 int			after_changed_len__(char *ptr, t_minishell *info, t_str *string);
 bool		change_env_for_here_doc(char **ptr, t_minishell *info);
 void		fill_normal_with_slash_support__(char *res, int *res_i, char chr[2],
-														char *now);
+				char *now);
 bool		do_here_document(t_minishell *info, int fd, char *stopper,
-									bool expand_flag);
+				bool expand_flag);
 void		close_pipe_fd(int pipefd[2], t_minishell *info);
 void		connect_std_in_out_and_pipe(int pipefd[2], int i_o,
 				t_minishell *info);

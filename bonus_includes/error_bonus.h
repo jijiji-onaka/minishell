@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:51:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 13:51:37 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/13 16:27:37 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@
 # define ERR_OUTPUT_PIPE "minishell: `>|\' is not supported by mandatory.\n"
 # define ERR_DB_INPUT "minishell: `<<\' is not supported by mandatory.\n"
 # define ERR_TR_INPUT "minishell: `<<<\' is not supported by mandatory.\n"
+# define ERR_AND "minishell: `&\' is not supported by mandatory.\n"
+# define ERR_DB_AND "minishell: `&&\' is not supported by mandatory.\n"
 # define ERR_MANDATORY "That command is not supported by mandatory.\n"
 # define ERR_GET_WINDOW_SIZE "Failed to get window size.\n"
 # define ERR_ENV "Usage: env [No option] [No argument]\n"

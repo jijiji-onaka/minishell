@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 18:27:21 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 14:33:25 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/13 16:20:51 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static bool	check_fd_redirect(char **str)
 	return (false);
 }
 
-bool		is_except_separator(char *str, int quo)
+bool	is_except_separator(char *str, int quo)
 {
 	if (quo > 0 && *str != quo)
 		return (1);
@@ -41,7 +41,7 @@ bool		is_except_separator(char *str, int quo)
 				|| check_fd_redirect(&str))));
 }
 
-bool		is_separator(char *str, int *flag)
+bool	is_separator(char *str, int *flag)
 {
 	bool	f;
 	char	*tmp;
@@ -63,5 +63,5 @@ bool		is_separator(char *str, int *flag)
 	else if (tmp == str)
 		*flag += 1;
 	return (((*str == '&' || *str == '|' || *str == '>'
-		|| *str == '<' || *str == ';' || f)));
+				|| *str == '<' || *str == ';' || f)));
 }

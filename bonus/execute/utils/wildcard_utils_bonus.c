@@ -6,13 +6,13 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/13 14:41:58 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 14:54:38 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/13 16:14:13 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../bonus_includes/minishell_bonus.h"
 
-bool		pattern_match(char *s1, char *s2)
+bool	pattern_match(char *s1, char *s2)
 {
 	if (s1[0] == '\0' && s2[0] == '\0')
 		return (true);
@@ -33,7 +33,7 @@ bool		pattern_match(char *s1, char *s2)
 	return (false);
 }
 
-size_t		word_count(char const *s, char c)
+size_t	word_count(char const *s, char c)
 {
 	size_t		cnt;
 

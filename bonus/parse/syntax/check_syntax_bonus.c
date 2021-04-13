@@ -16,6 +16,7 @@ static bool	free_syntax_error(int type, char ***cmd_grp, t_minishell *info)
 {
 	ptr_2d_free((void ***)cmd_grp, -1);
 	return (syntax_error(type, info));
+	return (syntax_error(type, info));
 }
 
 static bool	pipe_end(t_minishell *info, int i, char ***grp, int type)
@@ -44,10 +45,10 @@ static bool	display_format_error_message(int before, int now,
 					char ***grp, t_minishell *info)
 {
 	if (before == -1 && (now == F_SEMICOLON || now == F_PIPE
-		|| now == F_DB_AND || now == F_AND))
+			|| now == F_DB_AND || now == F_AND || now == F_DB_PIPE))
 		return (free_syntax_error(now, grp, info));
 	else if ((before == -1 || before == F_SEMICOLON || before == F_PIPE
-		|| before == F_DB_PIPE || before == F_AND)
+			|| before == F_DB_PIPE || before == F_AND)
 		&& (now == F_CMD_NUM || is_redir_for_format(now)))
 		return (true);
 	else if (now == F_CMD_NUM && before == F_TR_INPUT)
@@ -56,12 +57,8 @@ static bool	display_format_error_message(int before, int now,
 		return (free_syntax_error(now, grp, info));
 	else if (now == F_TR_INPUT)
 		return (true);
-	else if (now == F_AND)
-		return (free_syntax_error(F_AND, grp, info));
-	else if (now == F_DB_SEMICOLON)
-		return (free_syntax_error(F_DB_SEMICOLON, grp, info));
-	else if (now == F_OUTPUT_PIPE)
-		return (free_syntax_error(F_OUTPUT_PIPE, grp, info));
+	else if (now == F_AND || now == F_DB_SEMICOLON || now == F_OUTPUT_PIPE)
+		return (free_syntax_error(now, grp, info));
 	if ((now == F_SEMICOLON && !(before >= 1 && before <= 12))
 		|| now == F_CMD_NUM || !(before >= 1 && before <= 12))
 		return (true);

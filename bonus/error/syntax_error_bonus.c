@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 02:18:39 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 14:03:38 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/13 16:27:30 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,10 @@ static ssize_t	syntax_error2(int type)
 		write_rc = write(STDERR, ERR_DB_INPUT, 47);
 	else if (type == F_TR_INPUT)
 		write_rc = write(STDERR, ERR_TR_INPUT, 48);
-	else if (type == F_OUTPUT_PIPE)
-		write_rc = write(STDERR, ERR_OUTPUT_PIPE, 47);
+	else if (type == F_AND)
+		write_rc = write(STDERR, ERR_AND, 46);
+	else if (type == F_DB_AND)
+		write_rc = write(STDERR, ERR_DB_AND, 47);
 	return (write_rc);
 }
 

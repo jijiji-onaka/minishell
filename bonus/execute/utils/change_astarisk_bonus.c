@@ -6,13 +6,13 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/13 14:37:01 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 14:49:14 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/13 16:15:14 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../bonus_includes/minishell_bonus.h"
 
-static int		all_file_len(t_wild_lst *lst)
+static int	all_file_len(t_wild_lst *lst)
 {
 	int	len;
 
@@ -25,7 +25,7 @@ static int		all_file_len(t_wild_lst *lst)
 	return (len);
 }
 
-static void		create_sorted_files(t_wild_lst *lst,
+static void	create_sorted_files(t_wild_lst *lst,
 					char **ptr, t_minishell *info)
 {
 	int			i;
@@ -34,7 +34,8 @@ static void		create_sorted_files(t_wild_lst *lst,
 	t_wild_lst	*next;
 
 	lst = file_sort(lst);
-	if (!(new = malloc((sizeof(char) * (all_file_len(lst) + 1)))))
+	new = malloc((sizeof(char) * (all_file_len(lst) + 1)));
+	if (new == NULL)
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	i = 0;
 	while (lst)
@@ -53,7 +54,7 @@ static void		create_sorted_files(t_wild_lst *lst,
 	*ptr = new;
 }
 
-bool			change_astarisk(char **ptr, t_minishell *info, int i)
+bool	change_astarisk(char **ptr, t_minishell *info, int i)
 {
 	char		*current_dir;
 	bool		ret;

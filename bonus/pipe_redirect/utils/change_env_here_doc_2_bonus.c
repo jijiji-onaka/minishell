@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/13 14:58:21 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 15:03:36 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/13 16:18:38 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static int	envval_len_and_return_index(char *ptr, int *len,
 	return (i);
 }
 
-void		fill_normal_with_slash_support__(char *res, int *res_i, char chr[2],
+void	fill_normal_with_slash_support__(char *res, int *res_i, char chr[2],
 														char *now)
 {
 	if (*now == '\\')
@@ -68,7 +68,7 @@ static void	normal_with_slash_support_len(int *len, char chr[2],
 	(*len)++;
 }
 
-int			after_changed_len__(char *ptr, t_minishell *info, t_str *string)
+int	after_changed_len__(char *ptr, t_minishell *info, t_str *string)
 {
 	char	chr[2];
 	int		len;
@@ -82,11 +82,11 @@ int			after_changed_len__(char *ptr, t_minishell *info, t_str *string)
 			chr[QUO] = ptr[arg_i];
 		else if (chr[B_SLA] == '\0' && chr[QUO] == ptr[arg_i])
 			chr[QUO] = '\0';
-		if ((ptr[arg_i] == '$' &&
-				(ptr[arg_i + 1] != '\0' && ptr[arg_i + 1] != chr[QUO])
+		if ((ptr[arg_i] == '$'
+				&& (ptr[arg_i + 1] != '\0' && ptr[arg_i + 1] != chr[QUO])
 				&& (chr[B_SLA] == '\0')))
 			arg_i += envval_len_and_return_index(ptr + arg_i, &len,
-				info->env, &(string[++struct_i])) - 1;
+					info->env, &(string[++struct_i])) - 1;
 		else
 			normal_with_slash_support_len(&len, chr, &ptr[arg_i]);
 	}

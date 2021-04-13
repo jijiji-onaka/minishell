@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 12:22:24 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/10 14:53:23 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/13 16:09:22 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ bool	safe_readdir(struct dirent **dirp, DIR *dp, t_minishell *info)
 	*dirp = readdir(dp);
 	if (*dirp != NULL)
 		return (true);
-	(void)info;
 	return (false);
 }
 

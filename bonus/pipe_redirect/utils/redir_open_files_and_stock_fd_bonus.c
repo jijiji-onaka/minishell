@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 01:15:42 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 15:41:24 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/13 16:20:24 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ static bool	when_here_document(int **fd, t_cmdlst **cmd, char **filename,
 	int		src_i;
 	int		dst_i;
 
-	if ((fd[(*cmd)->fd][0] = open("./bonus/tmp", O_CREAT | O_WRONLY |
-	O_TRUNC, 0666)) == -1)
+	fd[(*cmd)->fd][0] = open("./bonus/tmp", O_CREAT | O_WRONLY | O_TRUNC, 0666);
+	if (fd[(*cmd)->fd][0] == -1)
 		return (ft_perror(*filename));
 	stop = safe_malloc(ft_strlen(*filename) + 1, where_err(LINE, FILE), info);
 	src_i = -1;
@@ -41,7 +41,8 @@ static bool	when_here_document(int **fd, t_cmdlst **cmd, char **filename,
 	do_here_document(info, fd[(*cmd)->fd][0], stop, src_i == dst_i);
 	ptr_free((void **)&stop);
 	close(fd[(*cmd)->fd][0]);
-	if ((fd[(*cmd)->fd][0] = open("./bonus/tmp", O_RDONLY)) == -1)
+	fd[(*cmd)->fd][0] = open("./bonus/tmp", O_RDONLY);
+	if (fd[(*cmd)->fd][0] == -1)
 		return (ft_perror(*filename));
 	*cmd = (*cmd)->next;
 	return (true);
@@ -50,20 +51,21 @@ static bool	when_here_document(int **fd, t_cmdlst **cmd, char **filename,
 static bool	open_files(int **fd, t_cmdlst **cmd, char **filename,
 				t_minishell *info)
 {
-	if ((*cmd)->type == OUTPUT || (*cmd)->type == DB_OUTPUT ||
-			(*cmd)->type == INPUT)
+	if ((*cmd)->type == OUTPUT || (*cmd)->type == DB_OUTPUT
+		|| (*cmd)->type == INPUT)
 		if (err_ambiguous_redirect(filename, info) == false)
 			return (false);
 	if ((*cmd)->type == OUTPUT || (*cmd)->type == DB_OUTPUT)
 	{
-		if ((fd[(*cmd)->fd][0] = open(*filename, O_CREAT | O_WRONLY |
-			set_mode((*cmd)->type), 0666))
-				== -1)
+		fd[(*cmd)->fd][0] = open(*filename, O_CREAT | O_WRONLY
+				| set_mode((*cmd)->type), 0666);
+		if (fd[(*cmd)->fd][0] == -1)
 			return (ft_perror(*filename));
 	}
 	else if ((*cmd)->type == INPUT)
 	{
-		if ((fd[(*cmd)->fd][0] = open(*filename, O_RDONLY)) == -1)
+		fd[(*cmd)->fd][0] = open(*filename, O_RDONLY);
+		if (fd[(*cmd)->fd][0] == -1)
 			return (ft_perror(*filename));
 	}
 	else if ((*cmd)->type == DB_INPUT)

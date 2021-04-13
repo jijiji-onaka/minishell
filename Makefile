@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/23 01:57:04 by tjinichi          #+#    #+#              #
-#    Updated: 2021/04/13 15:56:29 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/04/13 16:06:07 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -279,7 +279,7 @@ LIBFT = ./utils/Libft/libft.a
 
 $(NAME): $(LIBFT) $(OBJS)
 	@$(CC) $(CFLAGS)  -o $(NAME) $(OBJS) $(LIBFT) -ltermcap
-	@printf "\r                                                             \r$(GREEN)$(BOLD)created exe file [minishell]$(RESET)\n"
+	@printf "                                                            \r$(GREEN)$(BOLD)created exe file [minishell]$(RESET)\n"
 
 $(LIBFT): FORCE
 	@make -C $(LIBS)
@@ -506,7 +506,7 @@ SEPARATOR_B_SRCS = $(addprefix $(SEPARATOR_DIR)/, \
 )
 $(OBJDIR)/%.o : $(SEPARATOR_DIR)/utils/%.c
 	@$(CC) $(CFLAGS) -c -o $@ $<
-	@printf " %-100b\r" "$(YELLOW) Compiled $(RESET)$(UNDER_LINE)"$<"$(RESET)"
+	@printf " %-100b\r" "$(YELLOW) Compiled $(RESET)$(UNDER_LINE)"$<"$(RESET)\033[K\033[J"
 $(OBJDIR)/%.o : $(SEPARATOR_DIR)/%.c
 	@$(CC) $(CFLAGS) -c -o $@ $<
 	@printf " %-100b\r" "$(YELLOW) Compiled $(RESET)$(UNDER_LINE)"$<"$(RESET)"

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/13 14:58:28 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 15:00:49 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/13 16:18:07 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,11 @@ static void	fill_in_return_str(char *res, char **ptr, t_str *string)
 			chr[QUO] = (*ptr)[arg_i];
 		else if (chr[B_SLA] == '\0' && chr[QUO] == (*ptr)[arg_i])
 			chr[QUO] = '\0';
-		if (((*ptr)[arg_i] == '$' &&
-			((*ptr)[arg_i + 1] != '\0' && (*ptr)[arg_i + 1] != chr[QUO])
+		if (((*ptr)[arg_i] == '$'
+			&& ((*ptr)[arg_i + 1] != '\0' && (*ptr)[arg_i + 1] != chr[QUO])
 			&& (chr[B_SLA] == '\0')))
 			arg_i += stock_envval_and_return_index(res, (*ptr)[arg_i + 1],
-				&res_i, &(string[++struct_i])) - 1;
+					&res_i, &(string[++struct_i])) - 1;
 		else
 			fill_normal_with_slash_support__(res, &res_i, chr, &(*ptr)[arg_i]);
 	}
@@ -91,17 +91,20 @@ static void	fill_in_return_str(char *res, char **ptr, t_str *string)
 static bool	do_main(char **ptr, int dollar_num, t_minishell *info)
 {
 	char	*res;
-	t_str	string[dollar_num];
+	t_str	*strings;
 
-	if (!(res = malloc((size_t)after_changed_len__(*ptr, info, string) + 1)))
+	strings = safe_malloc(sizeof(t_str), where_err(LINE, FILE), info);
+	res = malloc((size_t)after_changed_len__(*ptr, info, strings) + 1);
+	if (res == NULL)
 		return (false);
-	fill_in_return_str(res, ptr, string);
+	fill_in_return_str(res, ptr, strings);
 	ptr_free((void **)ptr);
 	*ptr = res;
+	free(strings);
 	return (true);
 }
 
-bool		change_env_for_here_doc(char **ptr, t_minishell *info)
+bool	change_env_for_here_doc(char **ptr, t_minishell *info)
 {
 	int		dollar_num;
 	int		i;

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 17:42:21 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 12:28:07 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/13 12:59:16 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,10 @@ int				get_command_len_from_pos(int pos_end[2], int pos_start[2],
 int				get_from_nl_to_nl(t_string *command, t_cursor cursor, int pos[2]);
 int				get_now_index(t_minishell *info, t_string *command);
 int				get_key_id(char *buf, t_string *command, t_minishell *info);
+void			key_x_func(char *buf, t_string *command,
+					t_minishell *info, int key);
+void			key_x_func_mul(char *buf, t_string *command,
+					t_minishell *info, int key);
 void			check_key(char *buf, t_string *command, t_minishell *info);
 void			check_key_multiple_line(char multiple_line_char, char *buf,
 					t_string *cmd, t_minishell *info);

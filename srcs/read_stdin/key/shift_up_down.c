@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/13 12:08:34 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 12:12:09 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/13 12:55:59 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,8 @@ static char	*create_new_command(t_string *command, int start, int len,
 	return (new);
 }
 
-static void	move_original_cursor_pos(int move_len, t_minishell *info)
+static void	move_original_cursor_pos(int move_len, t_string *command,
+						t_minishell *info)
 {
 	int		i;
 
@@ -95,7 +96,7 @@ static void	move_original_cursor_pos(int move_len, t_minishell *info)
 	dup_pos(info->cursor.cur_pos, info->cursor.command_start_pos);
 	while (i < move_len)
 	{
-		move_cursor_right(NULL, NULL, info);
+		move_cursor_right(NULL, command, info);
 		i++;
 	}
 }
@@ -125,5 +126,5 @@ void	cut_command(char *buf, t_string *command, t_minishell *info)
 	dup_pos(info->cursor.cur_pos, info->cursor.command_start_pos);
 	dup_pos(info->cursor.command_end_pos, info->cursor.cur_pos);
 	display_command(command, info);
-	move_original_cursor_pos(original_pos, info);
+	move_original_cursor_pos(original_pos, command, info);
 }

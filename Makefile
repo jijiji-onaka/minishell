@@ -6,11 +6,12 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/23 01:57:04 by tjinichi          #+#    #+#              #
-#    Updated: 2021/04/10 16:21:47 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/04/13 13:06:14 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
+COMMAND_HISTORY = .minishell_history
 
 CC = gcc
 # CFLAGS = -g -Wall -Werror -Wextra #            -fsanitize=address
@@ -100,6 +101,7 @@ READ_SRCS = $(addprefix $(READ_DIR)/, \
 				key/delete.c \
 				key/get_key_id.c \
 				key/home_end.c \
+				key/key_x_func.c \
 				key/key_check.c \
 				key/left_right.c \
 				key/normal.c \
@@ -285,16 +287,17 @@ $(LIBFT): FORCE
 all: $(NAME)
 
 clean:
-	# @make clean -C $(LIBS)
-	@rm -f $(OBJS)
+	@make clean -C $(LIBS)
+	@rm -f $(COMMAND_HISTORY)
 	@rm -rf $(OBJDIR)
 	@printf "$(RED)$(BOLD)[minishell] \nremoved object file and objs directory$(RESET)\n"
 
 fclean:
-	# @make fclean -C $(LIBS)
+	@make fclean -C $(LIBS)
 	@rm -rf $(OBJDIR)
 	@printf "$(RED)$(BOLD)[minishell] \nremoved object file and objs directory\n"
 	@rm -f $(NAME)
+	@rm -f $(COMMAND_HISTORY)
 	@printf "removed minishell$(RESET)\n\n"
 
 re: fclean all
@@ -306,14 +309,6 @@ leak: $(LIBFT) $(OBJS)
 valgrind: $(LIBFT) $(OBJS)
 	gcc -g -o $(NAME) $(OBJS) $(LIBFT)
 	valgrind ./minishell
-
-
-check:
-	@cd minishell-helper && bash check.sh
-check2:
-	@cd minishell-helper && bash check1.sh
-check1:
-	@cd minishell-helper && bash test.sh
 
 #========== builtin function ===================================================
 BUILTIN_DIR = $(B_SRCDIR)/builtin

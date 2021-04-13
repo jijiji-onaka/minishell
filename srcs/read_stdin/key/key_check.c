@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 16:26:24 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 12:26:06 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/13 13:02:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,29 +42,12 @@ static void	init_selected_target(int key, t_string *command, t_minishell *info)
 
 void	check_key(char *buf, t_string *command, t_minishell *info)
 {
-	int						key;
-	const	void	(*const do_each_key[])(char *, t_string *, t_minishell *)
-	= {
-		trace_history_up, trace_history_down,
-		move_cursor_left, move_cursor_right,
-		ctrl_d_exit, clear_terminal, delete_displayed_char,
-		print_user_pushed_char, pushed_newline,
-		go_command_beginning, go_command_end, do_nothing,
-		move_word_directly_to_left, move_word_directly_to_right,
-		select_target_left, select_target_right,
-		copy_command, paste_selected_str, cut_command,
-		move_up_one_line, move_down_one_line, do_nothing,
-	};
+	int	key;
 
-	// printf("0[%s]\n", buf);
-	// printf("1[%d]\n", buf[0]);
-	// printf("2[%d]\n", buf[1]);
-	// printf("3[%d]\n", buf[2]);
-	// printf("4[%d]\n", buf[3]);
 	putstr_fd(info->key.cursor_visible, STDIN, where_err(LINE, FILE), info);
 	key = get_key_id(buf, command, info);
 	init_selected_target(key, command, info);
-	do_each_key[key](buf, command, info);
+	key_x_func(buf, command, info, key);
 	if (key != KEY_SHIFT_LEFT && key != KEY_SHIFT_RIGHT && key != CTRL_B
 		&& key != TO_BE_CONTINUE)
 		dup_pos(info->cursor.select_pos, info->cursor.cur_pos);
@@ -73,25 +56,13 @@ void	check_key(char *buf, t_string *command, t_minishell *info)
 void	check_key_multiple_line(char multiple_line_char, char *buf,
 					t_string *command, t_minishell *info)
 {
-	int						key;
-	const	void	(*const do_each_key[])(char *, t_string *, t_minishell *)
-	= {
-		trace_history_up, trace_history_down,
-		move_cursor_left, move_cursor_right,
-		ctrl_d_put_error, clear_terminal, delete_displayed_char,
-		print_user_pushed_char, pushed_newline,
-		go_command_beginning, go_command_end, do_nothing,
-		move_word_directly_to_left, move_word_directly_to_right,
-		select_target_left, select_target_right,
-		copy_command, paste_selected_str, cut_command,
-		move_up_one_line, move_down_one_line, do_nothing,
-	};
+	int	key;
 
 	info->multiple_line_char = multiple_line_char;
 	putstr_fd(info->key.cursor_visible, STDIN, where_err(LINE, FILE), info);
 	key = get_key_id(buf, command, info);
 	init_selected_target(key, command, info);
-	do_each_key[key](buf, command, info);
+	key_x_func_mul(buf, command, info, key);
 	if (key != KEY_SHIFT_LEFT && key != KEY_SHIFT_RIGHT && key != CTRL_B
 		&& key != TO_BE_CONTINUE)
 		dup_pos(info->cursor.select_pos, info->cursor.cur_pos);

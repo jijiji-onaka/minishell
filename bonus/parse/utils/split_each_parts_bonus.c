@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 16:54:09 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 21:31:08 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/10 12:54:26 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,10 +114,10 @@ char			**split_each_parts(char *str)
 	{
 		if (*str && (is_except_separator(str, 0)))
 			if (!(res[i++] = insert_word(&str)))
-				return (ptr_2d_free((void***)&res, --i));
+				return (ptr_2d_free((void ***)&res, --i));
 		if (*str && (is_separator(str, NULL)))
 			if (!(res[i++] = insert_separator(&str)))
-				return (ptr_2d_free((void***)&res, --i));
+				return (ptr_2d_free((void ***)&res, --i));
 	}
 	res[i] = NULL;
 	return (res);

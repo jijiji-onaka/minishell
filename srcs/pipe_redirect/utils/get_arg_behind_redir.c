@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 09:51:09 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/18 05:13:48 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/11 13:29:51 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ static int	arg_len(t_cmdlst *cmd)
 			while (cmd->arg[++i])
 				arg_num++;
 		}
-		if (cmd->next == NULL || (cmd->next && (cmd->next->type == PIPE ||
-					cmd->next->type == SEMICOLON)))
+		if (cmd->next == NULL || (cmd->next
+				&& (cmd->next->type == PIPE || cmd->next->type == SEMICOLON)))
 			break ;
 		cmd = cmd->next;
 	}
@@ -59,8 +59,8 @@ static char	**make_arg(t_cmdlst *cmd, char **res)
 				cmd->arg[i] = NULL;
 			}
 		}
-		if (cmd->next == NULL || (cmd->next && (cmd->next->type == PIPE ||
-					cmd->next->type == SEMICOLON)))
+		if (cmd->next == NULL || (cmd->next
+				&& (cmd->next->type == PIPE || cmd->next->type == SEMICOLON)))
 			break ;
 		cmd = cmd->next;
 	}
@@ -68,7 +68,7 @@ static char	**make_arg(t_cmdlst *cmd, char **res)
 	return (res);
 }
 
-void		get_arg_behind_redir(t_cmdlst *cmd, t_minishell *info)
+void	get_arg_behind_redir(t_cmdlst *cmd, t_minishell *info)
 {
 	int			arg_num;
 	char		**res;
@@ -76,9 +76,10 @@ void		get_arg_behind_redir(t_cmdlst *cmd, t_minishell *info)
 	if (cmd->arg == NULL)
 		return ;
 	arg_num = arg_len(cmd);
-	if (!(res = malloc((size_t)sizeof(char *) * (arg_num + 1))))
+	res = malloc(sizeof(char *) * (arg_num + 1));
+	if (res == NULL)
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	res = make_arg(cmd, res);
-	ptr_2d_free((void***)&cmd->arg, 0);
+	ptr_2d_free((void ***)&cmd->arg, 0);
 	cmd->arg = res;
 }

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 02:09:10 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 03:01:28 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/10 12:51:37 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ bool	err_ambiguous_redirect(char **filename, t_minishell *info)
 	num = word_count(*filename, ' ');
 	if (num == 1 || ft_strchr(tmp, '$') == NULL)
 	{
-		ptr_free((void**)&tmp);
+		ptr_free((void **)&tmp);
 		return (true);
 	}
 	if (write(STDERR, "minishell: ", 11) < 0)
@@ -44,6 +44,6 @@ bool	err_ambiguous_redirect(char **filename, t_minishell *info)
 	if (write(STDERR, ": ambiguous redirect\n", 21) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	g_global.exit_status = EXIT_FAILURE;
-	ptr_free((void**)&tmp);
+	ptr_free((void **)&tmp);
 	return (false);
 }

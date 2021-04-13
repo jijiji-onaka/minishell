@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:51:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/09 11:16:02 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/11 13:24:12 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,16 +65,19 @@
 # define ERR_UNSET "Usage: unset [No option] ...\n"
 # define FIRST_PIPE -1
 # define LAST_PIPE -2
+# define ERR_FD "minishell: file descriptor out of range: Bad file descriptor\n"
 
 # define LINE __LINE__
 # define FILE __FILE__
 
-void			all_free_minishell_info(t_minishell *info);
-void			all_free_exit(t_minishell *info, char *error_message, \
-							int line_num, char *file_name);
-void			*ft_perror(char *err_message);
-void			ft_perror_exit(char *error_message);
-void			signal_error_exit(void);
-bool			syntax_error(int type, t_minishell *info);
+void	all_free_minishell_info(t_minishell *info);
+void	all_free_exit(t_minishell *info, char *error_message, \
+			int line_num, char *file_name);
+void	*ft_perror(char *err_message);
+void	ft_perror_exit(char *error_message);
+bool	syntax_error(int type, t_minishell *info);
+void	free_env_lst(t_envlst **envlst);
+void	free_command_history(t_hist_list **history);
+void	free_cmd_lst(t_cmdlst **cmdlst);
 
 #endif

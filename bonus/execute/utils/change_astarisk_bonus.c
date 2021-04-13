@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 07:53:13 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/18 12:04:48 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/10 12:51:37 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static void		create_sorted_files(t_wild_lst *lst,
 		lst = next;
 	}
 	new[i] = '\0';
-	ptr_free((void**)ptr);
+	ptr_free((void **)ptr);
 	*ptr = new;
 }
 

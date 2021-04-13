@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/09 12:24:45 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/10 12:12:05 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static bool	check_quotation(char **command, t_minishell *info)
 
 	quo = '\0';
 	if (is_valid_quotations(command, &quo) == false)
-		if (waiting_for_quotation(quo, command, info) == false)
+		if (read_quotation(quo, command, info) == false)
 			return (false);
 	return (true);
 }

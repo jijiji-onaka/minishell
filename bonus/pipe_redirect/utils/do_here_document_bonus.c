@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 14:07:59 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 03:01:19 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/10 12:51:37 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static bool	press_newline(char **inputs, char *stopper,
 {
 	if (ft_strcmp(*inputs, stopper) == 0)
 	{
-		ptr_free((void**)inputs);
+		ptr_free((void **)inputs);
 		return (true);
 	}
 	if (expand_flag)
@@ -56,15 +56,15 @@ static void	clean_up(int *backup, char **inputs, t_minishell *info)
 	if (!g_global.reading)
 		if ((dup2(*backup, STDIN)) == -1)
 		{
-			ptr_free((void**)inputs);
-			ptr_free((void**)info->ptr_for_free);
+			ptr_free((void **)inputs);
+			ptr_free((void **)info->ptr_for_free);
 			info->ptr_for_free = NULL;
 			all_free_exit(info, ERR_DUP2, __LINE__, __FILE__);
 		}
 	if (ft_close(backup) == false)
 	{
-		ptr_free((void**)inputs);
-		ptr_free((void**)info->ptr_for_free);
+		ptr_free((void **)inputs);
+		ptr_free((void **)info->ptr_for_free);
 		info->ptr_for_free = NULL;
 		all_free_exit(info, ERR_CLOSE, __LINE__, __FILE__);
 	}

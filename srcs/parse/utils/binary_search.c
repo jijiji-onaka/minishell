@@ -6,17 +6,17 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 11:16:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/24 22:23:00 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/11 13:17:55 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-int		binary_search(char *cmd)
+int	binary_search(char *cmd)
 {
+	int			ret;
 	const char	*base[CMD_NUM] = {"\0", ";", "<", ">", ">>",
 	"cd", "echo", "env", "export", "pwd", "unset", "|"};
-	int			ret;
 
 	if (is_command_exit(cmd) == true)
 		return (EXIT);

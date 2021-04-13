@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/10 12:09:52 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static void	console_loop(t_minishell *info)
 	{
 		initialize_global_variables();
 		put_prompt(info);
-		if ((command = waiting_for_input(info)) != NULL)
+		if ((command = read_command(info)) != NULL)
 		{
 			if (parse_command(info, command) != false)
 			{

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/23 01:13:20 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/10 13:01:49 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,18 +36,18 @@ void		exec_cd(t_minishell *info, t_cmdlst *cmd)
 	{
 		if (!(arg[1] = search_env("HOME", 4, info->env, NULL)))
 			return (not_set_home_path(info));
-		go_to_path(info, &(arg[1]), false);
+		go_path(info, &(arg[1]), false);
 		arg[1] = NULL;
 	}
 	else if (arg[1][0] == '-' && arg[1][1] == '\0')
-		go_to_oldpwd(info);
+		go_oldpwd(info);
 	else
-		go_to_path(info, &(cmd->arg[1]), false);
+		go_path(info, &(cmd->arg[1]), false);
 }
 
 /*
 ** else if (arg[1][0] == '-' && arg[1][1] == 'P' && arg[1][2] == '\0')
-** go_to_path(info, &(cmd->arg[2]), true);
+** go_path(info, &(cmd->arg[2]), true);
 ** else if (arg[1][0] == '-' && arg[1][1] == 'L' && arg[1][2] == '\0')
-** go_to_path(info, &(cmd->arg[2]), false);
+** go_path(info, &(cmd->arg[2]), false);
 */

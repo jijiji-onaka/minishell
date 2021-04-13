@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 17:56:17 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/10 14:06:40 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static char	*apply_env_value(char *arg, t_minishell *info, char **env_name)
 	char	*env_value;
 
 	if (arg[0] == '+' && arg[1] == '=')
-		env_value = add_env_value(arg + 2, info, env_name);
+		env_value = joint_env_value(arg + 2, info, env_name);
 	else
 		env_value = make_env_value(arg + 1, info, env_name);
 	return (env_value);

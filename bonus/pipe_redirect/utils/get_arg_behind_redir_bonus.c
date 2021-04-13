@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_arg_behind_redir.c                             :+:      :+:    :+:   */
+/*   get_arg_behind_redir_bonus.c                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 09:51:09 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/17 04:37:54 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/10 12:54:26 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,6 @@ void		get_arg_behind_redir(t_cmdlst *cmd, t_minishell *info)
 	if (!(res = malloc((size_t)sizeof(char *) * (arg_num + 1))))
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	res = make_arg(cmd, res);
-	ptr_2d_free((void***)&cmd->arg, 0);
+	ptr_2d_free((void ***)&cmd->arg, 0);
 	cmd->arg = res;
 }

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 21:55:45 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 01:52:10 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/11 13:51:17 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,11 @@ void		mix_input_and_output(int fd[3], t_cmdlst *begin,
 				t_minishell *info);
 void		mix_input_and_stderr_output(int fd[3], t_cmdlst *begin,
 				t_minishell *info);
-int			open_files_and_stock_fd(int (*fd)[2],
+int			open_files_and_stock_fd(int **fd,
 				t_cmdlst **cmd_lst, t_minishell *info);
-void		prepare_redirect_put(int (*fd)[2], int *backup,
+void		prepare_redirect_put(int **fd, int *backup,
 				t_cmdlst *lst, t_minishell *info);
-void		cleanup_redirect_put(int (*fd)[2], int *backup,
+void		cleanup_redirect_put(int **fd, int *backup,
 				t_cmdlst *lst, t_minishell *info);
 void		read_from_file(int fd, t_cmdlst *begin, t_minishell *info);
 t_cmdlst	*skip_cmdlst(t_cmdlst **cmd_lst, size_t how_many, bool flag);

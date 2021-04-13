@@ -6,13 +6,13 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 11:26:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/08 08:08:09 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/11 14:02:44 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-void		cleanup_redirect_put(int (*fd)[2], int *backup,
+void	cleanup_redirect_put(int **fd, int *backup,
 				t_cmdlst *lst, t_minishell *info)
 {
 	t_cmdlst	*begin;

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 00:02:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 14:16:01 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/10 12:54:26 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	arg_num_len(t_cmdlst *cmd, t_minishell *info)
 			if (!(tmp = split_each_arg(cmd->arg[i])))
 				all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 			arg_num += count_2d(tmp);
-			ptr_2d_free((void***)&tmp, -1);
+			ptr_2d_free((void ***)&tmp, -1);
 		}
 		else
 			arg_num++;
@@ -66,7 +66,7 @@ bool		at_first_change_only_env(t_cmdlst *cmd, int *type,
 
 	(void)type;
 	new = create_new_args(cmd, info);
-	ptr_2d_free((void***)&(cmd->arg), -1);
+	ptr_2d_free((void ***)&(cmd->arg), -1);
 	cmd->arg = new;
 	if (cmd->arg[0] == NULL || cmd->arg[0][0] == '\0')
 		return (false);

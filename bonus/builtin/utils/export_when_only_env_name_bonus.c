@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 12:38:30 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/10 12:51:37 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,5 @@ void		when_only_env_name(char *arg, t_minishell *info)
 			&& !f)
 			update_env_lst(&(info->env), env_name, NULL, info);
 	}
-	ptr_free((void**)&env_name);
+	ptr_free((void **)&env_name);
 }

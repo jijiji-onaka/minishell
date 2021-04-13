@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/08 05:11:14 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/08 08:21:06 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/10 15:46:39 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ void	historylist_add_front(t_hist_list **lst, t_hist_list *new)
 static void	lstadd_back(t_hist_list **lst, t_hist_list *new)
 {
 	t_hist_list	*last_elem;
-	// t_hist_list	*loop;
 
 	if (!new || !lst)
 		return ;
@@ -62,7 +61,8 @@ t_hist_list	*make_struct_hist_list(int fd, char *line, t_hist_list *old_hist,
 	return (new);
 }
 
-static void	get_command_history(int fd, t_hist_list **history, t_minishell *info)
+static void	get_command_history(int fd, t_hist_list **history,
+						t_minishell *info)
 {
 	char		*line;
 	int			ret;
@@ -77,7 +77,7 @@ static void	get_command_history(int fd, t_hist_list **history, t_minishell *info
 		ret = get_next_line(fd, &line);
 		if (ret == 0 || line[0] == '\0')
 		{
-			ptr_free((void**)&line);
+			ptr_free((void **)&line);
 			if (ret == 0)
 				break ;
 			continue ;

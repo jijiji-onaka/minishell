@@ -6,13 +6,20 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 16:46:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/25 03:40:17 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/11 13:22:13 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-void		fill_normal_with_slash_support(char *res, int *res_i, char chr[2],
+static char	return_back_slash_or_null(char chr[2], char *now)
+{
+	if (chr[B_SLA] == '\0' && *now == '\\')
+		return ('\\');
+	return ('\0');
+}
+
+void	fill_normal_with_slash_support(char *res, int *res_i, char chr[2],
 														char *now)
 {
 	if (((*(now + 1)) == '\"' || *(now + 1) == '$') && *now == '\\'
@@ -27,7 +34,7 @@ void		fill_normal_with_slash_support(char *res, int *res_i, char chr[2],
 	{
 		if (!(*now == '\'' && chr[B_SLA] == '\\' && chr[QUO] == '\''))
 			res[(*res_i)++] = *now;
-		chr[B_SLA] = ((!chr[B_SLA] && *now == '\\') ? '\\' : '\0');
+		chr[B_SLA] =return_back_slash_or_null(chr, now);
 	}
 	else if (chr[QUO] == '\"')
 	{
@@ -55,7 +62,7 @@ static void	normal_with_slash_support_len(int *len, char chr[2],
 	{
 		if (!(*now == '\'' && chr[B_SLA] == '\\' && chr[QUO] == '\''))
 			(*len)++;
-		chr[B_SLA] = ((!chr[B_SLA] && *now == '\\') ? '\\' : '\0');
+		chr[B_SLA] = return_back_slash_or_null(chr, now);
 	}
 	else if (chr[QUO] == '\"')
 	{
@@ -94,7 +101,7 @@ static int	envval_len_and_return_index(char *ptr, int *len,
 	return (i);
 }
 
-int			after_changed_len(char *ptr, t_minishell *info, t_str *string)
+int	after_changed_len(char *ptr, t_minishell *info, t_str *string)
 {
 	char	chr[2];
 	int		len;
@@ -108,11 +115,11 @@ int			after_changed_len(char *ptr, t_minishell *info, t_str *string)
 			chr[QUO] = ptr[arg_i];
 		else if (chr[B_SLA] == '\0' && chr[QUO] == ptr[arg_i])
 			chr[QUO] = '\0';
-		else if ((ptr[arg_i] == '$' &&
-				(ptr[arg_i + 1] != '\0' && ptr[arg_i + 1] != chr[QUO])
+		else if ((ptr[arg_i] == '$'
+				&& (ptr[arg_i + 1] != '\0' && ptr[arg_i + 1] != chr[QUO])
 				&& (chr[B_SLA] == '\0') && !(chr[QUO] == '\'')))
 			arg_i += envval_len_and_return_index(ptr + arg_i, &len,
-				info->env, &(string[++struct_i])) - 1;
+					info->env, &(string[++struct_i])) - 1;
 		else
 			normal_with_slash_support_len(&len, chr, &ptr[arg_i]);
 	}

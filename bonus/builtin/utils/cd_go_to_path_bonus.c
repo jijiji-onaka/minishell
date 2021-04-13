@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd_go_to_path_bonus.c                              :+:      :+:    :+:   */
+/*   cd_go_path_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -42,14 +42,14 @@ static bool	ch_each_path(t_minishell *info, char *dir)
 		if (!(new = getcwd(NULL, 0)))
 			return (not_found_cwd(info, dir, &split));
 		else if (ft_strcmp(split[i], ".") == 0)
-			go_to_cwd(info, info->current_dir_path, dir);
+			go_cwd(info, info->current_dir_path, dir);
 		else if (ft_strcmp(split[i], "..") == 0)
 			go_to_upper_dir(info->current_dir_path, info);
 		else
 			update_current_dir(info, split[i]);
 		free(new);
 	}
-	ptr_2d_free((void***)&(split), -1);
+	ptr_2d_free((void ***)&(split), -1);
 	info->ptr_2d_for_free = NULL;
 	return (true);
 }
@@ -74,12 +74,12 @@ static bool	change_dir(char *dir, t_minishell *info)
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	if (ch_root_dir_when_arg_is_absolute(info, dir[0] == '/') == false)
 	{
-		ptr_free((void**)&oldpwd);
+		ptr_free((void **)&oldpwd);
 		return (false);
 	}
 	if (ch_each_path(info, dir) == false)
 	{
-		ptr_free((void**)&oldpwd);
+		ptr_free((void **)&oldpwd);
 		return (false);
 	}
 	flag = false;
@@ -88,11 +88,11 @@ static bool	change_dir(char *dir, t_minishell *info)
 	else
 		set_oldpwd(info, oldpwd);
 	info->oldpwd_path = re_strdup(&(info->oldpwd_path), oldpwd);
-	ptr_free((void**)&oldpwd);
+	ptr_free((void **)&oldpwd);
 	return (true);
 }
 
-void		go_to_path(t_minishell *info, char **dir,
+void		go_path(t_minishell *info, char **dir,
 				bool option_p_flag)
 {
 	bool	flag;

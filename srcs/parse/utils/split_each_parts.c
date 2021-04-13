@@ -6,13 +6,13 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 16:54:09 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 14:06:31 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/10 16:32:56 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-static void		decide_quo_val(char chr[2], char *now)
+static void	decide_quo_val(char chr[2], char *now)
 {
 	if (chr[B_SLA] == '\0' && chr[QUO] == '\0' && is_quo(*now))
 		chr[QUO] = *now;
@@ -21,7 +21,12 @@ static void		decide_quo_val(char chr[2], char *now)
 	else if (chr[QUO] != '\'' && chr[B_SLA] == '\0' && *now == '\\')
 		chr[B_SLA] = '\\';
 	else if (chr[QUO] != '\'')
-		chr[B_SLA] = ((!chr[B_SLA] && *now == '\\') ? '\\' : '\0');
+	{
+		if (chr[B_SLA] == '\0' && *now == '\\')
+			chr[B_SLA] = '\\';
+		else
+			chr[B_SLA] = '\0';
+	}
 }
 
 static size_t	count_words(char *str)
@@ -43,7 +48,7 @@ static size_t	count_words(char *str)
 			word_count++;
 		}
 		flag ^= flag;
-		if (*str && (is_separator(str, NULL)) && (word_count += 1))
+		if (*str && (is_separator(str, NULL)) && (word_count++))
 			while (*str && (is_separator(str, &flag)))
 				str++;
 		while (*str && ft_isspace(*str))
@@ -52,7 +57,7 @@ static size_t	count_words(char *str)
 	return (word_count);
 }
 
-static char		*insert_separator(char **str)
+static char	*insert_separator(char **str)
 {
 	char		*word;
 	size_t		i;
@@ -62,7 +67,8 @@ static char		*insert_separator(char **str)
 	flag = 0;
 	while ((*str)[i] && (is_separator(&(*str)[i], &flag)))
 		i++;
-	if (!(word = malloc(sizeof(char) * (i + 1))))
+	word = malloc(sizeof(char) * (i + 1));
+	if (word == NULL)
 		return (NULL);
 	i = 0;
 	flag = 0;
@@ -74,7 +80,7 @@ static char		*insert_separator(char **str)
 	return (word);
 }
 
-static char		*insert_word(char **str)
+static char	*insert_word(char **str)
 {
 	char		*word;
 	size_t		i;
@@ -85,7 +91,8 @@ static char		*insert_word(char **str)
 	chr[B_SLA] = 0;
 	while ((*str)[++i] && (is_except_separator(&(*str)[i], chr[QUO])))
 		decide_quo_val(chr, &((*str)[i]));
-	if (!(word = malloc(sizeof(char) * (i + 1))))
+	word = malloc(sizeof(char) * (i + 1));
+	if (word == NULL)
 		return (NULL);
 	i = 0;
 	chr[QUO] = 0;
@@ -100,25 +107,31 @@ static char		*insert_word(char **str)
 	return (word);
 }
 
-char			**split_each_parts(char *str)
+char	**split_each_parts(char *str)
 {
 	char		**res;
-	size_t		word_count;
-	size_t		i;
+	size_t		i[2];
 
-	word_count = count_words(str);
-	if (!(res = malloc(sizeof(char *) * (word_count + 1))))
+	i[1] = count_words(str);
+	res = malloc(sizeof(char *) * (i[1] + 1));
+	if (res == NULL)
 		return (NULL);
-	i = 0;
-	while (*str && i < word_count)
+	i[0] = 0;
+	while (*str && i[0] < i[1])
 	{
 		if (*str && (is_except_separator(str, 0)))
-			if (!(res[i++] = insert_word(&str)))
-				return (ptr_2d_free((void***)&res, --i));
+		{
+			res[i[0]] = insert_word(&str);
+			if (res[i[0]++] == NULL)
+				return (ptr_2d_free((void ***)&res, --i[0]));
+		}
 		if (*str && (is_separator(str, NULL)))
-			if (!(res[i++] = insert_separator(&str)))
-				return (ptr_2d_free((void***)&res, --i));
+		{
+			res[i[0]] = insert_separator(&str);
+			if (res[i[0]++] == NULL)
+				return (ptr_2d_free((void ***)&res, --i[0]));
+		}
 	}
-	res[i] = NULL;
+	res[i[0]] = NULL;
 	return (res);
 }

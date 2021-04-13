@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 21:03:13 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 03:01:19 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/10 16:34:23 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,44 +28,30 @@ static bool	final_cmd_check(int *type, t_cmdlst *cmd, t_minishell *info)
 	return (true);
 }
 
-static int	return_index(int type)
+bool	execute_command(t_minishell *info, t_cmdlst *cmd)
 {
-	if (type == BIN)
-		return (0);
-	else if (type == EXIT)
-		return (1);
-	else if (type == PWD)
-		return (2);
-	else if (type == CMD_ECHO)
-		return (3);
-	else if (type == CD)
-		return (4);
-	else if (type == ENV)
-		return (5);
-	else if (type == EXPORT)
-		return (6);
-	else if (type == UNSET)
-		return (7);
-	return (END_OF_THE_WORLD);
-}
-
-bool		execute_command(t_minishell *info, t_cmdlst *cmd)
-{
-	int		type;
-	void	(*const exec_command[])(t_minishell *, t_cmdlst *) = {
-		exec_bin, exec_exit, exec_pwd, exec_echo, exec_cd, exec_env,
-		exec_export, exec_unset,
-	};
-
-	if ((cmd)->type == SEMICOLON)
+	if (cmd->type == SEMICOLON)
 		return (true);
-	type = cmd->type;
-	if (final_cmd_check(&type, cmd, info) == false)
+	if (final_cmd_check(&(cmd->type), cmd, info) == false)
 		return (true);
-	if (is_redir(type) || type == SEMICOLON || type == PIPE)
+	if (is_redir(cmd->type) || cmd->type == SEMICOLON || cmd->type == PIPE)
 		return (write(STDOUT, "my minishell is failed (T_T)\n", 29));
-	exec_command[return_index(type)](info, cmd);
-	info->ptr_for_free = NULL;
+	if (cmd->type == BIN)
+		exec_bin(info, cmd);
+	else if (cmd->type == EXIT)
+		exec_exit(info, cmd);
+	else if (cmd->type == PWD)
+		exec_pwd(info, cmd);
+	else if (cmd->type == CMD_ECHO)
+		exec_echo(info, cmd);
+	else if (cmd->type == CD)
+		exec_cd(info, cmd);
+	else if (cmd->type == ENV)
+		exec_env(info, cmd);
+	else if (cmd->type == EXPORT)
+		exec_export(info, cmd);
+	else if (cmd->type == UNSET)
+		exec_unset(info, cmd);
 	return (true);
 }
 
@@ -82,7 +68,7 @@ static bool	is_after_pipe(t_cmdlst *lst)
 	return (false);
 }
 
-void		execute_command_loop(t_minishell *info)
+void	execute_command_loop(t_minishell *info)
 {
 	t_cmdlst	*lst;
 

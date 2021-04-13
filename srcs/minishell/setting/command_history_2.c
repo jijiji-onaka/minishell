@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/08 07:33:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/09 08:41:06 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/10 16:01:33 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void	update_command_history_file(t_minishell *info, t_hist_list *history)
 	{
 		if (history->command)
 		{
-			// printf("[%s]\n",history->command);
 			if (ft_putstr_fd(history->command, fd) == false)
 				all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 			if (write(fd, "\n", 1) < 1)

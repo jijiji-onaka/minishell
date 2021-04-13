@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/23 01:57:04 by tjinichi          #+#    #+#              #
-#    Updated: 2021/04/09 12:32:41 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/04/10 16:21:47 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,40 +25,62 @@ OBJDIR = ./objs
 #========== builtin function ===================================================
 BUILTIN_DIR = $(SRCDIR)/builtin
 BUILTIN_SRCS = $(addprefix $(BUILTIN_DIR)/, \
-				utils/cd_go_to_home.c \
-				utils/cd_go_to_cwd.c \
-				utils/cd_go_to_oldpwd.c \
-				utils/cd_go_to_path.c \
-				utils/cd_utils.c \
-				utils/display_sorted_env.c \
-				utils/envlst_sort_2.c \
-				utils/envlst_sort.c \
-				utils/error_mandatory.c \
-				utils/exit_set_numeric_flag.c \
-				utils/export_make_env_name.c \
-				utils/export_make_env_value.c \
-				utils/export_unset_is_parameter.c \
-				utils/export_when_only_env_name.c \
-				utils/safe_chdir.c \
-				utils/ft_getenv.c \
-				utils/skip_for_exit.c \
-				utils/two_ptr_free.c \
-				utils/unset_remove_env_lst_if.c \
-				utils/update_env_lst.c \
-				utils/make_struct_string.c \
-				utils/get_environ.c \
-				utils/search_exefile_bin_dir.c \
-				utils/not_builtin_command.c \
-				bin.c \
-				cd.c \
-				echo.c \
-				env.c \
-				exit.c \
-				export.c \
-				pwd.c \
-				unset.c \
+				bin/bin.c \
+				bin/err_not_builtin.c \
+				bin/get_environ.c \
+				bin/search_binfile.c \
+				cd/cd_utils.c \
+				cd/cd_utils_2.c \
+				cd/cd.c \
+				cd/go_cwd.c \
+				cd/go_oldpwd.c \
+				cd/go_path.c \
+				cd/is_cdpath.c \
+				echo/echo.c \
+				env/env.c \
+				exit/exit.c \
+				exit/set_numeric_flag.c \
+				export/env_display.c \
+				export/env_free.c \
+				export/env_joint.c \
+				export/env_is_valid.c \
+				export/env_sort_2.c \
+				export/env_sort.c \
+				export/env_update.c \
+				export/export.c \
+				pwd/pwd.c \
+				unset/unset.c \
+				unset/env_remove.c \
 )
-$(OBJDIR)/%.o : $(BUILTIN_DIR)/utils/%.c
+$(OBJDIR)/%.o : $(BUILTIN_DIR)/bin/%.c
+	@mkdir -p $(OBJDIR)
+	@$(CC) $(CFLAGS) -c -o $@ $<
+	@printf " %-100b\r" "$(YELLOW) Compiled $(RESET)$(UNDER_LINE)"$<"$(RESET)"
+$(OBJDIR)/%.o : $(BUILTIN_DIR)/cd/%.c
+	@mkdir -p $(OBJDIR)
+	@$(CC) $(CFLAGS) -c -o $@ $<
+	@printf " %-100b\r" "$(YELLOW) Compiled $(RESET)$(UNDER_LINE)"$<"$(RESET)"
+$(OBJDIR)/%.o : $(BUILTIN_DIR)/echo/%.c
+	@mkdir -p $(OBJDIR)
+	@$(CC) $(CFLAGS) -c -o $@ $<
+	@printf " %-100b\r" "$(YELLOW) Compiled $(RESET)$(UNDER_LINE)"$<"$(RESET)"
+$(OBJDIR)/%.o : $(BUILTIN_DIR)/pwd/%.c
+	@mkdir -p $(OBJDIR)
+	@$(CC) $(CFLAGS) -c -o $@ $<
+	@printf " %-100b\r" "$(YELLOW) Compiled $(RESET)$(UNDER_LINE)"$<"$(RESET)"
+$(OBJDIR)/%.o : $(BUILTIN_DIR)/export/%.c
+	@mkdir -p $(OBJDIR)
+	@$(CC) $(CFLAGS) -c -o $@ $<
+	@printf " %-100b\r" "$(YELLOW) Compiled $(RESET)$(UNDER_LINE)"$<"$(RESET)"
+$(OBJDIR)/%.o : $(BUILTIN_DIR)/env/%.c
+	@mkdir -p $(OBJDIR)
+	@$(CC) $(CFLAGS) -c -o $@ $<
+	@printf " %-100b\r" "$(YELLOW) Compiled $(RESET)$(UNDER_LINE)"$<"$(RESET)"
+$(OBJDIR)/%.o : $(BUILTIN_DIR)/unset/%.c
+	@mkdir -p $(OBJDIR)
+	@$(CC) $(CFLAGS) -c -o $@ $<
+	@printf " %-100b\r" "$(YELLOW) Compiled $(RESET)$(UNDER_LINE)"$<"$(RESET)"
+$(OBJDIR)/%.o : $(BUILTIN_DIR)/exit/%.c
 	@mkdir -p $(OBJDIR)
 	@$(CC) $(CFLAGS) -c -o $@ $<
 	@printf " %-100b\r" "$(YELLOW) Compiled $(RESET)$(UNDER_LINE)"$<"$(RESET)"
@@ -69,32 +91,39 @@ $(OBJDIR)/%.o : $(BUILTIN_DIR)/%.c
 #========== read stdin function ================================================
 READ_DIR = $(SRCDIR)/read_stdin
 READ_SRCS = $(addprefix $(READ_DIR)/, \
-				utils/key_ctrl_d.c \
-				utils/check_format.c \
-				utils/check_more_pipe.c \
-				utils/reset_prompt.c \
-				utils/rm_chr_in_str.c \
-				utils/get_key_id.c \
-				utils/key_check.c \
-				utils/key_up_down.c \
-				utils/key_left_right.c \
-				utils/key_clear.c \
-				utils/key_del.c \
-				utils/key_normal.c \
-				utils/key_home_end.c \
-				utils/key_shift_up_down.c \
-				utils/key_ctrl_b.c  \
-				utils/key_ctrl_p_n.c \
-				utils/key_shift_left_right.c \
-				utils/key_utils.c \
-				utils/cursor_utils.c \
-				utils/key_ctrl_left_right.c \
-				utils/get_window_size.c \
-				waiting_for_input.c \
-				waiting_for_quotation.c \
-				waiting_for_next_command.c \
+				format/check_format.c \
+				key/ctrl_b.c  \
+				key/ctrl_l.c \
+				key/ctrl_d.c \
+				key/ctrl_left_right.c \
+				key/ctrl_p_n.c \
+				key/delete.c \
+				key/get_key_id.c \
+				key/home_end.c \
+				key/key_check.c \
+				key/left_right.c \
+				key/normal.c \
+				key/shift_left_right.c \
+				key/shift_up_down.c \
+				key/up_down.c \
+				window/display.c \
+				window/get.c \
+				window/move_cursor.c \
+				window/win_utils_2.c \
+				window/win_utils.c \
+				read_command.c \
+				read_quotation.c \
+				read_add_command.c \
 )
-$(OBJDIR)/%.o : $(READ_DIR)/utils/%.c
+$(OBJDIR)/%.o : $(READ_DIR)/window/%.c
+	@mkdir -p $(OBJDIR)
+	@$(CC) $(CFLAGS) -c -o $@ $<
+	@printf " %-100b\r" "$(YELLOW) Compiled $(RESET)$(UNDER_LINE)"$<"$(RESET)"
+$(OBJDIR)/%.o : $(READ_DIR)/format/%.c
+	@mkdir -p $(OBJDIR)
+	@$(CC) $(CFLAGS) -c -o $@ $<
+	@printf " %-100b\r" "$(YELLOW) Compiled $(RESET)$(UNDER_LINE)"$<"$(RESET)"
+$(OBJDIR)/%.o : $(READ_DIR)/key/%.c
 	@mkdir -p $(OBJDIR)
 	@$(CC) $(CFLAGS) -c -o $@ $<
 	@printf " %-100b\r" "$(YELLOW) Compiled $(RESET)$(UNDER_LINE)"$<"$(RESET)"
@@ -108,17 +137,16 @@ PARSE_SRCS = $(addprefix $(PARSE_DIR)/, \
 				utils/binary_search.c \
 				utils/cmdlst_add_back.c \
 				utils/is_valid_quotation.c \
-				utils/what_is_waiting_for.c \
 				utils/is_what.c \
 				utils/is_what_2.c \
 				utils/rm_spaces_in_2d_array.c \
 				utils/split_each_arg.c \
 				utils/split_each_parts.c \
-				check_format/free_syntax_error.c \
-				check_format/check_syntax.c \
+				syntax/free_syntax_error.c \
+				syntax/check_syntax.c \
 				parse_command.c \
 )
-$(OBJDIR)/%.o : $(PARSE_DIR)/check_format/%.c
+$(OBJDIR)/%.o : $(PARSE_DIR)/syntax/%.c
 	@$(CC) $(CFLAGS) -c -o $@ $<
 	@printf " %-100b\r" "$(YELLOW) Compiled $(RESET)$(UNDER_LINE)"$<"$(RESET)"
 $(OBJDIR)/%.o : $(PARSE_DIR)/utils/%.c
@@ -184,11 +212,13 @@ $(OBJDIR)/%.o : $(SEPARATOR_DIR)/%.c
 #========== minishell function =================================================
 MINISHELL_DIR = $(SRCDIR)/minishell
 MINISHELL_SRCS = $(addprefix $(MINISHELL_DIR)/, \
-				setting/set_env.c \
-				setting/set_minishell.c \
+				setting/environ.c \
+				setting/struct_all.c \
 				setting/set_shell_level.c \
 				setting/command_history.c \
 				setting/command_history_2.c \
+				setting/tgetent.c \
+				ft_getenv.c \
 				main.c \
 				signal.c \
 )
@@ -202,10 +232,11 @@ $(OBJDIR)/%.o : $(MINISHELL_DIR)/%.c
 #========== error function =================================================
 ERROR_DIR = $(SRCDIR)/error
 ERROR_SRCS = $(addprefix $(ERROR_DIR)/, \
-				all_free_exit.c \
-				ft_perror_exit.c \
-				signal_error_exit.c \
+				all_free.c \
+				error_exit.c \
+				ft_perror.c \
 				syntax_error.c \
+				error_mandatory.c \
 )
 $(OBJDIR)/%.o : $(ERROR_DIR)/setting/%.c
 	@$(CC) $(CFLAGS) -c -o $@ $<
@@ -217,9 +248,11 @@ $(OBJDIR)/%.o : $(ERROR_DIR)/%.c
 #========== safe_function function =================================================
 SAFE_DIR = $(SRCDIR)/safe_function
 SAFE_SRCS = $(addprefix $(SAFE_DIR)/, \
+				dir.c \
 				put_fd.c \
 				safe_malloc.c \
 				safe_read.c \
+				safe_chdir.c \
 )
 $(OBJDIR)/%.o : $(SAFE_DIR)/%.c
 	@$(CC) $(CFLAGS) -c -o $@ $<
@@ -286,9 +319,9 @@ check1:
 BUILTIN_DIR = $(B_SRCDIR)/builtin
 BUILTIN_B_SRCS = $(addprefix $(BUILTIN_DIR)/, \
 				utils/cd_go_to_home_bonus.c \
-				utils/cd_go_to_cwd_bonus.c \
-				utils/cd_go_to_oldpwd_bonus.c \
-				utils/cd_go_to_path_bonus.c \
+				utils/cd_go_cwd_bonus.c \
+				utils/cd_go_oldpwd_bonus.c \
+				utils/cd_go_path_bonus.c \
 				utils/cd_utils_bonus.c \
 				utils/display_sorted_env_bonus.c \
 				utils/envlst_sort_2_bonus.c \
@@ -335,9 +368,9 @@ READ_B_SRCS = $(addprefix $(READ_DIR)/, \
 				utils/check_more_pipe_bonus.c \
 				utils/ctrl_d_rm_bonus.c \
 				utils/what_is_waiting_for_bonus.c \
-				waiting_for_input_bonus.c \
-				waiting_for_quotation_bonus.c \
-				waiting_for_next_command_bonus.c \
+				read_command_bonus.c \
+				read_quotation_bonus.c \
+				read_add_command_bonus.c \
 )
 $(OBJDIR)/%.o : $(READ_DIR)/utils/%.c
 	@mkdir -p $(OBJDIR)

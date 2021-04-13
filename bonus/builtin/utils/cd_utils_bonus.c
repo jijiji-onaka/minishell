@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 12:11:59 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 21:31:44 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/10 12:58:54 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void		upper_dir(char *now, t_minishell *info)
 			break ;
 	}
 	res[i[0]] = '\0';
-	ptr_free((void**)&(info->current_dir_path));
+	ptr_free((void **)&(info->current_dir_path));
 	info->current_dir_path = res;
 }
 
@@ -55,11 +55,11 @@ void			go_to_upper_dir(char *now, t_minishell *info)
 	while (split[++i])
 	{
 		if (ft_strcmp(split[i], ".") == 0)
-			go_to_cwd(info, info->current_dir_path, now);
+			go_cwd(info, info->current_dir_path, now);
 		else if (ft_strcmp(split[i], "..") == 0)
 			upper_dir(info->current_dir_path, info);
 	}
-	ptr_2d_free((void***)&(split), -1);
+	ptr_2d_free((void ***)&(split), -1);
 	info->ptr_2d_for_free = NULL;
 }
 
@@ -103,6 +103,6 @@ access parent directories: No such file or directory\n", 108);
 	update_env_lst(&(info->env), "PWD", info->current_dir_path, info);
 	info->cwd_err_f = 1;
 	if (ptr)
-		ptr_2d_free((void***)(ptr), -1);
+		ptr_2d_free((void ***)(ptr), -1);
 	return (false);
 }

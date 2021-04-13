@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:44:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/09 13:13:35 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/10 14:57:21 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,50 +17,40 @@
 # include <stdbool.h>
 # include "standard_lib.h"
 
-typedef struct stat		t_stat;
-typedef struct termios	t_termios;
-typedef struct dirent	t_dirent;
-typedef struct winsize	t_ws;
-
-typedef struct			s_string
+typedef struct s_string
 {
 	char				*str;
 	size_t				len;
 }						t_string;
 
-typedef struct			s_env
+typedef struct s_env
 {
 	struct s_string		key;
 	struct s_string		value;
-	// char				*key;
-	// size_t				key_len;
-	// char				*value;
-	// size_t				value_len;
-	// bool				only_key_flag;
 }						t_env;
 
-typedef struct			s_envlst
+typedef struct s_envlst
 {
 	struct s_env		env;
 	struct s_envlst		*next;
 	struct s_envlst		*qnext;
 }						t_envlst;
 
-typedef struct			s_hist_list
+typedef struct s_hist_list
 {
 	char				*command;
 	struct s_hist_list	*new_hist;
 	struct s_hist_list	*old_hist;
 }						t_hist_list;
 
-typedef struct			s_history
+typedef struct s_history
 {
 	char				*file_path;
 	struct s_hist_list	*list;
 	struct s_hist_list	*begin;
 }						t_history;
 
-typedef struct			s_key
+typedef struct s_key
 {
 	char				*up;
 	char				*down;
@@ -84,7 +74,7 @@ typedef struct			s_key
 	bool				shift_ctrl_lr_flag;
 }						t_key;
 
-typedef struct			s_cursor
+typedef struct s_cursor
 {
 	int					cur_pos[2];
 	int					command_start_pos[2];
@@ -92,13 +82,7 @@ typedef struct			s_cursor
 	int					select_pos[2];
 }						t_cursor;
 
-// typedef struct			s_err
-// {
-// 	int					line;
-// 	char				*file;
-// }						t_err;
-
-typedef struct			s_minishell_info
+typedef struct s_minishell_info
 {
 	char				*current_dir_path;
 	char				*oldpwd_path;
@@ -121,7 +105,7 @@ typedef struct			s_minishell_info
 	char				**ptr_2d_for_free;
 }						t_minishell;
 
-typedef struct			s_cmdlst
+typedef struct s_cmdlst
 {
 	int					type;
 	int					fd;
@@ -131,27 +115,28 @@ typedef struct			s_cmdlst
 	struct s_cmdlst		*next;
 }						t_cmdlst;
 
-typedef struct			s_cmd_grp
+typedef struct s_cmd_grp
 {
-	char				***cmd_grp;
-	int					array_size;
+	char		***cmd_grp;
+	int			array_size;
 }						t_cmd_grp;
 
-typedef struct			s_str
+typedef struct s_str
 {
-	char				*str;
-	int					prev_len;
+	char		*str;
+	int			prev_len;
 }						t_str;
 
-typedef struct			s_global
+typedef struct s_global
 {
-	pid_t				fork_pid;
-	pid_t				fork_pid_for_pipe;
-	int					exit_status;
-	int					sig_sign;
-	t_minishell			info;
-	bool				reading;
+	pid_t		fork_pid;
+	pid_t		fork_pid_for_pipe;
+	int			exit_status;
+	int			sig_sign;
+	t_minishell	info;
+	bool		reading;
 }						t_global;
+
 t_global				g_global;
 
 enum	e_cmd
@@ -248,14 +233,11 @@ enum	e_format
 # define Y 1
 # define LEFT_EDGE 1
 # define UPPER_EDGE 1
-// # define SELECT_LEFT 0
-// # define SELECT_RIGHT 1
 /*
 ** FD
 */
-# define STDIN 0
-# define STDOUT 1
-# define STDERR 2
-
+# define STDIN STDIN_FILENO
+# define STDOUT STDOUT_FILENO
+# define STDERR STDERR_FILENO
 
 #endif

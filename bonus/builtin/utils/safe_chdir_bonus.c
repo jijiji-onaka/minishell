@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 03:10:50 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/10 12:54:26 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ bool	safe_chdir(char *dir, char **split, t_minishell *info)
 	{
 		if (!(err = ft_strjoin("cd: ", dir)))
 		{
-			ptr_2d_free((void***)&split, -1);
+			ptr_2d_free((void ***)&split, -1);
 			all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 		}
 		ft_perror(err);

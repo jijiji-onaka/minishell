@@ -6,13 +6,19 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/19 21:12:16 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/09 12:00:51 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/11 13:26:12 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
 // derectory 移動させる　ヘッダーファイルも移動させる
+static char	return_back_slash_or_null(char chr[2], char *now)
+{
+	if (chr[B_SLA] == '\0' && *now == '\\')
+		return ('\\');
+	return ('\0');
+}
 
 bool	is_valid_command_quotations(char *command, char *first_quo)
 {
@@ -29,11 +35,10 @@ bool	is_valid_command_quotations(char *command, char *first_quo)
 		else if (chr[B_SLA] == '\0' && chr[QUO] == command[arg_i])
 			chr[QUO] = '\0';
 		else if (chr[QUO] != '\'' && chr[B_SLA] == '\0'
-				&& command[arg_i] == '\\')
+			&& command[arg_i] == '\\')
 			chr[B_SLA] = '\\';
 		else if (chr[QUO] != '\'')
-			chr[B_SLA] = ((!chr[B_SLA] && command[arg_i] == '\\') ?
-						'\\' : '\0');
+			chr[B_SLA] = return_back_slash_or_null(chr, command);
 	}
 	if (chr[QUO])
 	{
@@ -48,7 +53,7 @@ int	is_valid_command_pipe(char *command)
 {
 	while (ft_isspace(*command))
 		command++;
-	if (command[0] == '|')
+	if (command[0] == '|' && command[1] == '\0')
 		return (FIRST_PIPE);
 	while (*command)
 	{

@@ -6,13 +6,13 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/08 16:09:33 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/24 22:23:20 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/10 15:24:46 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-void		fill_normal_with_slash_support_(char *res, int *res_i, char chr[2],
+void	fill_normal_with_slash_support_(char *res, int *res_i, char chr[2],
 														char *now)
 {
 	if (*now == '\\')
@@ -42,7 +42,7 @@ static void	normal_with_slash_support_len(int *len, char chr[2],
 	(*len)++;
 }
 
-bool		only_hatena_or_doll(char *ptr, int *len, t_str *string)
+bool	only_hatena_or_doll(char *ptr, int *len, t_str *string)
 {
 	if (ptr[1] == '?')
 	{
@@ -86,7 +86,7 @@ static int	envval_len_and_return_index(char *ptr, int *len,
 	return (i);
 }
 
-int			after_changed_len_(char *ptr, t_minishell *info, t_str *string)
+int	after_changed_len_(char *ptr, t_minishell *info, t_str *string)
 {
 	char	chr[2];
 	int		len;
@@ -100,11 +100,11 @@ int			after_changed_len_(char *ptr, t_minishell *info, t_str *string)
 			chr[QUO] = ptr[arg_i];
 		else if (chr[B_SLA] == '\0' && chr[QUO] == ptr[arg_i])
 			chr[QUO] = '\0';
-		if ((ptr[arg_i] == '$' &&
-				(ptr[arg_i + 1] != '\0' && ptr[arg_i + 1] != chr[QUO])
+		if ((ptr[arg_i] == '$'
+				&& (ptr[arg_i + 1] != '\0' && ptr[arg_i + 1] != chr[QUO])
 				&& (chr[B_SLA] == '\0') && chr[QUO] == '\0'))
 			arg_i += envval_len_and_return_index(ptr + arg_i, &len,
-				info->env, &(string[++struct_i])) - 1;
+					info->env, &(string[++struct_i])) - 1;
 		else
 			normal_with_slash_support_len(&len, chr, &ptr[arg_i]);
 	}

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 02:54:08 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 03:01:28 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/10 12:54:26 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ static void		free_cmd_lst(t_cmdlst **cmdlst)
 
 void			all_free_minishell_info(t_minishell *info)
 {
-	ptr_free((void**)&(info->current_dir_path));
-	ptr_free((void**)&(info->oldpwd_path));
+	ptr_free((void **)&(info->current_dir_path));
+	ptr_free((void **)&(info->oldpwd_path));
 	free_cmd_lst(&(info->cmd_lst));
 	free_env_lst(&(info->env));
 }
@@ -70,7 +70,7 @@ static void		put_error_location_and_exit(char *error_message,
 	ft_putendl_fd(location_message, STDERR);
 	ptr_free((void **)&location_message);
 	free_env_lst(&(info->env));
-	ptr_free((void**)&(info->current_dir_path));
+	ptr_free((void **)&(info->current_dir_path));
 	ft_perror_exit(error_message);
 }
 
@@ -80,11 +80,11 @@ void			all_free_exit(t_minishell *info, char *error_message, \
 	if (info == NULL)
 		signal_error_exit();
 	if (info->ptr_2d_for_free)
-		ptr_2d_free((void***)&info->ptr_2d_for_free, -1);
+		ptr_2d_free((void ***)&info->ptr_2d_for_free, -1);
 	if (info->ptr_for_free)
-		ptr_free((void**)&info->ptr_for_free);
+		ptr_free((void **)&info->ptr_for_free);
 	if (info->ptr_for_free_2)
-		ptr_free((void**)&info->ptr_for_free_2);
+		ptr_free((void **)&info->ptr_for_free_2);
 	free_cmd_lst(&(info->cmd_lst));
 	if (errno == 0)
 		exit(1);

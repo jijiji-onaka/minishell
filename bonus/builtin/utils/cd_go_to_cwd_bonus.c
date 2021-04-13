@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd_go_to_cwd_bonus.c                               :+:      :+:    :+:   */
+/*   cd_go_cwd_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -34,7 +34,7 @@ static bool	when_cwd_is_symbolic(t_minishell *info, char *dir)
 	return (true);
 }
 
-bool		go_to_cwd(t_minishell *info, char *dir, char *arg_dir)
+bool		go_cwd(t_minishell *info, char *dir, char *arg_dir)
 {
 	if (is_symbolic_dir(info, info->current_dir_path))
 		return (when_cwd_is_symbolic(info, arg_dir));

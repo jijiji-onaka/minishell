@@ -6,13 +6,13 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/08 14:32:44 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 05:14:55 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/10 16:24:50 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-static bool		is_arg(char c, char quo)
+static bool	is_arg(char c, char quo)
 {
 	if (quo != 0 && !(quo != 0 && c != quo))
 		return (0);
@@ -21,7 +21,7 @@ static bool		is_arg(char c, char quo)
 	return (0);
 }
 
-static char		decide_quo_val(char quo, char now, char *sla)
+static char	decide_quo_val(char quo, char now, char *sla)
 {
 	if (quo == 0 && is_quo(now) && *sla == 0)
 		quo = now;
@@ -61,7 +61,7 @@ static size_t	count_words(char *str)
 	return (word_count);
 }
 
-static char		*insert_word(char **str)
+static char	*insert_word(char **str)
 {
 	char		*word;
 	size_t		i;
@@ -73,7 +73,8 @@ static char		*insert_word(char **str)
 	sla = 0;
 	while ((*str)[++i] && !(is_arg((*str)[i], quo)))
 		quo = decide_quo_val(quo, (*str)[i], &sla);
-	if (!(word = malloc(sizeof(char) * (i + 1))))
+	word = malloc(sizeof(char) * (i + 1));
+	if (word == NULL)
 		return (NULL);
 	i = 0;
 	quo = 0;
@@ -88,14 +89,15 @@ static char		*insert_word(char **str)
 	return (word);
 }
 
-char			**split_each_arg(char *str)
+char	**split_each_arg(char *str)
 {
 	char		**res;
 	size_t		word_count;
 	size_t		i;
 
 	word_count = count_words(str);
-	if (!(res = malloc(sizeof(char *) * (word_count + 1))))
+	res = malloc(sizeof(char *) * (word_count + 1));
+	if (res == NULL)
 		return (NULL);
 	i = 0;
 	while (*str && i < word_count)
@@ -103,8 +105,11 @@ char			**split_each_arg(char *str)
 		while (*str && is_arg(*str, -1))
 			str++;
 		if (*str && !(ft_isspace(*str)))
-			if (!(res[i++] = insert_word(&str)))
-				return (ptr_2d_free((void***)&res, --i));
+		{
+			res[i] = insert_word(&str);
+			if (res[i++] == NULL)
+				return (ptr_2d_free((void ***)&res, --i));
+		}
 	}
 	res[i] = NULL;
 	return (res);

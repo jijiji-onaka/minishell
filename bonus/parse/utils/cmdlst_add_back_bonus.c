@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmdlst_add_back.c                                  :+:      :+:    :+:   */
+/*   cmdlst_add_back_bonus.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/07 21:28:43 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/17 04:37:54 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/10 12:54:26 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ bool			cmdlst_add_back(t_minishell *info,
 
 	if (!(cmd = make_cmdlst(command, type, fd)))
 	{
-		ptr_2d_free((void***)&command, -1);
+		ptr_2d_free((void ***)&command, -1);
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	}
 	cmd_lstadd_back(&(info->cmd_lst), cmd);

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   waiting_for_next_command_bonus.c                   :+:      :+:    :+:   */
+/*   read_add_command_bonus.c                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -22,7 +22,7 @@ static char	*preparation(int *backup, \
 	display_what_is_waiting_for('|', &res, NULL, &(g_global.info));
 	if ((*backup = dup(STDIN)) == -1)
 	{
-		ptr_free((void**)&res);
+		ptr_free((void **)&res);
 		all_free_exit(&(g_global.info), ERR_DUP, __LINE__, __FILE__);
 	}
 	cmd_grp_info->cmd_grp = cmd_grp;
@@ -36,12 +36,12 @@ static void	clean_up(int *backup, char **inputs, t_minishell *info)
 	if (!g_global.reading)
 		if ((dup2(*backup, STDIN)) == -1)
 		{
-			ptr_free((void**)inputs);
+			ptr_free((void **)inputs);
 			all_free_exit(info, ERR_DUP2, __LINE__, __FILE__);
 		}
 	if (ft_close(backup) == false)
 	{
-		ptr_free((void**)inputs);
+		ptr_free((void **)inputs);
 		all_free_exit(info, ERR_CLOSE, __LINE__, __FILE__);
 	}
 	ptr_free((void **)inputs);
@@ -56,7 +56,7 @@ static bool	press_newline(char **inputs,
 	if (rc != NEXT_CMD && rc != NEWLINE)
 	{
 		if (rc == false)
-			ptr_2d_free((void***)(cmd_grp_info->cmd_grp), -1);
+			ptr_2d_free((void ***)(cmd_grp_info->cmd_grp), -1);
 		info->cmd_lst_num = cmd_grp_info->array_size;
 		return (false);
 	}
@@ -74,11 +74,11 @@ static void	*press_eof(char **inputs, t_cmd_grp *cmd_grp_info,
 	if (write(STDERR, "minishell: syntax error: unexpected end of file\n"
 , 48) < 48)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	ptr_2d_free((void***)(cmd_grp_info->cmd_grp), -1);
+	ptr_2d_free((void ***)(cmd_grp_info->cmd_grp), -1);
 	return (NULL);
 }
 
-char		*waiting_for_next_command(char ***cmd_grp, int array_size,
+char		*read_add_command(char ***cmd_grp, int array_size,
 								t_minishell *info)
 {
 	ssize_t		rc;
@@ -101,6 +101,6 @@ char		*waiting_for_next_command(char ***cmd_grp, int array_size,
 			all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	}
 	clean_up(&backup, &inputs, info);
-	ptr_2d_free((void***)(cmd_grp_info.cmd_grp), -1);
+	ptr_2d_free((void ***)(cmd_grp_info.cmd_grp), -1);
 	return (reset_prompt(&inputs, NULL));
 }

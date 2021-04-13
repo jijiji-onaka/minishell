@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/09 12:24:45 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/11 13:25:48 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,7 @@ static int	err_fd(long long fd, t_minishell *info)
 {
 	if (fd > INT_MAX)
 	{
-		if (write(STDERR,
-"minishell: file descriptor out of range: Bad file descriptor\n", 61) < 0)
+		if (write(STDERR, ERR_FD, 61) < 0)
 			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	}
 	else if (fd >= 256 && fd <= INT_MAX)
@@ -58,17 +57,6 @@ static int	check_redirect_fd(t_minishell *info, char **command)
 	return (fd);
 }
 
-// static bool	check_quotation(char **command, t_minishell *info)
-// {
-// 	char	quo;
-
-// 	quo = '\0';
-// 	if (is_valid_quotations(command, &quo) == false)
-// 		if (waiting_for_quotation(quo, command, info) == false)
-// 			return (false);
-// 	return (true);
-// }
-
 static int	parsing(t_minishell *info, char **command)
 {
 	int			type;
@@ -78,15 +66,15 @@ static int	parsing(t_minishell *info, char **command)
 
 	if ((*command)[0] == ';')
 		return (cmdlst_add_back(info, NULL, SEMICOLON, 0));
-	// if (check_quotation(command, info) == false)
-	// 	return (false);
 	begin = *command;
-	if ((fd_for_redir = check_redirect_fd(info, &(*command))) == -1)
+	fd_for_redir = check_redirect_fd(info, &(*command));
+	if (fd_for_redir == -1)
 	{
 		*command = begin;
 		return (false);
 	}
-	if (!(split = split_each_arg((*command))))
+	split = split_each_arg((*command));
+	if (split == NULL)
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	*command = begin;
 	if (split[0] == NULL)
@@ -97,7 +85,7 @@ static int	parsing(t_minishell *info, char **command)
 	return (cmdlst_add_back(info, split, type, 0));
 }
 
-bool		parse_command(t_minishell *info, char *command)
+bool	parse_command(t_minishell *info, char *command)
 {
 	char	**cmd_grp;
 	char	*tmp;
@@ -106,9 +94,9 @@ bool		parse_command(t_minishell *info, char *command)
 
 	info->ptr_for_free = command;
 	tmp = skip_space(command);
-	if (!(cmd_grp = split_each_parts(tmp)))
+	cmd_grp = split_each_parts(tmp);
+	if (cmd_grp == NULL)
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-	// ptr_free((void **)&(command));
 	info->ptr_for_free = NULL;
 	cmd_grp = rm_spaces_in_2d_array(cmd_grp, info);
 	if (check_syntax(&cmd_grp, info) == false)

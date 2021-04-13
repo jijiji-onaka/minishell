@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/19 21:36:06 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/04 03:01:19 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/10 12:51:37 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@ void		display_what_is_waiting_for(char quo, char **ptr1, char **ptr2,
 	if (f < 0)
 	{
 		if (ptr1)
-			ptr_free((void**)ptr1);
+			ptr_free((void **)ptr1);
 		if (ptr2)
-			ptr_free((void**)ptr2);
+			ptr_free((void **)ptr2);
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	}
 }

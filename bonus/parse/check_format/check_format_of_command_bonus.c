@@ -18,7 +18,7 @@ static bool	pipe_end(t_minishell *info, int i, char ***grp, int type)
 		return (free_syntax_error(F_DB_PIPE, grp, info));
 	if (i == 1)
 		return (free_syntax_error(F_PIPE, grp, info));
-	waiting_for_next_command(grp, i + 1, info);
+	read_add_command(grp, i + 1, info);
 	if (*grp == NULL)
 		return (false);
 	return (true);

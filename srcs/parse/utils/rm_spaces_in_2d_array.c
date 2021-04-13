@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 01:30:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/15 23:18:11 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/10 16:26:02 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static char	**create_no_spaces_array(char **new, char **old)
 	return (new);
 }
 
-char		**rm_spaces_in_2d_array(char **arr, t_minishell *info)
+char	**rm_spaces_in_2d_array(char **arr, t_minishell *info)
 {
 	int		i;
 	int		element_num;
@@ -65,7 +65,8 @@ char		**rm_spaces_in_2d_array(char **arr, t_minishell *info)
 
 	if (spaces_or_not_in_array(arr, &element_num, &i) == false)
 		return (arr);
-	if (!(res = malloc(sizeof(char *) * (element_num + 1))))
+	res = malloc(sizeof(char *) * (element_num + 1));
+	if (res == NULL)
 	{
 		ptr_2d_free((void ***)&arr, i);
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);

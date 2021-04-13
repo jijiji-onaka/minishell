@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 01:15:42 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 14:00:35 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/11 13:51:34 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	set_mode(int type)
 	return (0);
 }
 
-static bool	open_files(int (*fd)[2], t_cmdlst *cmd, char **filename,
+static bool	open_files(int **fd, t_cmdlst *cmd, char **filename,
 				t_minishell *info)
 {
 	int		mode;
@@ -31,22 +31,25 @@ static bool	open_files(int (*fd)[2], t_cmdlst *cmd, char **filename,
 	if (cmd->type == OUTPUT || cmd->type == DB_OUTPUT)
 	{
 		mode = set_mode(cmd->type);
-		if ((fd[cmd->fd][0] = open((*filename),
-		O_CREAT | O_WRONLY | mode, 0666)) == -1)
+		fd[cmd->fd][0] = open((*filename), O_CREAT | O_WRONLY | mode, 0666);
+		if (fd[cmd->fd][0] == -1)
 			return (ft_perror((*filename)));
 	}
 	else if (cmd->type == INPUT)
-		if ((fd[cmd->fd][0] = open((*filename), O_RDONLY)) == -1)
+	{
+		fd[cmd->fd][0] = open((*filename), O_RDONLY);
+		if (fd[cmd->fd][0] == -1)
 			return (ft_perror((*filename)));
+	}
 	return (true);
 }
 
-static int	check_last_redir_and_close_fd(int (*fd)[2], t_cmdlst *next_sep)
+static int	check_last_redir_and_close_fd(int **fd, t_cmdlst *next_sep)
 {
 	int	next_fd;
 
 	if (next_sep && (next_sep->type == OUTPUT || next_sep->type == DB_OUTPUT
-						|| next_sep->type == INPUT))
+			|| next_sep->type == INPUT))
 	{
 		next_fd = next_sep->fd;
 		if (fd[next_fd][0] != -1)
@@ -56,7 +59,7 @@ static int	check_last_redir_and_close_fd(int (*fd)[2], t_cmdlst *next_sep)
 	return (true);
 }
 
-int			open_files_and_stock_fd(int (*fd)[2],
+int	open_files_and_stock_fd(int **fd,
 						t_cmdlst **cmd_lst, t_minishell *info)
 {
 	t_cmdlst	*next_sep;

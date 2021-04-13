@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   waiting_for_quotation_bonus.c                      :+:      :+:    :+:   */
+/*   read_quotation_bonus.c                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -19,14 +19,14 @@ static char	*preparation(char first_quo, char **command, int *backup,
 
 	if (!(res = ft_strdup("\0")))
 	{
-		ptr_free((void**)command);
+		ptr_free((void **)command);
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	}
 	display_what_is_waiting_for(first_quo, &res, command, info);
 	if ((*backup = dup(STDIN)) == -1)
 	{
-		ptr_free((void**)command);
-		ptr_free((void**)res);
+		ptr_free((void **)command);
+		ptr_free((void **)res);
 		all_free_exit(info, ERR_DUP, __LINE__, __FILE__);
 	}
 	g_global.reading = true;
@@ -39,15 +39,15 @@ static void	clean_up(int *backup, char **inputs, t_minishell *info)
 	if (!g_global.reading)
 		if ((dup2(*backup, STDIN)) == -1)
 		{
-			ptr_free((void**)inputs);
-			ptr_free((void**)info->ptr_for_free);
+			ptr_free((void **)inputs);
+			ptr_free((void **)info->ptr_for_free);
 			info->ptr_for_free = NULL;
 			all_free_exit(info, ERR_DUP2, __LINE__, __FILE__);
 		}
 	if (ft_close(backup) == false)
 	{
-		ptr_free((void**)inputs);
-		ptr_free((void**)info->ptr_for_free);
+		ptr_free((void **)inputs);
+		ptr_free((void **)info->ptr_for_free);
 		info->ptr_for_free = NULL;
 		all_free_exit(info, ERR_CLOSE, __LINE__, __FILE__);
 	}
@@ -81,14 +81,14 @@ static bool	press_newline(char *first_quo, char **inputs, \
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	if (!(*inputs = re_strdup(inputs, "\0")))
 	{
-		ptr_free((void**)command);
+		ptr_free((void **)command);
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	}
 	display_what_is_waiting_for(*first_quo, inputs, command, info);
 	return (false);
 }
 
-char		*waiting_for_quotation(char first_quo, char **command, \
+char		*read_quotation(char first_quo, char **command, \
 						t_minishell *info)
 {
 	ssize_t		rc;

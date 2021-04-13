@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd_go_to_oldpwd_bonus.c                            :+:      :+:    :+:   */
+/*   cd_go_oldpwd_bonus.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,7 +12,7 @@
 
 #include "../../../includes/minishell_bonus.h"
 
-void		go_to_oldpwd(t_minishell *info)
+void		go_oldpwd(t_minishell *info)
 {
 	char		*oldpwd_path;
 

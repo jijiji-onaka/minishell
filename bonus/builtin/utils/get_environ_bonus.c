@@ -42,7 +42,7 @@ char		**get_environ(t_envlst *lst, t_minishell *info)
 			res[i++] = ft_strdup(lst->env.key.str);
 		if (res[i - 1] == NULL)
 		{
-			ptr_2d_free((void***)&res, -1);
+			ptr_2d_free((void ***)&res, -1);
 			all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 		}
 		lst = lst->next;

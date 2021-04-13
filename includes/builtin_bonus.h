@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 16:25:10 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/21 21:03:37 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/10 14:06:40 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,15 @@ char		*relative_path(char *now, char *dir, t_minishell *info);
 char		*absolute_path(char *now, char *dir, t_minishell *info);
 char		*make_env_name(char *arg, int *i, t_minishell *info);
 char		*make_env_value(char *arg, t_minishell *info, char **ptr);
-char		*add_env_value(char *arg, t_minishell *info, char **ptr);
+char		*joint_env_value(char *arg, t_minishell *info, char **ptr);
 void		when_only_env_name(char *arg, t_minishell *info);
 bool		safe_chdir(char *dir, char **split, t_minishell *info);
 char		*search_env(char *str, int num, t_envlst *env_lst, bool *flag);
 void		go_to_home(t_minishell *info);
-bool		go_to_cwd(t_minishell *info, char *dir, char *real_dir);
-void		go_to_path(t_minishell *info, char **dir,
+bool		go_cwd(t_minishell *info, char *dir, char *real_dir);
+void		go_path(t_minishell *info, char **dir,
 					bool option_p_flag);
-void		go_to_oldpwd(t_minishell *info);
+void		go_oldpwd(t_minishell *info);
 void		set_oldpwd(t_minishell *info, char *oldpwd);
 void		remove_env_lst_if(t_envlst **env, char *data);
 bool		set_numeric_flag(char *arg);

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   waiting_for_input_bonus.c                          :+:      :+:    :+:   */
+/*   read_command_bonus.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -44,17 +44,17 @@ static void	clean_up(int *backup, char **command, t_minishell *info)
 	if (!g_global.reading)
 		if ((dup2(*backup, STDIN)) == -1)
 		{
-			ptr_free((void**)command);
+			ptr_free((void **)command);
 			all_free_exit(info, ERR_DUP2, __LINE__, __FILE__);
 		}
 	if (ft_close(backup) == false)
 	{
-		ptr_free((void**)command);
+		ptr_free((void **)command);
 		all_free_exit(info, ERR_CLOSE, __LINE__, __FILE__);
 	}
 }
 
-char		*waiting_for_input(t_minishell *info)
+char		*read_command(t_minishell *info)
 {
 	char	*command;
 	char	buf;

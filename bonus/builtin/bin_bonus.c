@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 00:06:42 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/03/24 00:41:42 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/10 12:54:26 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,12 @@ static void	clean_up(char ***environ, int i, char ***split, t_minishell *info)
 {
 	int	status;
 
-	ptr_2d_free((void***)environ, 0);
+	ptr_2d_free((void ***)environ, 0);
 	if (*split)
 	{
 		free((*split)[i]);
 		(*split)[i] = NULL;
-		ptr_2d_free((void***)split, -1);
+		ptr_2d_free((void ***)split, -1);
 	}
 	if ((waitpid(g_global.fork_pid, &status, 0)) == -1)
 		all_free_exit(info, ERR_WAIT_PID, __LINE__, __FILE__);

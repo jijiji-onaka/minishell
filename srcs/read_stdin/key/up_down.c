@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 16:50:46 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 12:39:23 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/22 18:20:51 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	trace_history_up(char *buf, t_string *command, t_minishell *info)
 {
+	(void)buf;
 	if (info->history.list->old_hist == NULL)
 		return ;
 	delete_displayed_command(where_err(LINE, FILE), command, info);

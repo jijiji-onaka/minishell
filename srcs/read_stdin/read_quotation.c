@@ -12,8 +12,7 @@
 
 #include "../../includes/minishell.h"
 
-static void	preparation(int *backup, t_string *add_command,
-					char buf[READ_SIZE + 1], t_minishell *info)
+static void	preparation(int *backup, t_string *add_command, t_minishell *info)
 {
 	add_command->str = ft_strdup("");
 	add_command->len = 0;
@@ -68,7 +67,7 @@ char	*read_quotation(char first_quo, t_string *command, \
 	int			backup;
 
 	display_what_is_waiting_for(first_quo, NULL, &(command->str), info);
-	preparation(&backup, &add_command, buf, info);
+	preparation(&backup, &add_command, info);
 	while (g_global.reading)
 	{
 		rc = safe_read(buf, &(command->str), info);

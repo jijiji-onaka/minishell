@@ -27,6 +27,8 @@ void	ctrl_d_exit(char *buf, t_string *command, t_minishell *info)
 
 void	ctrl_d_put_error(char *buf, t_string *command, t_minishell *info)
 {
+	(void)buf;
+	(void)command;
 	if (info->multiple_line_char != '|')
 	{
 		if (write(STDERR, SYNTAX_1, 54) < 54)

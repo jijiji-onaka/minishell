@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 01:55:24 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/10 16:01:09 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/22 18:23:25 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,9 +96,6 @@ void	set_shell_level(void)
 {
 	extern char	**environ;
 	size_t		i;
-	int			j;
-	int			current_shlvl;
-	int			len;
 
 	i = -1;
 	while (environ[++i])

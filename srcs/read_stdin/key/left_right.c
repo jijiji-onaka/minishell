@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 16:49:37 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 12:30:12 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/22 18:20:28 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	move_cursor_left(char *buf, t_string *command, t_minishell *info)
 {
 	int	max_winsize_x;
 
+	(void)buf;
 	max_winsize_x = get_window_size(info).ws_col;
 	if (equal_pos(info->cursor.cur_pos, info->cursor.command_start_pos) == true)
 		return ;
@@ -45,6 +46,7 @@ void	move_cursor_right(char *buf, t_string *command, t_minishell *info)
 	struct winsize	winsize;
 	int				len;
 
+	(void)buf;
 	if (equal_pos(info->cursor.cur_pos, info->cursor.command_end_pos) == true)
 		return ;
 	winsize = get_window_size(info);

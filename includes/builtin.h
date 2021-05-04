@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 16:25:10 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 13:15:36 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/22 22:36:26 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ bool		set_numeric_flag(char *arg);
 ** EXPORT
 */
 void		exec_export(t_minishell *info, t_cmdlst *cmd);
-bool		is_valid_env_name(char **env_name, char *arg, t_minishell *info);
+bool		is_valid_env_name(char **env_name, char *arg, bool ex_or_un, t_minishell *info);
 void		display_sorted_env(t_minishell *info);
 void		*destroy_queue(t_envlst **qhead);
 t_envlst	*merge_lst_sort(t_envlst *lst);

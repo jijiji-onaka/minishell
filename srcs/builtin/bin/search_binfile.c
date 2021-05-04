@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/21 14:23:17 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/10 14:53:40 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/22 22:22:54 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*check_executable_file_in_bin_dir(char *path, char **command,
 	if (lstat(bin_path, &stat_buf) == 0)
 		return (bin_path);
 	ptr_free((void **)&bin_path);
-	return (false);
+	return (NULL);
 }
 
 bool	no_exe_file_in_bin_dir(char *file, t_minishell *info)

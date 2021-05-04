@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 00:06:42 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/10 16:34:13 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/22 23:09:58 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,28 @@
 static void	setting_1(char ***environ, char **paths,
 			char ***split, t_minishell *info)
 {
+	int	i;
+
 	tcsetattr(STDIN, TCSANOW, &(info->terminal[ORIGINAL]));
 	*environ = get_environ(info->env, info);
 	*paths = ft_getenv("PATH", info->env, false);
-	if (*paths && (*paths)[0] != '\0')
-		*split = ft_split(*paths, ':');
+	i = 0;
+	if (*paths)
+	{
+		*paths = ft_strdup(*paths);
+		if (*paths == NULL)
+			all_free_exit(info, ERR_MALLOC, LINE, FILE);
+		while ((*paths)[i] == '\\')
+			i++;
+		if ((*paths)[0] == ':')
+		{
+			*paths = ft_strjoin("./", *paths);
+			if (*paths == NULL)
+				all_free_exit(info, ERR_MALLOC, LINE, FILE);
+		}
+		if ((*paths)[0] != '\0')
+			*split = ft_split(*paths, ':');
+	}
 	else
 		*split = NULL;
 	g_global.exit_status = 0;
@@ -42,15 +59,20 @@ static int	setting_2(char *paths, char *command,
 			(*split)[i] = tmp;
 		}
 	}
-	(*split)[i] = ft_strdup(command);
-	if ((*split)[i] == NULL)
-		all_free_exit(info, ERR_MALLOC, LINE, FILE);
-	len = ft_strlen(paths);
-	if ((paths[len - 1] == ':' || paths[len - 1] == '/')
-		&& no_exe_file_in_bin_dir((*split)[i], info) == true)
-		(*split)[i] = re_strjoin(&((*split)[i]), "./", (*split)[i]);
-	if ((*split)[i] == NULL)
-		all_free_exit(info, ERR_MALLOC, LINE, FILE);
+	if (ft_strchr(command, '/'))
+	{
+		(*split)[i] = ft_strdup(command);
+		if ((*split)[i] == NULL)
+			all_free_exit(info, ERR_MALLOC, LINE, FILE);
+	}
+	free(paths);
+	// len = ft_strlen(paths);
+	(void)len;
+	// if ((paths[len - 1] == ':' || paths[len - 1] == '/')
+	// 	&& no_exe_file_in_bin_dir((*split)[i], info) == true)
+	// 	(*split)[i] = re_strjoin(&((*split)[i]), "./", (*split)[i]);
+	// if ((*split)[i] == NULL)
+	// 	all_free_exit(info, ERR_MALLOC, LINE, FILE);
 	return (i);
 }
 
@@ -87,19 +109,19 @@ void	exec_bin(t_minishell *info, t_cmdlst *cmd)
 	char		**split;
 
 	setting_1(&environ, &paths, &split, info);
-	if (paths != NULL && paths[0] != '\0')
+	if (split)
 		i[0] = setting_2(paths, cmd->arg[0], &split, info);
 	g_global.fork_pid = fork();
 	if (g_global.fork_pid == -1)
 		all_free_exit(info, ERR_FORK, __LINE__, __FILE__);
 	if (g_global.fork_pid == 0)
 	{
-		if (paths == NULL || paths[0] == '\0')
+		if (split == NULL)
 			not_set_path(cmd->arg, environ, info);
 		i[1] = -1;
 		while (++i[1] <= i[0])
 			execve(split[i[1]], cmd->arg, environ);
-		not_builtin(split[i[1] - 1], info, false);
+		not_builtin(cmd->arg[0], info, false);
 		exit(g_global.exit_status);
 	}
 	clean_up(&environ, i[0], &split, info);

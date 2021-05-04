@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/22 17:51:45 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/09 02:29:20 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/22 22:44:02 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ int	ft_atoi(const char *str)
 	{
 		if (str[i++] == '-')
 			f = -1;
-		i++;
 	}
 	while (ft_isdigit(str[i]))
 	{

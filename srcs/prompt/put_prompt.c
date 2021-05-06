@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 00:41:03 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 15:20:59 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/05 20:51:04 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@ void	put_prompt(t_minishell *info)
 	if (!user_name)
 		user_name = "Who am I?";
 	putstr_fd(user_name, STDOUT, where_err(LINE, FILE), info);
-	if (write(STDOUT, "\033[1m\x1b[35m (;;) \x1b[0m", 19) < 19)
+	if (write(STDOUT, " \033[38;5;44m\x1b[1m42\x1b[0m ", 22) < 22)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	if (!working_dir)
 		working_dir = "Where am I?";
 	putstr_fd(working_dir, STDOUT, where_err(LINE, FILE), info);
-	if (write(STDOUT, "\033[1m\x1b[35m (;;) > \x1b[0m", 21) < 21)
+	if (write(STDOUT, " \033[38;5;44m\x1b[1m>\x1b[0m ", 21) < 21)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	get_cursor_position(info->cursor.command_start_pos, info);
 }

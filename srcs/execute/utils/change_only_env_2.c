@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/08 16:09:33 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/10 15:24:46 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/07 04:17:31 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,14 @@ void	fill_normal_with_slash_support_(char *res, int *res_i, char chr[2],
 {
 	if (*now == '\\')
 	{
-		if (chr[B_SLA] == '\0')
+		if (chr[B_SLA] == '\0' && !(*(now + 1) == '\"' || *(now + 1) == '\''))
+		{
 			chr[B_SLA] = '\\';
+		}
 		else
 			chr[B_SLA] = '\0';
+		res[(*res_i)++] = *now;
+		return ;
 	}
 	else
 		chr[B_SLA] = '\0';
@@ -32,10 +36,14 @@ static void	normal_with_slash_support_len(int *len, char chr[2],
 {
 	if (*now == '\\')
 	{
-		if (chr[B_SLA] == '\0')
+		if (chr[B_SLA] == '\0' && !(*(now + 1) == '\"' || *(now + 1) == '\''))
+		{
 			chr[B_SLA] = '\\';
+		}
 		else
 			chr[B_SLA] = '\0';
+		(*len)++;
+		return ;
 	}
 	else
 		chr[B_SLA] = '\0';

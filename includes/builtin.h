@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 16:25:10 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/22 22:36:26 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/12 15:39:26 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,15 @@ bool		not_found_cwd(t_minishell *info, char *arg_dir, char ***ptr);
 ** BIN
 */
 void		exec_bin(t_minishell *info, t_cmdlst *cmd);
+void		setting_1(char ***environ, char **paths, char ***split,
+				t_minishell *info);
+int			setting_2(char *paths, char **command, char ***split,
+				t_minishell *info);
 char		**get_environ(t_envlst *lst, t_minishell *info);
 char		*check_executable_file_in_bin_dir(char *path, char **command,
 				t_minishell *info);
 bool		no_exe_file_in_bin_dir(char *file, t_minishell *info);
-void		not_builtin(char *command,
-				t_minishell *info, bool path_flag);
+void		not_builtin(char *command, t_minishell *info, char *path);
 /*
 ** ECHO
 */

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/22 22:27:10 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/13 01:19:39 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,15 @@ static int	minishell_option_c(char *argv_2, t_minishell *info)
 		execute_command_loop(info);
 		initialize_cmd_lst(info);
 	}
+	free(command);
 	all_free_minishell_info(info);
 	return (g_global.exit_status);
+}
+
+__attribute__((destructor))
+void end()
+{
+	system("leaks minishell");
 }
 
 int	main(int argc, char **argv)

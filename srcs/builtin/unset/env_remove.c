@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/15 17:55:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/10 14:21:19 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/13 01:16:31 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,10 @@
 
 static void	free_env(t_env env)
 {
-	ptr_free((void **)&(env.key.str));
-	ptr_free((void **)&(env.value.str));
+	if (env.key.str)
+		ptr_free((void **)&(env.key.str));
+	if (env.value.str)
+		ptr_free((void **)&(env.value.str));
 }
 
 void	remove_env_lst_if(t_envlst **env, char *data)

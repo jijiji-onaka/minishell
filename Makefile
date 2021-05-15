@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/23 01:57:04 by tjinichi          #+#    #+#              #
-#    Updated: 2021/04/22 22:58:11 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/05/13 01:19:36 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = minishell
 COMMAND_HISTORY = .minishell_history
 
 CC = gcc
-CFLAGS = -g -Wall -Werror -Wextra             -fsanitize=address
+CFLAGS = -g -Wall -Werror -Wextra #            -fsanitize=address
 # CFLAGS = -g          -fsanitize=address
 
 SRCFILE =	 \
@@ -30,6 +30,7 @@ BUILTIN_SRCS = $(addprefix $(BUILTIN_DIR)/, \
 				bin/err_not_builtin.c \
 				bin/get_environ.c \
 				bin/search_binfile.c \
+				bin/setting.c \
 				cd/cd_utils.c \
 				cd/cd_utils_2.c \
 				cd/cd.c \

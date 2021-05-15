@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 11:51:17 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 12:07:00 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/07 03:56:01 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ bool	get_cursor_position(int pos[2], t_minishell *info)
 	ssize_t			rc;
 	unsigned int	i;
 	char			*ptr;
-	char			buf[32];
+	char			buf[33];
 
 	putstr_fd("\x1b[6n", STDOUT, where_err(LINE, FILE), info);
 	i = 0;

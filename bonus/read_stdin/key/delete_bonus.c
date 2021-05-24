@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/04 01:48:20 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 14:03:24 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/19 15:58:59 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void	delete_displayed_char(char *buf, t_string *command,
 {
 	int	max_winsize_x;
 
+	(void)buf;
 	max_winsize_x = get_window_size(info).ws_col;
 	if (equal_pos(info->cursor.cur_pos, info->cursor.command_start_pos) == true)
 		return ;

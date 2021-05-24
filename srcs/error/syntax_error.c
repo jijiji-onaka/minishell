@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 02:18:39 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/10 15:23:43 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/16 13:16:58 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static ssize_t	syntax_error2(int type)
 	else if (type == NEWLINE)
 		write_rc = write(STDERR, SYNTAX_NL, 56);
 	else if (type == F_DB_SEMICOLON)
-		write_rc = write(STDERR, ERR_DB_SEMICOLON, 47);
+		write_rc = write(STDERR, ERR_DB_SEMCOLON, 51);
 	else if (type == F_DB_PIPE)
 		write_rc = write(STDERR, ERR_DB_PIPE, 47);
 	else if (type == F_DB_INPUT)

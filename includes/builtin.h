@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 16:25:10 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/05/12 15:39:26 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/19 15:57:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ char		*check_executable_file_in_bin_dir(char *path, char **command,
 				t_minishell *info);
 bool		no_exe_file_in_bin_dir(char *file, t_minishell *info);
 void		not_builtin(char *command, t_minishell *info, char *path);
+bool		search_files(char *dir_name, char *file_name, t_minishell *info);
+bool		is_cwd_in_path(char *path, t_minishell *info);
 /*
 ** ECHO
 */
@@ -61,7 +63,8 @@ bool		set_numeric_flag(char *arg);
 ** EXPORT
 */
 void		exec_export(t_minishell *info, t_cmdlst *cmd);
-bool		is_valid_env_name(char **env_name, char *arg, bool ex_or_un, t_minishell *info);
+bool		is_valid_env_name(char **env_name, char *arg,
+				bool ex_or_un, t_minishell *info);
 void		display_sorted_env(t_minishell *info);
 void		*destroy_queue(t_envlst **qhead);
 t_envlst	*merge_lst_sort(t_envlst *lst);

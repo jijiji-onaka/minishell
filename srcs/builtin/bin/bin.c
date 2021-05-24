@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 00:06:42 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/05/13 00:56:04 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/16 14:00:12 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,7 @@ static void	clean_up(char ***environ, int i, char ***split, t_minishell *info)
 		all_free_exit(info, ERR_WAIT_PID, __LINE__, __FILE__);
 	ptr_2d_free((void ***)environ, -1);
 	if (*split)
-	{
-		// free((*split)[i]);
-		// (*split)[i] = NULL;
 		ptr_2d_free((void ***)split, -1);
-	}
 	if (g_global.exit_status != 130 && g_global.exit_status != 131)
 		g_global.exit_status = WEXITSTATUS(status);
 	if (info->minishell_op_c == false)
@@ -48,9 +44,7 @@ void	exec_bin(t_minishell *info, t_cmdlst *cmd)
 
 	setting_1(&environ, &path, &split, info);
 	if (split)
-	{
 		i[0] = setting_2(path, &(cmd->arg[0]), &split, info);
-	}
 	g_global.fork_pid = fork();
 	if (g_global.fork_pid == -1)
 		all_free_exit(info, ERR_FORK, __LINE__, __FILE__);
@@ -60,14 +54,10 @@ void	exec_bin(t_minishell *info, t_cmdlst *cmd)
 			not_set_path(cmd->arg, environ, path, info);
 		i[1] = -1;
 		while (split[++i[1]])
-		{
-			// printf("{%s}\n", split[i[1]]);
 			execve(split[i[1]], cmd->arg, environ);
-		}
 		if (split[i[1]] == NULL)
 			execve(cmd->arg[0], cmd->arg, environ);
 		not_builtin(cmd->arg[0], info, path);
-		// free(path);
 		exit(g_global.exit_status);
 	}
 	free(path);

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/13 14:44:00 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 16:14:02 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/19 16:01:04 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ static t_wild_lst	*merge(t_wild_lst *cmp1, t_wild_lst *cmp2)
 {
 	t_wild_lst	head;
 	t_wild_lst	*res;
-	int			tmp;
 
 	res = &head;
 	while (cmp1 && cmp2)

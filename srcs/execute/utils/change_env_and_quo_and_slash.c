@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 06:38:02 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/22 18:23:05 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/16 15:06:22 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ static bool	do_main(char **ptr, int dollar_num,
 	t_str	*strings;
 
 	strings = safe_malloc(sizeof(t_str) * dollar_num,
-		where_err(LINE, FILE), info);
+			where_err(LINE, FILE), info);
 	res = malloc((size_t)after_changed_len(*ptr, info, strings) + 1);
 	if (res == NULL)
 		return (false);

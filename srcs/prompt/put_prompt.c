@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 00:41:03 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/05/07 03:56:28 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/19 20:23:20 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	put_prompt(t_minishell *info)
 	char	*user_name;
 	char	*working_dir;
 
-	if (isatty(STDIN) == false)
+	if (isatty(STDOUT) == false)
 		return ;
 	user_name = ft_getenv("USER", info->env, false);
 	working_dir = info->current_dir_path;
@@ -61,9 +61,9 @@ void	display_what_is_waiting_for(char chr, char **ptr1, char **ptr2,
 
 char	*reset_prompt(char **ptr1, char **ptr2)
 {
-	if (ptr1)
+	if (ptr1 && *ptr1)
 		ptr_free((void **)ptr1);
-	if (ptr2)
+	if (ptr2 && *ptr2)
 		ptr_free((void **)ptr2);
 	return (NULL);
 }

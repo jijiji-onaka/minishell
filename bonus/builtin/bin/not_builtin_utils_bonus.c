@@ -1,52 +1,56 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_environ_bonus.c                                :+:      :+:    :+:   */
+/*   not_builtin_utils_bonus.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/10 15:21:39 by tjinichi          #+#    #+#             */
+/*   Created: 2021/05/16 16:25:22 by tjinichi          #+#    #+#             */
 /*   Updated: 2021/05/22 13:44:08 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../bonus_includes/minishell_bonus.h"
 
-static int	envlst_size(t_envlst *lst)
+bool	search_files(char *dir_name, char *file_name, t_minishell *info)
 {
-	int	len;
+	DIR				*dp;
+	struct dirent	*dirp;
 
-	len = 0;
-	while (lst)
+	if (safe_opendir(&dp, dir_name, info) == false)
+		return (false);
+	while (1)
 	{
-		len++;
-		lst = lst->next;
+		if (safe_readdir(&dirp, dp, info) == false)
+			break ;
+		if (dirp->d_name[0] == '.')
+			continue ;
+		if (equal(ft_strcmp(dirp->d_name, file_name)))
+		{
+			safe_closedir(&dp, info);
+			return (true);
+		}
 	}
-	return (len);
+	safe_closedir(&dp, info);
+	return (false);
 }
 
-char	**get_environ(t_envlst *lst, t_minishell *info)
+bool	is_cwd_in_path(char *path, t_minishell *info)
 {
-	char	**res;
+	char	**split;
 	int		i;
+	bool	ret;
 
-	res = malloc(sizeof(char *) * (envlst_size(lst) + 1));
-	if (res == NULL)
+	split = ft_split(path, ':');
+	if (split == NULL)
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-	i = 0;
-	while (lst)
+	i = -1;
+	ret = false;
+	while (split[++i])
 	{
-		if (lst->env.value.str)
-			res[i++] = ft_str3join(lst->env.key.str, "=", lst->env.value.str);
-		else
-			res[i++] = ft_strdup(lst->env.key.str);
-		if (res[i - 1] == NULL)
-		{
-			ptr_2d_free((void ***)&res, -1);
-			all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-		}
-		lst = lst->next;
+		if (split[i][0] == '.')
+			ret = true;
 	}
-	res[i] = NULL;
-	return (res);
+	ptr_2d_free((void ***)&split, i);
+	return (ret);
 }

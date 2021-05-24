@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/13 12:40:09 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 14:03:24 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/22 13:57:28 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	key_x_func_mul(char *buf, t_string *command, t_minishell *info, int key)
 	else if (key == KEY_RIGHT)
 		move_cursor_right(buf, command, info);
 	else if (key == CTRL_D)
-		ctrl_d_exit(buf, command, info);
+		ctrl_d_put_error(buf, command, info);
 	else if (key == CTRL_L)
 		clear_terminal(buf, command, info);
 	else if (key == KEY_DELETE)

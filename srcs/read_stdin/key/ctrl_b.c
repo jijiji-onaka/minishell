@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/13 12:17:07 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 12:17:52 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/19 19:39:35 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static char	*create_new_command(t_string *command, t_minishell *info)
 	int		insert_index;
 
 	len = ft_strlen(command->str) + ft_strlen(info->key.target);
-	new = malloc(len + 1);
+	new = malloc((size_t)len + 1);
 	if (new == NULL)
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	index[0] = 0;

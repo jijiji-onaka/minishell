@@ -81,6 +81,6 @@ char	*read_quotation(char first_quo, t_string *command, \
 	}
 	clean_up(&backup, &(add_command.str), info);
 	if (!g_global.reading)
-		return (reset_prompt(&(command->str), NULL));
+		return (NULL);
 	return (command->str);
 }

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/21 14:23:17 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/05/22 13:44:08 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/04/13 14:03:24 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,21 +18,13 @@ char	*check_executable_file_in_bin_dir(char *path, char **command,
 	struct stat	stat_buf;
 	char		*bin_path;
 
-	if (lstat(path, &stat_buf) == 0)
-	{
-		if (path[ft_strlen(path) - 1] == '/' || (*command)[0] == '/')
-			bin_path = ft_strjoin(path, command[0]);
-		else
-			bin_path = ft_str3join(path, "/", command[0]);
-	}
-	else
-		return (NULL);
+	bin_path = ft_str3join(path, "/", command[0]);
 	if (bin_path == NULL)
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	if (lstat(bin_path, &stat_buf) == 0)
 		return (bin_path);
 	ptr_free((void **)&bin_path);
-	return (NULL);
+	return (false);
 }
 
 bool	no_exe_file_in_bin_dir(char *file, t_minishell *info)

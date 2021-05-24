@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 16:53:58 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 14:03:24 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/19 16:00:04 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void	print_user_pushed_char(char *buf, t_string *command,
 
 void	pushed_newline(char *buf, t_string *command, t_minishell *info)
 {
+	(void)buf;
 	if (command->str[0] == '\0')
 		ptr_free((void **)&(command->str));
 	move_specified_position(info->cursor.command_end_pos[Y],
@@ -78,5 +79,8 @@ void	pushed_newline(char *buf, t_string *command, t_minishell *info)
 
 void	do_nothing(char *buf, t_string *command, t_minishell *info)
 {
+	(void)buf;
+	(void)command;
+	(void)info;
 	return ;
 }

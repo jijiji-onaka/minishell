@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/05/13 01:19:39 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/22 14:07:07 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,28 +48,30 @@ static void	console_loop(t_minishell *info)
 
 static int	minishell_option_c(char *argv_2, t_minishell *info)
 {
-	char	*command;
+	t_string	command;
+	char		quo;
 
 	info->minishell_op_c = true;
 	initialize_global_variables();
-	command = ft_strdup(argv_2);
-	if (command == NULL)
-		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-	if (parse_command(info, command) != false)
+	command.str = ft_strdup(argv_2);
+	command.len = ft_strlen(command.str);
+	quo = '\0';
+	if (is_valid_command_quotations(command.str, &quo) == false)
+	{
+		write(STDERR, SYNTAX_1, 54);
+		write(STDERR, &(quo), 1);
+		free(command.str);
+		return (write(STDERR, "'\n", 2));
+	}
+	if (parse_command(info, command.str) != false)
 	{
 		g_global.sig_sign = 1;
 		execute_command_loop(info);
 		initialize_cmd_lst(info);
 	}
-	free(command);
+	free(command.str);
 	all_free_minishell_info(info);
 	return (g_global.exit_status);
-}
-
-__attribute__((destructor))
-void end()
-{
-	system("leaks minishell");
 }
 
 int	main(int argc, char **argv)

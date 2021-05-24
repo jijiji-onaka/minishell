@@ -18,7 +18,6 @@ void	ctrl_d_exit(char *buf, t_string *command, t_minishell *info)
 	if (write(STDERR, "\033[0Kexit\n", 9) < 9)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	tcsetattr(STDIN, TCSANOW, &(info->terminal[ORIGINAL]));
-	ptr_free((void **)&(command->str));
 	info->history.list->command = command->str;
 	update_command_history_file(info, info->history.begin);
 	all_free_minishell_info(info);
@@ -35,10 +34,11 @@ void	ctrl_d_put_error(char *buf, t_string *command, t_minishell *info)
 			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 		if (write(STDERR, &(info->multiple_line_char), 1) < 1)
 			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
-		if (write(STDERR, "`\n", 2) < 2)
+		if (write(STDERR, "'\n", 2) < 2)
 			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	}
 	if (write(STDERR, SYNTAX_2, 48) < 48)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
+	g_global.exit_status = 258;
 	g_global.reading = false;
 }

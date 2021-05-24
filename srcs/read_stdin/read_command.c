@@ -103,9 +103,9 @@ char	*read_command(t_minishell *info)
 	clean_up(&backup, &(command.str), info);
 	if (!g_global.reading || command.str == NULL || command.str[0] == '\0')
 		return (not_command(info, &(command.str)));
+	update_command_history(info, &command);
 	if (check_format(&command, info) == NULL)
 		return (NULL);
-	update_command_history(info, &command);
 	info->history.list = info->history.begin;
 	return (command.str);
 }

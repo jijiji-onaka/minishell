@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 17:56:17 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 14:03:24 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/22 14:03:19 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	exec_export(t_minishell *info, t_cmdlst *cmd)
 		value = make_value(cmd->arg[i] + key_len + 1, equ_ptr == NULL, info);
 		if (equ_ptr && key.str[key.len - 1] == '+')
 			joint_env_value(&key, &value, info);
-		if (is_valid_env_name(&(key.str), cmd->arg[i], info))
+		if (is_valid_env_name(&(key.str), cmd->arg[i], 1, info))
 			update_env_lst(&(info->env), key, value, info);
 		else
 			two_free((void **)&(key.str), (void **)&(value.str));

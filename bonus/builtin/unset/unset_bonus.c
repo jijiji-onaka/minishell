@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 18:44:56 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 14:03:24 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/22 14:03:11 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	exec_unset(t_minishell *info, t_cmdlst *cmd)
 	i = 0;
 	while (args[++i])
 	{
-		if (is_valid_env_name(&(args[i]), args[i], info))
+		if (is_valid_env_name(&(args[i]), args[i], 0, info))
 		{
 			if (ft_strcmp(args[i], "PWD") == MATCH)
 				g_global.info.unset_pwd_flag = true;

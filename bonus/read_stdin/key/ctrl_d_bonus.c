@@ -27,6 +27,8 @@ void	ctrl_d_exit(char *buf, t_string *command, t_minishell *info)
 
 void	ctrl_d_put_error(char *buf, t_string *command, t_minishell *info)
 {
+	(void)buf;
+	(void)command;
 	if (info->multiple_line_char != '|')
 	{
 		if (write(STDERR, SYNTAX_1, 54) < 54)
@@ -38,5 +40,6 @@ void	ctrl_d_put_error(char *buf, t_string *command, t_minishell *info)
 	}
 	if (write(STDERR, SYNTAX_2, 48) < 48)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
+	g_global.exit_status = 258;
 	g_global.reading = false;
 }

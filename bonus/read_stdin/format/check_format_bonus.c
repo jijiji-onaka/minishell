@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/09 12:25:33 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 14:03:24 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/19 15:58:35 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,6 @@ static bool	check_pipe(t_string *command, t_minishell *info)
 
 static bool	check_slash(t_string *command, t_minishell *info)
 {
-	int	pipe_ret;
-
-	pipe_ret = is_valid_command_slash(command->str);
 	if (is_valid_command_slash(command->str) == false)
 		if (read_add_command(command, is_valid_command_slash, info) == false)
 			return (false);

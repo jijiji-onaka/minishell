@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 16:25:10 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 13:51:37 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/22 14:02:50 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,17 @@ bool		not_found_cwd(t_minishell *info, char *arg_dir, char ***ptr);
 ** BIN
 */
 void		exec_bin(t_minishell *info, t_cmdlst *cmd);
+void		setting_1(char ***environ, char **paths, char ***split,
+				t_minishell *info);
+int			setting_2(char *paths, char **command, char ***split,
+				t_minishell *info);
 char		**get_environ(t_envlst *lst, t_minishell *info);
 char		*check_executable_file_in_bin_dir(char *path, char **command,
 				t_minishell *info);
 bool		no_exe_file_in_bin_dir(char *file, t_minishell *info);
-void		not_builtin(char *command,
-				t_minishell *info, bool path_flag);
+void		not_builtin(char *command, t_minishell *info, char *path);
+bool		search_files(char *dir_name, char *file_name, t_minishell *info);
+bool		is_cwd_in_path(char *path, t_minishell *info);
 /*
 ** ECHO
 */
@@ -58,7 +63,8 @@ bool		set_numeric_flag(char *arg);
 ** EXPORT
 */
 void		exec_export(t_minishell *info, t_cmdlst *cmd);
-bool		is_valid_env_name(char **env_name, char *arg, t_minishell *info);
+bool		is_valid_env_name(char **env_name, char *arg, bool ex_or_un,
+				t_minishell *info);
 void		display_sorted_env(t_minishell *info);
 void		*destroy_queue(t_envlst **qhead);
 t_envlst	*merge_lst_sort(t_envlst *lst);

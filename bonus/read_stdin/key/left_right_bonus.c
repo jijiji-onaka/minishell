@@ -6,28 +6,17 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 16:49:37 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 14:03:24 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/19 15:59:48 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../bonus_includes/minishell_bonus.h"
 
-// int len = get_now_index(info, command);
-// if (len != 0 && command->str[len - 1] == '\n')
-// {
-// 	move_specified_position(info->cursor.cur_pos[Y] - 1,
-// 		signed_min(get_from_nl_to_nl(command, info->cursor,
-//			info->cursor.cur_pos),
-// 		get_window_size_x(info)), where_err(LINE, FILE), info);
-// }
-// else
-// 	move_specified_position(info->cursor.cur_pos[Y] - 1,
-// 		get_window_size_x(info), where_err(LINE, FILE), info);
-
 void	move_cursor_left(char *buf, t_string *command, t_minishell *info)
 {
 	int	max_winsize_x;
 
+	(void)buf;
 	max_winsize_x = get_window_size(info).ws_col;
 	if (equal_pos(info->cursor.cur_pos, info->cursor.command_start_pos) == true)
 		return ;
@@ -45,6 +34,7 @@ void	move_cursor_right(char *buf, t_string *command, t_minishell *info)
 	struct winsize	winsize;
 	int				len;
 
+	(void)buf;
 	if (equal_pos(info->cursor.cur_pos, info->cursor.command_end_pos) == true)
 		return ;
 	winsize = get_window_size(info);

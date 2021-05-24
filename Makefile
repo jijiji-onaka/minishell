@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/23 01:57:04 by tjinichi          #+#    #+#              #
-#    Updated: 2021/05/13 01:19:36 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/05/22 13:45:51 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = minishell
 COMMAND_HISTORY = .minishell_history
 
 CC = gcc
-CFLAGS = -g -Wall -Werror -Wextra #            -fsanitize=address
+CFLAGS = -g -Wall -Werror -Wextra  #           -fsanitize=address
 # CFLAGS = -g          -fsanitize=address
 
 SRCFILE =	 \
@@ -27,7 +27,8 @@ OBJDIR = ./objs
 BUILTIN_DIR = $(SRCDIR)/builtin
 BUILTIN_SRCS = $(addprefix $(BUILTIN_DIR)/, \
 				bin/bin.c \
-				bin/err_not_builtin.c \
+				bin/not_builtin.c \
+				bin/not_builtin_utils.c \
 				bin/get_environ.c \
 				bin/search_binfile.c \
 				bin/setting.c \
@@ -319,9 +320,11 @@ valgrind: $(LIBFT) $(OBJS)
 BUILTIN_DIR = $(B_SRCDIR)/builtin
 BUILTIN_B_SRCS = $(addprefix $(BUILTIN_DIR)/, \
 				bin/bin_bonus.c \
-				bin/err_not_builtin_bonus.c \
+				bin/not_builtin_bonus.c \
+				bin/not_builtin_utils_bonus.c \
 				bin/get_environ_bonus.c \
 				bin/search_binfile_bonus.c \
+				bin/setting_bonus.c \
 				cd/cd_utils_bonus.c \
 				cd/cd_utils_2_bonus.c \
 				cd/cd_bonus.c \

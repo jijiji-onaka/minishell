@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:51:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 16:27:37 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/16 13:14:03 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@
 # define SYNTAX_PIPE "minishell: syntax error near unexpected token `|\'\n"
 # define SYNTAX_INPUT "minishell: syntax error near unexpected token `<\'\n"
 # define SYNTAX_NL "minishell: syntax error near unexpected token `newline\'\n"
-# define ERR_DB_SEMICOLON "minishell: `;;\' is not supported by mandatory.\n"
+# define ERR_DB_SEMCOLON "minishell: syntax error near unexpected token `;;\'\n"
 # define ERR_DB_PIPE "minishell: `||\' is not supported by mandatory.\n"
 # define ERR_OUTPUT_PIPE "minishell: `>|\' is not supported by mandatory.\n"
 # define ERR_DB_INPUT "minishell: `<<\' is not supported by mandatory.\n"

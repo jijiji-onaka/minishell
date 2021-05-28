@@ -14,7 +14,8 @@
 
 static void	normal_exit(t_minishell *info)
 {
-	tcsetattr(STDIN, TCSANOW, &(info->terminal[ORIGINAL]));
+	if (info->minishell_op_c == false)
+		tcsetattr(STDIN, TCSANOW, &(info->terminal[ORIGINAL]));
 	update_command_history_file(info, info->history.begin);
 	all_free_minishell_info(info);
 	exit(g_global.exit_status);
@@ -38,7 +39,8 @@ static void	non_numeric_exit(t_minishell *info, char *arg1)
 	if (write(STDERR, ": numeric argument required\n", 28) < 0)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	g_global.exit_status = 255;
-	tcsetattr(STDIN, TCSANOW, &(info->terminal[ORIGINAL]));
+	if (info->minishell_op_c == false)
+		tcsetattr(STDIN, TCSANOW, &(info->terminal[ORIGINAL]));
 	update_command_history_file(info, info->history.begin);
 	all_free_minishell_info(info);
 	exit(g_global.exit_status);
@@ -47,7 +49,8 @@ static void	non_numeric_exit(t_minishell *info, char *arg1)
 static void	selected_code_exit(t_minishell *info, int exit_code)
 {
 	g_global.exit_status = exit_code % 256;
-	tcsetattr(STDIN, TCSANOW, &(info->terminal[ORIGINAL]));
+	if (info->minishell_op_c == false)
+		tcsetattr(STDIN, TCSANOW, &(info->terminal[ORIGINAL]));
 	update_command_history_file(info, info->history.begin);
 	all_free_minishell_info(info);
 	exit(g_global.exit_status);

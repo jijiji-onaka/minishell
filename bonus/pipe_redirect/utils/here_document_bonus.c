@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/13 15:05:11 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 16:20:34 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/25 21:20:08 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	preparation(int *backup, t_string *command,
 	*backup = dup(STDIN);
 	if (*backup == -1)
 		all_free_exit(info, ERR_DUP, __LINE__, __FILE__);
-	command->str = ft_strdup("\0");
+	command->str = ft_strdup("");
 	if (command->str == NULL)
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	command->len = 0;

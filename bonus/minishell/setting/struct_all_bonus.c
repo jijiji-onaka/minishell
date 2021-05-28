@@ -6,11 +6,31 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 16:01:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 14:03:24 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/26 13:56:50 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../bonus_includes/minishell_bonus.h"
+
+static void	set_file_path(char path[1024])
+{
+	char		cwd[1024];
+	int			i;
+	int			j;
+	const char	*file_name = "/.minishell_history\0";
+
+	ft_bzero(path, 1024);
+	getcwd(cwd, 1024);
+	i = -1;
+	while (cwd[++i] && i < 1024)
+		path[i] = cwd[i];
+	if (i == 1024)
+		exit(EXIT_FAILURE);
+	j = 0;
+	while (file_name[j] && i + j < 1024)
+		path[i++] = file_name[j++];
+	path[i + j] = '\0';
+}
 
 void	set_minishell(t_minishell *info)
 {
@@ -23,7 +43,7 @@ void	set_minishell(t_minishell *info)
 	info->unset_oldpwd_flag = false;
 	info->minishell_op_no_edit = false;
 	info->env = NULL;
-	history.file_path = "./.minishell_history";
+	set_file_path(history.file_path);
 	history.list = NULL;
 	info->history = history;
 	info->ptr_for_free = NULL;

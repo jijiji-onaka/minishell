@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:44:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/05/13 00:10:31 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/26 13:57:02 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ typedef struct s_hist_list
 
 typedef struct s_history
 {
-	char				*file_path;
+	char				file_path[1024];
 	struct s_hist_list	*list;
 	struct s_hist_list	*begin;
 }						t_history;
@@ -71,7 +71,8 @@ typedef struct s_key
 	size_t				target_end;
 	char				*target;
 	size_t				save_command_len;
-	bool				shift_ctrl_lr_flag;
+	bool				multi_byte_flag;
+	bool				multi_byte_flag_2;
 }						t_key;
 
 typedef struct s_cursor
@@ -226,6 +227,8 @@ enum	e_format
 # define CTRL_P 19
 # define CTRL_N 20
 # define TO_BE_CONTINUE 21
+# define HOME 0
+# define END 1
 /*
 ** CURSOR || WINDOW
 */

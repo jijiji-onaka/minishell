@@ -62,4 +62,5 @@ void	paste_selected_str(char *buf, t_string *command, t_minishell *info)
 	i = -1;
 	while (++i < original_pos)
 		move_cursor_left(NULL, NULL, info);
+	dup_pos(info->cursor.select_pos, info->cursor.cur_pos);
 }

@@ -83,7 +83,8 @@ bool	check_syntax(char ***grp, t_minishell *info)
 	while ((*grp)[++i[0]])
 	{
 		i[1] = 0;
-		while ((*grp)[i[0]][i[1]] && ft_isdigit((*grp)[i[0]][i[1]]))
+		while ((*grp)[i[0]][i[1]] && ft_strchr((*grp)[i[0]], '>')
+			&& ft_strchr((*grp)[i[0]], '<') && ft_isdigit((*grp)[i[0]][i[1]]))
 			i[1]++;
 		now_type = str_bsearch((*grp)[i[0]] + i[1], base, F_CMD_NUM, ft_strcmp);
 		if (!display_format_error_message(before_type, now_type, grp, info))

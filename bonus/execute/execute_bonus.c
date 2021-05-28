@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 21:03:13 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 16:15:56 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/26 15:41:39 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,8 @@ static bool	is_after_pipe(t_cmdlst *lst)
 {
 	while (lst)
 	{
-		if (lst->type == SEMICOLON || lst->type == DB_AND)
+		if (lst->type == SEMICOLON || lst->type == DB_AND
+			|| lst->type == DB_PIPE)
 			return (false);
 		else if (lst->type == PIPE)
 			return (true);

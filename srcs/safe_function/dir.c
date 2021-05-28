@@ -14,11 +14,10 @@
 
 bool	safe_opendir(DIR **dp, char *dir, t_minishell *info)
 {
+	(void)info;
 	*dp = opendir(dir);
-	if (*dp == NULL && errno == ENOENT)
-		return (false);
 	if (*dp == NULL)
-		all_free_exit(info, ERR_OPENDIR, __LINE__, __FILE__);
+		return (false);
 	return (true);
 }
 

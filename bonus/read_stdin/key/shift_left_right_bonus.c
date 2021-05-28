@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/13 12:15:52 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/05/19 16:00:14 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/25 01:19:02 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static void	put_selected_target(t_minishell *info, t_string *command)
 void	select_target_left(char *buf, t_string *command, t_minishell *info)
 {
 	(void)buf;
-	info->key.shift_ctrl_lr_flag = false;
+	info->key.multi_byte_flag = false;
 	if (equal_pos(info->cursor.select_pos, info->cursor.command_start_pos)
 		== true)
 		return ;
@@ -66,7 +66,7 @@ void	select_target_left(char *buf, t_string *command, t_minishell *info)
 void	select_target_right(char *buf, t_string *command, t_minishell *info)
 {
 	(void)buf;
-	info->key.shift_ctrl_lr_flag = false;
+	info->key.multi_byte_flag = false;
 	if (equal_pos(info->cursor.select_pos, info->cursor.command_end_pos)
 		== true)
 		return ;

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/19 20:52:49 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 14:22:42 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/24 21:43:56 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,8 @@ static int	for_norm(int **pipefd, t_minishell *info,
 {
 	int	i;
 
-	tcsetattr(STDIN, TCSANOW, &(info->terminal[ORIGINAL]));
+	if (info->minishell_op_c == false)
+		tcsetattr(STDIN, TCSANOW, &(info->terminal[ORIGINAL]));
 	apply_first_pipe(cmd_lst, pipefd[0], info, fd);
 	skip_command(cmd_lst);
 	i = 1;
@@ -133,10 +134,8 @@ t_cmdlst	*my_pipe(t_minishell *info, t_cmdlst **cmd_lst, int fd)
 		;
 	g_global.sig_sign = 1;
 	skip_command(cmd_lst);
-	tcsetattr(STDIN, TCSAFLUSH, &(info->terminal[REPLICA]));
-	i = -1;
-	while (++i < info->cmd_lst_num / 2)
-		free(pipefd[i]);
-	free(pipefd);
+	if (info->minishell_op_c == false)
+		tcsetattr(STDIN, TCSAFLUSH, &(info->terminal[REPLICA]));
+	ptr_2d_free((void ***)&pipefd, info->cmd_lst_num / 2);
 	return (*cmd_lst);
 }

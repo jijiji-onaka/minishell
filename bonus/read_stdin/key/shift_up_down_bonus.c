@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/13 12:08:34 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 14:03:24 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/25 01:19:02 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	copy_command(char *buf, t_string *command, t_minishell *info)
 	int		copy_len;
 
 	(void)buf;
-	info->key.shift_ctrl_lr_flag = false;
+	info->key.multi_byte_flag = false;
 	get_start_and_len(&start, &copy_len, NULL, info);
 	free(info->key.target);
 	if (copy_len == 0)
@@ -54,6 +54,7 @@ void	copy_command(char *buf, t_string *command, t_minishell *info)
 		info->key.target = ft_substr(command->str, start, copy_len);
 	if (info->key.target == NULL)
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	dup_pos(info->cursor.select_pos, info->cursor.cur_pos);
 }
 
 static char	*create_new_command(t_string *command, int start, int len,
@@ -109,7 +110,7 @@ void	cut_command(char *buf, t_string *command, t_minishell *info)
 	int		original_pos;
 
 	(void)buf;
-	info->key.shift_ctrl_lr_flag = false;
+	info->key.multi_byte_flag = false;
 	get_start_and_len(&start, &cut_len, &original_pos, info);
 	free(info->key.target);
 	if (cut_len == 0)
@@ -126,5 +127,6 @@ void	cut_command(char *buf, t_string *command, t_minishell *info)
 	dup_pos(info->cursor.cur_pos, info->cursor.command_start_pos);
 	dup_pos(info->cursor.command_end_pos, info->cursor.cur_pos);
 	display_command(command, info);
+	dup_pos(info->cursor.select_pos, info->cursor.cur_pos);
 	move_original_cursor_pos(original_pos, command, info);
 }

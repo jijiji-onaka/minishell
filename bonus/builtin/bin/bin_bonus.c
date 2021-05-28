@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 00:06:42 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/05/22 13:44:58 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/24 22:30:48 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,16 @@ static void	clean_up(char ***environ, int i, char ***split, t_minishell *info)
 		ptr_2d_free((void ***)split, -1);
 	if (g_global.exit_status != 130 && g_global.exit_status != 131)
 		g_global.exit_status = WEXITSTATUS(status);
+	if (WTERMSIG(status) == SIGINT)
+		sig_int(130);
+	else if (WTERMSIG(status) == SIGQUIT)
+		sig_quit(131);
 	if (info->minishell_op_c == false)
 		tcsetattr(STDIN, TCSAFLUSH, &(info->terminal[REPLICA]));
+	if (signal(SIGQUIT, &sig_quit) == SIG_ERR)
+		all_free_exit(info, ERR_SIGNAL, __LINE__, __FILE__);
+	if (signal(SIGINT, &sig_int) == SIG_ERR)
+		all_free_exit(info, ERR_SIGNAL, __LINE__, __FILE__);
 }
 
 void	exec_bin(t_minishell *info, t_cmdlst *cmd)

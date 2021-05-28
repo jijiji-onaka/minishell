@@ -6,11 +6,16 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:50:53 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/10 16:14:47 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/24 22:28:17 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+void	sig_nothing(int code)
+{
+	(void)code;
+}
 
 void	sig_quit(int code)
 {

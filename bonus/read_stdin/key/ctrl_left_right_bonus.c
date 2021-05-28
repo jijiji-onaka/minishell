@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/04 05:43:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 14:03:24 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/25 01:19:02 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	move_word_directly_to_left(char *buf, t_string *command,
 	size_t	len;
 	size_t	i;
 
-	info->key.shift_ctrl_lr_flag = false;
+	info->key.multi_byte_flag = false;
 	if (equal_pos(info->cursor.cur_pos, info->cursor.command_start_pos) == true)
 		return ;
 	len = get_now_index(info, command);
@@ -41,7 +41,7 @@ void	move_word_directly_to_right(char *buf, t_string *command,
 	size_t	len;
 	size_t	i;
 
-	info->key.shift_ctrl_lr_flag = false;
+	info->key.multi_byte_flag = false;
 	if (equal_pos(info->cursor.cur_pos, info->cursor.command_end_pos) == true)
 		return ;
 	len = get_now_index(info, command);

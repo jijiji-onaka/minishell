@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/13 12:08:34 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 12:55:59 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/25 01:19:02 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	copy_command(char *buf, t_string *command, t_minishell *info)
 	int		copy_len;
 
 	(void)buf;
-	info->key.shift_ctrl_lr_flag = false;
+	info->key.multi_byte_flag = false;
 	get_start_and_len(&start, &copy_len, NULL, info);
 	free(info->key.target);
 	if (copy_len == 0)
@@ -109,7 +109,7 @@ void	cut_command(char *buf, t_string *command, t_minishell *info)
 	int		original_pos;
 
 	(void)buf;
-	info->key.shift_ctrl_lr_flag = false;
+	info->key.multi_byte_flag = false;
 	get_start_and_len(&start, &cut_len, &original_pos, info);
 	free(info->key.target);
 	if (cut_len == 0)

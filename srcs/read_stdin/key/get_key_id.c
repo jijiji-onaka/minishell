@@ -6,15 +6,18 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/06 10:08:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 12:28:52 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/25 01:50:06 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-static int	key_ctrl_left_and_right(t_minishell *info)
+static int	key_multi_byte(t_minishell *info, bool home_or_end)
 {
-	info->key.shift_ctrl_lr_flag = true;
+	if (home_or_end == HOME)
+		info->key.multi_byte_flag = true;
+	else
+		info->key.multi_byte_flag_2 = true;
 	return (TO_BE_CONTINUE);
 }
 
@@ -33,7 +36,7 @@ static int	warning_multibyte(char *buf, t_string *command, t_minishell *info)
 
 static int	get_key_id_3(char *buf, t_string *command, t_minishell *info)
 {
-	if (info->key.shift_ctrl_lr_flag == true)
+	if (info->key.multi_byte_flag == true)
 	{
 		if (buf[0] == 59 && buf[1] == 53 && buf[2] == 68)
 			return (KEY_CTRL_LEFT);
@@ -47,7 +50,12 @@ static int	get_key_id_3(char *buf, t_string *command, t_minishell *info)
 			return (KEY_SHIFT_UP);
 		else if (buf[0] == 59 && buf[1] == 50 && buf[2] == 66)
 			return (KEY_SHIFT_DOWN);
+		else if (buf[0] == 126 && buf[1] == '\0')
+			return (KEY_HOME);
 	}
+	else if (info->key.multi_byte_flag_2 == true
+		&& buf[0] == 126 && buf[1] == '\0')
+		return (KEY_END);
 	else if (ft_isprint(buf[0]))
 		return (NORMAL_CHAR);
 	else if ((unsigned char)buf[0] > 127)
@@ -57,9 +65,7 @@ static int	get_key_id_3(char *buf, t_string *command, t_minishell *info)
 
 static int	get_key_id_2(char *buf, t_minishell *info)
 {
-	if (buf[0] == 5)
-		return (KEY_END);
-	else if (buf[0] == 2)
+	if (buf[0] == 2)
 		return (CTRL_B);
 	else if (buf[0] == 16)
 		return (CTRL_P);
@@ -76,7 +82,9 @@ static int	get_key_id_2(char *buf, t_minishell *info)
 	else if (buf[0] == 27 && buf[1] == 91 && buf[2] == 68)
 		return (KEY_LEFT);
 	else if (buf[0] == 27 && buf[1] == 91 && buf[2] == 49)
-		return (key_ctrl_left_and_right(info));
+		return (key_multi_byte(info, HOME));
+	else if (buf[0] == 27 && buf[1] == 91 && buf[2] == 52)
+		return (key_multi_byte(info, END));
 	return (-42);
 }
 
@@ -84,7 +92,7 @@ int	get_key_id(char *buf, t_string *command, t_minishell *info)
 {
 	int	key;
 
-	if (buf[0] == 4 && command->str[0] == '\0')
+	if (buf[0] == 4)
 		return (CTRL_D);
 	else if (buf[0] == 12)
 		return (CTRL_L);
@@ -92,8 +100,6 @@ int	get_key_id(char *buf, t_string *command, t_minishell *info)
 		return (KEY_DELETE);
 	else if (buf[0] == 10)
 		return (KEY_NEWLINE);
-	else if (buf[0] == 1)
-		return (KEY_HOME);
 	key = get_key_id_2(buf, info);
 	if (key != -42)
 		return (key);

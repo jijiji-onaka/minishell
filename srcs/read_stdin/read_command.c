@@ -35,7 +35,8 @@ static void	preparation(int *backup, t_string *command,
 	historylist_add_front(&(info->history.list), now_command);
 	info->history.list = now_command;
 	info->history.begin = now_command;
-	info->key.shift_ctrl_lr_flag = false;
+	info->key.multi_byte_flag = false;
+	info->key.multi_byte_flag_2 = false;
 	dup_pos(info->cursor.cur_pos, info->cursor.command_start_pos);
 	dup_pos(info->cursor.command_end_pos, info->cursor.command_start_pos);
 	dup_pos(info->cursor.select_pos, info->cursor.command_start_pos);
@@ -62,14 +63,17 @@ static void	clean_up(int *backup, char **command, t_minishell *info)
 
 static void	update_command_history(t_minishell *info, t_string *command)
 {
-	free(info->history.list->command);
-	info->history.list->command = command->str;
 	if (info->history.list != info->history.begin)
 	{
 		free(info->history.begin->command);
 		info->history.begin->command = ft_strdup(command->str);
 		if (info->history.begin->command == NULL)
 			all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	}
+	else
+	{
+		free(info->history.list->command);
+		info->history.list->command = command->str;
 	}
 }
 
@@ -101,11 +105,12 @@ char	*read_command(t_minishell *info)
 			break ;
 	}
 	clean_up(&backup, &(command.str), info);
-	if (!g_global.reading || command.str == NULL || command.str[0] == '\0')
+	if (!g_global.reading || command.str == NULL || command.str[0] == '\0'
+		|| command.str[0] == '\n')
 		return (not_command(info, &(command.str)));
-	update_command_history(info, &command);
 	if (check_format(&command, info) == NULL)
 		return (NULL);
+	update_command_history(info, &command);
 	info->history.list = info->history.begin;
 	return (command.str);
 }

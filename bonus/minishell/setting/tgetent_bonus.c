@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:16:39 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/05/06 17:27:09 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/24 23:57:57 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,7 @@ static void	set_key_2(t_minishell *info)
 		}
 	}
 	info->key.scroll_down = tgetstr("sr", NULL);
-	info->key.delete_line = tgetstr("dl", NULL);
-	if (info->key.delete_line == NULL)
-		all_free_exit(info, ERR_TGETSTR, __LINE__, __FILE__);
+	info->key.delete_line = "\033[2K";
 	info->key.color_change = "\x1b[38;5;106m\x1b[48;5;27m";
 	info->key.color_reset = "\033[0m";
 }

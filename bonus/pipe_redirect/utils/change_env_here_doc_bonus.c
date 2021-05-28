@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/13 14:58:28 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/05/19 16:01:11 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/25 21:31:05 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,9 @@ bool	change_env_for_here_doc(char **ptr, t_minishell *info)
 
 	dollar_num = 0;
 	i = -1;
-	while ((*ptr)[++i])
+	if (*ptr == NULL)
+		*ptr = ft_strdup("");
+	while (*ptr && (*ptr)[++i])
 	{
 		if ((*ptr)[i] == '$')
 			dollar_num++;

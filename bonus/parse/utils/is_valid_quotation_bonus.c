@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/19 21:12:16 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/04/13 14:03:24 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/25 21:45:35 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	is_valid_command_pipe(char *command)
 			return (true);
 		command++;
 	}
-	return (true);
+	return (false);
 }
 
 int	is_valid_command_slash(char *command)

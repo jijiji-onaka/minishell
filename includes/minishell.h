@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 02:04:00 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/05/12 23:39:55 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/24 22:28:29 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void		update_command_history_file(t_minishell *info,
 				t_hist_list *history);
 void		sig_quit(int code);
 void		sig_int(int code);
+void		sig_nothing(int code);
 char		*ft_getenv(char *str, t_envlst *env_lst, bool get_shell_val);
 
 #endif

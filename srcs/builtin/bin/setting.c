@@ -6,17 +6,26 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 00:06:42 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/05/16 15:10:01 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/05/24 22:29:34 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
+
+static void	setting_1_5(t_minishell *info)
+{
+	if (signal(SIGQUIT, &sig_nothing) == SIG_ERR)
+		all_free_exit(info, ERR_SIGNAL, __LINE__, __FILE__);
+	if (signal(SIGINT, &sig_nothing) == SIG_ERR)
+		all_free_exit(info, ERR_SIGNAL, __LINE__, __FILE__);
+}
 
 void	setting_1(char ***environ, char **paths, char ***split,
 					t_minishell *info)
 {
 	if (info->minishell_op_c == false)
 		tcsetattr(STDIN, TCSANOW, &(info->terminal[ORIGINAL]));
+	setting_1_5(info);
 	*environ = get_environ(info->env, info);
 	*paths = ft_getenv("PATH", info->env, false);
 	*paths = ft_strdup(*paths);

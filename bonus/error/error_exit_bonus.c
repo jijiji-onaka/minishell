@@ -48,7 +48,6 @@ static void	put_error_location_and_exit(char *error_message,
 void	all_free_exit(t_minishell *info, char *error_message,
 						int line_num, char *file_name)
 {
-	tcsetattr(STDIN, TCSANOW, &(info->terminal[ORIGINAL]));
 	if (info == NULL)
 		signal_error_exit();
 	if (info->ptr_2d_for_free)

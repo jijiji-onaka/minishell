@@ -3,17 +3,4 @@
  
 # Demo
 
-```
-$ ./minishell
-$ > ls
-Makefile    bonus        endian.c    minishell    srcs
-README.md    bonus_includes    includes    objs        utils
-$ > echo "Apple"
-Apple
-$ > export ME=tjinichi
-$ > echo $ME
-tjinichi
-$ > exit
-exit
-$
-```
+https://user-images.githubusercontent.com/60336548/123518943-46e0f400-d6e3-11eb-850d-15cced9c9a99.mov

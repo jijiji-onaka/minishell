@@ -3,4 +3,6 @@
  
 # Demo
 
-https://user-images.githubusercontent.com/60336548/123518943-46e0f400-d6e3-11eb-850d-15cced9c9a99.mov
+
+![minishell](https://user-images.githubusercontent.com/60336548/123519025-d4244880-d6e3-11eb-88ac-4e5f1ae20445.gif)
+
